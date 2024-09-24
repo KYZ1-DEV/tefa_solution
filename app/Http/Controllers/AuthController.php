@@ -49,22 +49,23 @@ class AuthController extends Controller
     public function register(Request  $request){
 
         $request->validate([
-                'name' => 'required|min:5',
-                'email' => 'required|unique:users|email',
-                'password' => 'required|min:6',
-                'role' => 'required'
-            ],
-            [
-                'name.required' => 'Name wajib diisi',
-                'name.min' => 'name minimal 5 karakter',
-                'email.required' => 'Email wajib diisi',
-                'email.unique' => 'Email telah terdaftar',
-                'password.required' => 'Password wajib diisi',
-                'password.min' => 'Password minimal 6 karakter',
-                'role.required' => 'Pilih role',
-            ]
-        );
-
+            'name' => 'required|min:5',
+            'email' => 'required|unique:users|email',
+            'password' => 'required|min:6|same:password_confirmation',
+            'password_confirmation' => 'required',
+            'role' => 'required'
+        ],
+        [
+            'name.required' => 'Name wajib diisi',
+            'name.min' => 'Name minimal 5 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.unique' => 'Email telah terdaftar',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'password.same' => 'Konfirmasi password tidak cocok',
+            'password_confirmation.required' => 'Konfirmasi password wajib diisi',
+            'role.required' => 'Pilih role',
+        ]);
 
         $infoRegister = [
         'name' => $request->name,

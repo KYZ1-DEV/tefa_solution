@@ -37,11 +37,11 @@ Route::middleware(['auth'])->group( function (){
         Route::put('/admin/editPassword' , [AdminController::class,'editPassword'])->middleware( 'userAkses:admin');
 
 
-        
+
         // Dashboard Admin/Kelola_user
         Route::get('/admin/kelola_user', [AdminController::class,'user'])->name('user')->middleware( 'userAkses:admin');
         Route::get('/admin/tambah_user',[AdminController::class, 'tambahUser'])->middleware( 'userAkses:admin');
-        Route::get('/admin/edit_User/{id}',[AdminController::class, 'editUser'])->middleware( 'userAkses:admin');
+        Route::get('/admin/edit_user/{id}',[AdminController::class, 'editUser'])->middleware( 'userAkses:admin');
 
 
         // Action form
@@ -106,7 +106,7 @@ Route::middleware(['auth'])->group( function (){
 
                 // Dashboard Industri/List Sekolah
                 Route::get('/industri/list_sekolah', [IndustriController::class,'listSekolah'])->name('listSekolah')->middleware( 'userAkses:industri');
-                
+
                 // Dashboard Industri/Laporan
                 Route::get('/industri/laporan', [IndustriController::class,'laporan'])->name('laporan')->middleware( 'userAkses:industri');
 
@@ -122,8 +122,8 @@ Route::middleware(['auth'])->group( function (){
 
                 // Dashboard Sekolah/Monitoring Bantuan
                  Route::get('/sekolah/monitoring_bantuan', [SekolahController::class,'monitoringBantuan'])->name('monitoringBantuanSekolah')->middleware( 'userAkses:sekolah');
-               
-               
+
+
                  // Dashboard Sekolah/Laporan
                 Route::get('/sekolah/progres0Persen', [SekolahController::class,'progress0Persen'])->name('0Persen')->middleware( 'userAkses:sekolah');
                 Route::get('/sekolah/progres50Persen', [SekolahController::class,'progress50Persen'])->name('50Persen')->middleware( 'userAkses:sekolah');
@@ -131,6 +131,6 @@ Route::middleware(['auth'])->group( function (){
 
 #End Sekolah
 
-        
-        
+
+
 });
