@@ -8,100 +8,87 @@
 @section('main')
 
                     <!-- Begin Page Content -->
-            <div class="container">
+                    <div class="container">
+                        <!-- DataTales Example -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
+                                {{-- new --}}
+                                <br>
+                                <a href="/admin/tambah_user" class="btn-sm text-decoration-none btn-purple">Tambah data User</a>
+                                @if ($errors->any())
+                                    <div class="alert alert-danger">
+                                        <ul>
+                                            @foreach ($errors->all() as $user)
+                                                <li>{{ $user }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                @if (Session::has('success'))
+                                    <script>
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            Swal.fire(
+                                                'Sukses',
+                                                '{{ Session::get('success') }}',
+                                                'success'
+                                            );
+                                        });
+                                    </script>
+                                @endif
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>foto</th>
+                                                <th>Nama</th>
+                                                <th>Email</th>
 
-                    <!-- DataTales Example -->
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
-                            {{-- new --}}
-                            <br>
+                                                <th>Role</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>gambar</th>
+                                                <th>Nama</th>
+                                                <th>Email</th>
 
-                <a href="tambahUser" class="btn-sm btn-primary text-decoration-none">Tambah data User</a>
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $item)
-                                <li>{{ $item }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                @if (Session::has('success'))
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            Swal.fire(
-                                'Sukses',
-                                '{{ Session::get('success') }}',
-                                'success'
-                            );
-                        });
-                    </script>
-                @endif
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                           
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Nama</th>
-                                            <th>Email</th>
-                                            <th>Role</th>
-                                            
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </tfoot>
-                                    <tbody>
-                                        @php
-                                                $data = [
-                                                    [
-                                                        'id' => '1',
-                                                        'nama' => 'Dimas Santoso',
-                                                        'email' => 'dimas@gmail.com',
-                                                        'role' => 'admin',
-                                                        
-                                                    ]
-                                                ];
-                                        @endphp
-                                        
-                                        @forelse ($data as $item)
-                                        <tr>
-                                            <td>{{ $item['nama'] }}</td>
-                                            <td>{{ $item['email'] }}</td>
-                                            <td>{{ $item['role'] }}</td>
-                                            
-                                            <td>
-                                                <a href="/damaEdit/{{ $item['id']}}" class="btn-primary btn-3d btn">Edit</a>
-                                                <form  onsubmit="return confirmHapus(event)"  action="/dataHapus/{{ $item['id'] }}" class="d-inline" method="post">
-                                                    @method('delete')
-                                                    @csrf
-                                                    <button type="submit" class="btn-primary btn-3d btn">Hapus</button>
-                                            </form>
-                                            </td>
-                                        </tr>
-                                        @empty
-                                        <tr>
-                                            <td>Data tidak ada !</td>
-                                        </tr>
-                                        @endforelse
-                                    </tbody>
+                                                <th>Role</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody>
+                                            @forelse ($users as $user)
+                                            <tr>
+                                                <td class="py-1">
+                                                    <img src="{{ asset('gambar/user.jpeg') }}" alt="image" height="50" width="50"/></td>
+                                                <td>{{ $user['name'] }}</td>
+                                                <td>{{ $user['email'] }}</td>
 
-
-                                </table>
+                                                <td>{{ $user['role'] }}</td>
+                                                <td>
+                                                    <a href="/admin/edit_user/{{ $user['id'] }}" class="btn-purple btn-3d btn">Edit</a>
+                                                    <form onsubmit="return confirmHapus(event)" action="/hapusUser/{{ $user['id'] }}" class="d-inline" method="post">
+                                                        @method('delete')
+                                                        @csrf
+                                                        <button type="submit" class="btn-purple btn-3d btn">Hapus</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            @empty
+                                            <tr>
+                                                <td colspan="4">Data tidak ada !</td>
+                                            </tr>
+                                            @endforelse
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                </div>
                 <!-- /.container-fluid -->
 @endsection
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>

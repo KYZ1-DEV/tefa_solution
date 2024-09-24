@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group( function (){
         // Dashboard Admin/Kelola_user
         Route::get('/admin/kelola_user', [AdminController::class,'user'])->name('user')->middleware( 'userAkses:admin');
         Route::get('/admin/tambah_user',[AdminController::class, 'tambahUser'])->middleware( 'userAkses:admin');
-        Route::get('/admin/edit_User/{id}',[AdminController::class, 'editUser'])->middleware( 'userAkses:admin');
+        Route::get('/admin/edit_user/{id}',[AdminController::class, 'editUser'])->middleware( 'userAkses:admin');
 
 
         // Action form

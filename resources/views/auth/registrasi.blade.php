@@ -29,8 +29,10 @@
           <div class="col-md-6 col-lg-4">
             <div class="login-wrap p-0">
               <h3 class="mb-2 text-center">Create new account</h3>
-              
-              <form action="{{ route('register') }}"  method="POST" autocomplete="off" class="signin-form">
+                @error('password')
+                <li class="text-center" style="color: red;">{{ $message}}</li>
+                @enderror
+              <form action="{{ route('register') }}"  method="POST" novalidate autocomplete="off" class="signin-form">
                 @csrf
                 <div class="form-group">
                   <input
@@ -73,9 +75,21 @@
                   ></span>
                 </div>
                 <div class="form-group">
+
+                    <input
+                      id="password-confirm-field"
+                      type="password"
+                      name="password_confirmation"
+                      class="form-control @error('password') is-invalid @enderror"
+                      placeholder="Confirm Password"
+                      required
+                    />
+                    <span toggle="#password-confirm-field" class="fa fa-fw fa-eye field-icon toggle-password1" style="top:58%!important;"></span>
+                  </div>
+                <div class="form-group">
                   <label for="role"> Select Role</label>
                   <select class="form-control @error('role') is-invalid @enderror" name="role" id="role">
-                    
+
                     <option value="" style="color: black">
                       Pilih Role
                     </option>
@@ -91,7 +105,7 @@
               @enderror
 
                 </div>
-             
+
 
                 <div class="form-group">
                   <button
