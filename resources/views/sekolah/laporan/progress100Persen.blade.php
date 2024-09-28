@@ -6,15 +6,15 @@
     {{ route('profileSekolah') }}
 @endsection
 @section('main')
-                    <!-- Begin Page Content -->
-                    <div class="container-fluid">
-                        @if (Session::get('success'))
-                    <div class="alert alert-success alert-dismissible fade show">
-                        <ul>
-                            <li>{{ Session::get('success') }}</li>
-                        </ul>
-                    </div>
-                @endif
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
+            @if (Session::get('success'))
+            <div class="alert alert-success alert-dismissible fade show">
+                <ul>
+                    <li>{{ Session::get('success') }}</li>
+                </ul>
+            </div>
+            @endif
 
 
             <!-- Page Heading -->
@@ -22,27 +22,22 @@
                 <h1 class="h3 mb-0 text-gray-800">Progress 100%</h1>
             </div>
          
-            <!-- Content Row -->
-            <div class="row">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Progress 100%</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="text-center">
-                            <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                src="{{ asset('dashboard/img/undraw_posting_photo.svg') }}" alt="...">
-                        </div>
-                        <p>Add some quality, svg illustrations to your project courtesy of <a
-                                target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                            constantly updated collection of beautiful svg images that you can use
-                            completely free and without attribution!</p>
-                        <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                            unDraw &rarr;</a>
-                    </div>
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Upload File PDF</h6>
                 </div>
-
+                <div class="card-body">
+                    <form action="{{ route('upload.file') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="form-group">
+                            <label for="file">Pilih File PDF:</label>
+                            <input type="file" class="form-control" name="file" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Upload</button>                    
+                    </form>
+                </div>
             </div>
+           
 
         </div>
         <!-- /.container-fluid -->

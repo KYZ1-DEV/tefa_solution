@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\IndustriController;
+use App\Http\Controllers\FileController;
 
 
 
@@ -129,8 +130,11 @@ Route::middleware(['auth'])->group( function (){
                 Route::get('/sekolah/progres50Persen', [SekolahController::class,'progress50Persen'])->name('50Persen')->middleware( 'userAkses:sekolah');
                 Route::get('/sekolah/progres100Persen', [SekolahController::class,'progress100Persen'])->name('100Persen')->middleware( 'userAkses:sekolah');
 
+                // Rute untuk menampilkan form upload
+                Route::get('/upload-file', [FileController::class, 'create']);
+
+                // Rute untuk menangani upload file
+                Route::post('/upload-file', [FileController::class, 'store'])->name('upload.file');
+
 #End Sekolah
-
-
-
 });
