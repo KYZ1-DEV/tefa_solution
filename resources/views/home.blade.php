@@ -69,7 +69,7 @@
             </p>
             <a href="{{ route('login') }}" class="btn-3d m-2">Sign In</a>
                     
-            <a href="{{ route('registrasi') }}" class="btn-3d m-2">Sign Up</a>
+            <a href="{{ route('register.show') }}" class="btn-3d m-2">Sign Up</a>
           </div>
           <div class="col-md-6">
             @if (Session::get('success'))

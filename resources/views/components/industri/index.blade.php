@@ -20,8 +20,8 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Edit</h6>
-                <a class="collapse-item" href="{{ route('profileIndustri') }}">Edit Profile</a>
-                <a class="collapse-item" href="{{ route('passwordIndustri') }}">Edit Password</a>
+                <a class="collapse-item" href="{{ route('industries.profile.show') }}">Edit Profile</a>
+                <a class="collapse-item" href="{{ route('industries.password.show') }}">Edit Password</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
@@ -29,15 +29,15 @@
 
     <hr class="sidebar-divider d-none d-md-block">
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('monitoringBantuan') }}" >
+        <a class="nav-link" href="{{ route('industries.assistance-monitoring') }}" >
             <i class="fas fa-fw fa-file"></i>
             <span>Monitoring Bantuan</span>
         </a>
-        <a class="nav-link" href="{{ route('listSekolah') }}" >
+        <a class="nav-link" href="{{ route('industries.schools.index') }}" >
             <i class="fas fa-fw fa-file"></i>
             <span>List Sekolah</span>
         </a>
-        <a class="nav-link" href="{{ route('laporan') }}" >
+        <a class="nav-link" href="{{ route('industries.reports.index') }}" >
             <i class="fas fa-fw fa-file"></i>
             <span>Laporan</span>
         </a>

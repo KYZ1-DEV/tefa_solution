@@ -1,136 +1,87 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\IndustriController;
 
-
-
-
 Route::middleware(['guest'])->group(function() {
-    Route::view('/', view: 'home');
-    Route::post('/login',[AuthController::class, 'login'])->name('auth');
-    Route::get('/user/login',[AuthController::class, 'index'])->name('login');
-    Route::post('/registrasi',[AuthController::class, 'register'])->name('register');
-    Route::get('/user/registrasi',[AuthController::class, 'registrasi'])->name('registrasi');
+    Route::view('/', 'home');
+    Route::get('/login', [AuthController::class, 'index'])->name('login');
+    Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
+    Route::get('/register', [AuthController::class, 'registrasi'])->name('register.show');
+    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 });
 
+Route::middleware(['auth'])->group(function () {
+    // Dashboard
+    Route::redirect('/home', '/schools');
+    Route::get('/schools', [SekolahController::class, 'index'])->name('schools.index')->middleware('userAkses:sekolah');
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('userAkses:admin');
+    Route::get('/industries', [IndustriController::class, 'index'])->name('industries.index')->middleware('userAkses:industri');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 
-Route::middleware(['auth'])->group( function (){
+    // Admin Profile & Password
+    Route::prefix('admin')->middleware('userAkses:admin')->group(function () {
+        Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile.show');
+        Route::put('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+        Route::get('/password', [AdminController::class, 'password'])->name('admin.password.show');
+        Route::put('/password', [AdminController::class, 'updatePassword'])->name('admin.password.update');
+        
+        // User Management
+        Route::get('/users', [AdminController::class, 'user'])->name('admin.users.index');
+        Route::get('/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
+        Route::post('/usersCreate', [AdminController::class, 'storeUser'])->name('admin.users.store');
+        Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
+        Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
+        Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+        
+        // School Management
+        Route::get('/schools', [AdminController::class, 'dataSekolah'])->name('admin.schools.index');
+        Route::get('/schools/create', [AdminController::class, 'createSekolah'])->name('admin.schools.create');
+        Route::post('/schoolsCreate', [AdminController::class, 'storeSekolah'])->name('admin.schools.store');
+        Route::get('/schools/{id}/edit', [AdminController::class, 'editSekolah'])->name('admin.schools.edit');
+        Route::put('/schools/{id}', [AdminController::class, 'updateSekolah'])->name('admin.schools.update');
+        Route::delete('/schools/{id}', [AdminController::class, 'destroySekolah'])->name('admin.schools.destroy');
+        
+        // Industry Management
+        Route::get('/industries', [AdminController::class, 'dataIndustri'])->name('admin.industries.index');
+        Route::get('/industries/create', [AdminController::class, 'createIndustri'])->name('admin.industries.create');
+        Route::post('/industriesCreate', [AdminController::class, 'storeIndustri'])->name('admin.industries.store');
+        Route::get('/industries/{id}/edit', [AdminController::class, 'editIndustri'])->name('admin.industries.edit');
+        Route::put('/industries/{id}', [AdminController::class, 'updateIndustri'])->name('admin.industries.update');
+        Route::delete('/industries/{id}', [AdminController::class, 'destroyIndustri'])->name('admin.industries.destroy');
 
-        // Dashboard
-        Route::redirect('/home', '/sekolah');
-        Route::get( '/sekolah',  [SekolahController::class,'index'])->name('sekolah')->middleware( 'userAkses:sekolah');
-        Route::get( '/admin',  [AdminController::class,'index'])->name('admin')->middleware( 'userAkses:admin');
-        Route::get( '/industri',  [IndustriController::class,'index'])->name('industri')->middleware( 'userAkses:industri');
-        Route::post( '/logout',  [AuthController::class, 'logout'])->name('logout');
+        // Partner Management
+        Route::get('/partners', [AdminController::class, 'dataMitra'])->name('admin.partners.index');
+        Route::get('/partners/create', [AdminController::class, 'createMitra'])->name('admin.partners.create');
+        Route::post('/partnersCreate', [AdminController::class, 'storeMitra'])->name('admin.partners.store');
+        Route::get('/partners/{id}/edit', [AdminController::class, 'editMitra'])->name('admin.partners.edit');
+        Route::put('/partners/{id}', [AdminController::class, 'updateMitra'])->name('admin.partners.update');
+        Route::delete('/partners/{id}', [AdminController::class, 'destroyMitra'])->name('admin.partners.destroy');
+    });
 
+    // Industry Profile & Password
+    Route::prefix('industries')->middleware('userAkses:industri')->group(function () {
+        Route::get('/profile', [IndustriController::class, 'profile'])->name('industries.profile.show');
+        Route::put('/profile', [IndustriController::class, 'updateProfile'])->name('industries.profile.update');
+        Route::get('/password', [IndustriController::class, 'password'])->name('industries.password.show');
+        Route::put('/password', [IndustriController::class, 'updatePassword'])->name('industries.password.update');
+        Route::get('/assistance-monitoring', [IndustriController::class, 'monitoringBantuan'])->name('industries.assistance-monitoring');
+        Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
+        Route::get('/reports', [IndustriController::class, 'laporan'])->name('industries.reports.index');
+    });
 
-#Dashbord admin
-        // Dashboard Admin/Profile && password
-        Route::get('/admin/profile' , [AdminController::class,'profile'])->name('profile')->middleware( 'userAkses:admin');
-        Route::put('/admin/profile/edit' , [AdminController::class,'editProfile'])->middleware( 'userAkses:admin');
-
-        Route::get('/admin/password' , [AdminController::class,'password'])->name(name: 'password')->middleware( 'userAkses:admin');
-        Route::put('/admin/editPassword' , [AdminController::class,'editPassword'])->middleware( 'userAkses:admin');
-
-
-
-        // Dashboard Admin/Kelola_user
-        Route::get('/admin/kelola_user', [AdminController::class,'user'])->name('user')->middleware( 'userAkses:admin');
-        Route::get('/admin/tambah_user',[AdminController::class, 'tambahUser'])->middleware( 'userAkses:admin');
-        Route::get('/admin/edit_user/{id}',[AdminController::class, 'editUser'])->middleware( 'userAkses:admin');
-
-
-        // Action form
-        Route::post('/tambahUser', [AdminController::class, 'createUser'])->middleware( 'userAkses:admin');
-        Route::put('/ubahUser', [AdminController::class, 'updateUser'])->middleware( 'userAkses:admin');
-        Route::delete('/hapusUser/{id}',[AdminController::class, 'deleteUser'])->middleware( 'userAkses:admin');
-
-
-
-        // Dashboard Admin/Data_sekolah
-        Route::get('/admin/data_sekolah', [AdminController::class,'dataSekolah'])->name('dataSekolah')->middleware( 'userAkses:admin');
-        Route::get('/admin/tambah_sekolah',[AdminController::class, 'tambahDataSekolah'])->middleware( 'userAkses:admin');
-        Route::get('admin/edit_sekolah/{id}',[AdminController::class, 'editDataSekolah'])->middleware( 'userAkses:admin');
-
-        // Action form
-        Route::post('/tambahSekolah', [AdminController::class, 'createSekolah'])->middleware( 'userAkses:admin');
-        Route::put('/ubahSekolah', [AdminController::class, 'updateSekolah'])->middleware( 'userAkses:admin');
-        Route::delete('/hapusSekolah/{id}',[AdminController::class, 'deleteSekolah'])->middleware( 'userAkses:admin');
-
-
-
-
-        // Dashboard Admin/Data_Industri
-        Route::get('/admin/data_industri', [AdminController::class,'dataIndustri'])->name('dataIndustri')->middleware( 'userAkses:admin');
-        Route::get('/admin/tambah_industri',[AdminController::class, 'tambahDataIndustri'])->middleware( 'userAkses:admin');
-        Route::get('admin/edit_industri/{id}',[AdminController::class, 'editDataIndustri'])->middleware( 'userAkses:admin');
-
-        // Action form
-        Route::post('/tambahIndustri', [AdminController::class, 'createIndustri'])->middleware( 'userAkses:admin');
-        Route::put('/ubahIndustri', [AdminController::class, 'updateIndustri'])->middleware( 'userAkses:admin');
-        Route::delete('/hapusIndustri/{id}',[AdminController::class, 'deleteIndustri'])->middleware( 'userAkses:admin');
-
-
-        // Dashboard Admin/Data_Mitra
-        Route::get('/admin/data_mitra', [AdminController::class,'dataMitra'])->name('dataMitra')->middleware( 'userAkses:admin');
-        Route::get('/admin/tambah_mitra',[AdminController::class, 'tambahDataMitra'])->middleware( 'userAkses:admin');
-        Route::get('admin/edit_mitra/{id}',[AdminController::class, 'editDataMitra'])->middleware( 'userAkses:admin');
-
-        // Action form
-        Route::post('/tambahMitra', [AdminController::class, 'createMitra'])->middleware( 'userAkses:admin');
-        Route::put('/ubahMitra', [AdminController::class, 'updateMitra'])->middleware( 'userAkses:admin');
-        Route::delete('/hapusMitra/{id}',[AdminController::class, 'deleteMitra'])->middleware( 'userAkses:admin');
-#End admin
-
-
-#Dashboard Industri
-                // Dashboard Industri/Profile && password
-                Route::get('/industri/profile' , [IndustriController::class,'profile'])->name('profileIndustri')->middleware( 'userAkses:industri');
-                Route::put('/industri/profile/edit' , [IndustriController::class,'editProfile'])->middleware( 'userAkses:industri');
-                Route::get('/industri/password' , [IndustriController::class,'password'])->name(name: 'passwordIndustri')->middleware( 'userAkses:industri');
-                Route::put('/industri/editPassword' , [IndustriController::class,'editPassword'])->middleware( 'userAkses:industri');
-
-                // Dashboard Industri/Monitoring Bantuan
-                 Route::get('/industri/monitoring_bantuan', [IndustriController::class,'monitoringBantuan'])->name('monitoringBantuan')->middleware( 'userAkses:industri');
-                //     Route::get('/industri/tambah_Bantuan',[IndustriController::class, 'tambahDataBantuan']);
-                //     Route::get('/industri/edit_Bantuan/{id}',[IndustriController::class, 'editDataBantuan']);
-                //     // Action form
-                //     Route::post('/tambahBantuan', [IndustriController::class, 'createBantuan']);
-                //     Route::put('/ubahBantuan', [IndustriController::class, 'updateBantuan']);
-                //     Route::delete('/hapusBantuan/{id}',[IndustriController::class, 'deleteBantuan']);
-
-
-                // Dashboard Industri/List Sekolah
-                Route::get('/industri/list_sekolah', [IndustriController::class,'listSekolah'])->name('listSekolah')->middleware( 'userAkses:industri');
-
-                // Dashboard Industri/Laporan
-                Route::get('/industri/laporan', [IndustriController::class,'laporan'])->name('laporan')->middleware( 'userAkses:industri');
-
-#End Industri
-
-
-#Dashboard Sekolah
-                // Dashboard Sekolah/Profile && password
-                Route::get('/sekolah/profile' , [SekolahController::class,'profile'])->name('profileSekolah')->middleware( 'userAkses:sekolah');
-                Route::put('/sekolah/profile/edit' , [SekolahController::class,'editProfile'])->middleware( 'userAkses:sekolah');
-                Route::get('/sekolah/password' , [SekolahController::class,'password'])->name(name: 'passwordSekolah')->middleware( 'userAkses:sekolah');
-                Route::put('/sekolah/editPassword' , [SekolahController::class,'editPassword'])->middleware( 'userAkses:sekolah');
-
-                // Dashboard Sekolah/Monitoring Bantuan
-                 Route::get('/sekolah/monitoring_bantuan', [SekolahController::class,'monitoringBantuan'])->name('monitoringBantuanSekolah')->middleware( 'userAkses:sekolah');
-
-
-                 // Dashboard Sekolah/Laporan
-                Route::get('/sekolah/progres0Persen', [SekolahController::class,'progress0Persen'])->name('0Persen')->middleware( 'userAkses:sekolah');
-                Route::get('/sekolah/progres50Persen', [SekolahController::class,'progress50Persen'])->name('50Persen')->middleware( 'userAkses:sekolah');
-                Route::get('/sekolah/progres100Persen', [SekolahController::class,'progress100Persen'])->name('100Persen')->middleware( 'userAkses:sekolah');
-
-#End Sekolah
-
-
+    // School Profile & Password
+    Route::prefix('schools')->middleware('userAkses:sekolah')->group(function () {
+        Route::get('/profile', [SekolahController::class, 'profile'])->name('schools.profile.show');
+        Route::put('/profile', [SekolahController::class, 'updateProfile'])->name('schools.profile.update');
+        Route::get('/password', [SekolahController::class, 'password'])->name('schools.password.show');
+        Route::put('/password', [SekolahController::class, 'updatePassword'])->name('schools.password.update');
+        Route::get('/assistance-monitoring', [SekolahController::class, 'monitoringBantuan'])->name('schools.assistance-monitoring');
+        Route::get('/progress/0', [SekolahController::class, 'progress0Persen'])->name('schools.progress.0');
+        Route::get('/progress/50', [SekolahController::class, 'progress50Persen'])->name('schools.progress.50');
+        Route::get('/progress/100', [SekolahController::class, 'progress100Persen'])->name('schools.progress.100');
+    });
 
 });

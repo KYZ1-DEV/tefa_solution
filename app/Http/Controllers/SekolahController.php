@@ -6,43 +6,59 @@ use Illuminate\Http\Request;
 
 class SekolahController extends Controller
 {
-    public function index(){
+    // Tampilkan halaman utama Sekolah
+    public function index()
+    {
         return view("pointakses.sekolah.index");
     }
-    
-    // Get Profile
-    public function profile(){
-        return view(view: "sekolah.profile.index");
+
+    // Tampilkan halaman profil Sekolah
+    public function profile()
+    {
+        return view("sekolah.profile.index");
     }
 
-    // Action
-    public function editProfile(){
-        return view("sdasd");
+    // Update profil Sekolah (Action)
+    public function updateProfile(Request $request)
+    {
+        // Logika pembaruan profil sekolah di sini
+        // Validasi data, simpan ke database, dll.
     }
-    
-    // Get Profile
-    public function password(){
+
+    // Tampilkan halaman ubah password Sekolah
+    public function password()
+    {
         return view("sekolah.profile.password");
     }
 
-    // Action
-    public function editPassword(){
-        return view("sdasd");
+    // Update password Sekolah (Action)
+    public function updatePassword(Request $request)
+    {
+        // Logika pembaruan password sekolah di sini
+        // Validasi data, update password, dll.
     }
 
-    
-        // Get Monitoring Bantuan
-            public function monitoringBantuan(){
-                return view("sekolah.monitoring_bantuan.index");
-            }
+    // Tampilkan halaman monitoring bantuan Sekolah
+    public function monitoringBantuan()
+    {
+        return view("sekolah.monitoring_bantuan.index");
+    }
 
-            public function progress0Persen(){
-                return view("sekolah.laporan.progress0Persen");
-            }
-            public function progress50Persen(){
-                return view("sekolah.laporan.progress50Persen");
-            }
-            public function progress100Persen(){
-                return view("sekolah.laporan.progress100Persen");
-            }
+    // Tampilkan laporan progress 0% Sekolah
+    public function progress0Persen()
+    {
+        return view("sekolah.laporan.progress0Persen");
+    }
+
+    // Tampilkan laporan progress 50% Sekolah
+    public function progress50Persen()
+    {
+        return view("sekolah.laporan.progress50Persen");
+    }
+
+    // Tampilkan laporan progress 100% Sekolah
+    public function progress100Persen()
+    {
+        return view("sekolah.laporan.progress100Persen");
+    }
 }
