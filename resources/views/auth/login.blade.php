@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{{ asset('auth/style.css') }}" />
   </head>
   <body class="img js-fullheight" style="background-image: url({{ asset('auth/bg2.jpg') }});overflow: hidden;">
-    <section class="ftco-section" style="margin-top: -50px !important;">
+    <section class="ftco-section" style="margin-top: -10px !important;">
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-md-6 text-center mb-1">
@@ -43,7 +43,7 @@
                   @if (Session::get('error'))
                   <li class="text-center" style="color: red;">{{ Session::get('error') }}</li>
               @endif
-              <form action="{{ route('auth') }}" novalidate method="POST" class="signin-form" autocomplete="off">
+              <form action="{{ route('auth.login') }}" method="POST" class="signin-form" autocomplete="off">
                 @csrf
                 <div class="form-group">
                   <input
@@ -70,7 +70,7 @@
                  
                   <span style="@error('password') margin-top: -14px; @enderror" 
                     toggle="#password-field"
-                    class="fa fa-fw fa-eye field-icon toggle-password"
+                    class="fa fa-fw fa-eye-slash field-icon toggle-password"
                   ></span>
                   @error('password')
                       <div class="invalid-feedback">{{ $message }}</div>
@@ -105,7 +105,7 @@
               <div class="text-center">
                 Not a Member ?
                 <a
-            href="{{ route('registrasi') }}"
+            href="{{ route('register.show') }}"
             style="color: rgb(187, 129, 224);"
               class="w-100"
             >Sign Up</a

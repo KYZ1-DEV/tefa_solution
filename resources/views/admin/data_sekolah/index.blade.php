@@ -3,7 +3,7 @@
     <x-admin></x-admin>
 @endsection
 @section('profile')
-    {{ route('profile') }}
+    {{ route('admin.profile.show') }}
 @endsection
 @section('main')
                     <!-- Begin Page Content -->

@@ -20,8 +20,8 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Edit</h6>
-                <a class="collapse-item" href="{{ route('profileSekolah') }}">Edit Profile</a>
-                <a class="collapse-item" href="{{ route('passwordSekolah') }}">Edit Password</a>
+                <a class="collapse-item" href="{{ route('schools.profile.show') }}">Edit Profile</a>
+                <a class="collapse-item" href="{{ route('schools.password.show') }}">Edit Password</a>
                 <div class="collapse-divider"></div>
             </div>
 
@@ -31,7 +31,7 @@
 
     <hr class="sidebar-divider d-none d-md-block">
     <li class="nav-item">
-        <a class="nav-link collapsed" href="{{ route('monitoringBantuanSekolah') }}" >
+        <a class="nav-link collapsed" href="{{ route('schools.assistance-monitoring') }}" >
             <i class="fas fa-fw fa-cog"></i>
             <span>Monitoring Bantuan</span>
         </a>
@@ -49,9 +49,9 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Progres</h6>
-                <a class="collapse-item" href="{{ route('0Persen') }}">Progres 0%</a>
-                <a class="collapse-item" href="{{ route('50Persen') }}">Progres 50%</a>
-                <a class="collapse-item" href="{{ route('100Persen') }}">Progres 100%</a>
+                <a class="collapse-item" href="{{ route('schools.progress.0') }}">Progres 0%</a>
+                <a class="collapse-item" href="{{ route('schools.progress.50') }}">Progres 50%</a>
+                <a class="collapse-item" href="{{ route('schools.progress.100') }}">Progres 100%</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>

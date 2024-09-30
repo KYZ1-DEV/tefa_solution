@@ -5,7 +5,7 @@
 @endsection
 
 @section('profile')
-    {{ route('profileIndustri') }}
+    {{ route('industries.password.show') }}
 @endsection
 
 @section('main')

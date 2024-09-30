@@ -3,7 +3,7 @@
     <x-industri></x-industri>
 @endsection
 @section('profile')
-    {{ route('profileIndustri') }}
+    {{ route('industries.profile.show') }}
 @endsection
 @section('main')
                     <!-- Begin Page Content -->

@@ -31,11 +31,11 @@ class AuthController extends Controller
 
         if (Auth::attempt($infoLogin)) {
             if (Auth::user()->role === 'admin') {
-                return redirect()->route('admin')->with('success','Halo Admin, Anda Berhasil Login');
+                return redirect()->route('admin.dashboard')->with('success','Halo Admin, Anda Berhasil Login');
             }elseif (Auth::user()->role === 'industri') {
-                return redirect()->route(route: 'industri')->with('success','Berhasil Login');
+                return redirect()->route(route: 'industries.index')->with('success','Berhasil Login');
             }elseif (Auth::user()->role === 'sekolah') {
-                return redirect()->route(route: 'sekolah')->with('success','Berhasil Login');
+                return redirect()->route(route: 'schools.index')->with('success','Berhasil Login');
             }
 
         }else {

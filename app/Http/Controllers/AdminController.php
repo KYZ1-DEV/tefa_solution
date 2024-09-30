@@ -2,74 +2,66 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Middleware\UserAkses;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-
-    // Get index
-    public function index(){
+    // Dashboard
+    public function index()
+    {
         return view("pointakses.admin.index");
     }
 
-
-    // Get Profile
-    public function profile(){
-        return view(view: "admin.profile.index");
+    // Profile Management
+    public function profile()
+    {
+        return view('admin.profile.index');
     }
 
-    // Action
-    public function editProfile(){
-        return view("sdasd");
+    public function updateProfile(Request $request)
+    {
+        // Logika pembaruan profil admin
     }
 
-
-
-    // Get Profile
-    public function password(){
-        return view("admin.profile.password");
+    public function password()
+    {
+        return view('admin.profile.password');
     }
 
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'newPassword' => 'required|min:6|confirmed',
+        ], [
+            'newPassword.confirmed' => "Password tidak sesuai, tolong masukkan password dengan benar!"
+        ]);
 
+        $user = User::find($request->id);
 
-    // Action
-    public function editPassword(){
-        return view("sdasd");
+        if ($user) {
+            $user->password = Hash::make($request->newPassword);
+            $user->save();
+            return redirect()->back()->with('success', 'Password berhasil diperbarui!');
+        }
     }
 
-
-    // Get User
-    public function user(){
-
+    // User Management
+    public function user()
+    {
         $users = User::all();
         return view('admin.kelola_user.index',compact('users'));
-
-
     }
 
-    public function tambahUser(){
+    public function createUser()
+    {
         return view("admin.kelola_user.tambah");
     }
 
-    public function editUser($id)
+    public function storeUser(Request $request)
     {
-        $user = User::find($id);
-        return view("admin.kelola_user.edit",compact('user'));
-    }
-
-
-
-    // Action User
-    public function deleteUser($id){
-        User::find($id)->delete();
-        return redirect()->route('user')->with('success', 'User berhasil dihapus');
-    }
-
-    public function createUser(Request $request){
-
-         $request->validate([
+        $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6', // Include password validation
@@ -84,110 +76,131 @@ class AdminController extends Controller
             'role' => $request->role,
         ]);
 
-        // Redirect back to the user index with success message
-        return redirect()->route('user')->with('success', 'User berhasil ditambahkan');
-        return view("admin.kelola_user.tambah");
-
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
     }
 
-
-    public function updateUser(Request $request){
-
-    $user = User::findOrFail($request->id);
-
-    $user->name = $request->name;
-    $user->email = $request->email;
-    if (isset($request->password)) {
-        $user->password = bcrypt($request->password);
+    public function editUser($id)
+    {
+        $user = User::find($id);
+        return view("admin.kelola_user.edit",compact('user'));
     }
 
-    $user->role = $request->role;
-    // Save the updated data
-    $user->save();
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($request->id);
 
-    return redirect()->route('user')->with('success', 'User berhasil diupdate');
-
+        $user->name = $request->name;
+        $user->email = $request->email;
+        if (isset($request->password)) {
+            $user->password = bcrypt($request->password);
+        }
+    
+        $user->role = $request->role;
+        $user->save();
+    
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil diupdate');
     }
 
-
-
-    // Get Sekolah
-    public function dataSekolah(){
-        return view("admin.data_sekolah.index");
-    }
-
-    public function tambahDataSekolah(){
-        return view("");
-    }
-    public function editDataSekolah(){
-        return view("");
-    }
-
-
-    // Action Sekolah
-    public function createSekolah(){
-        return view("");
-    }
-
-    public function updateSekolah(){
-        return view("");
-    }
-
-    public function deleteSekolah(){
-        return view("");
+    public function destroyUser($id)
+    {
+        $user = User::find($id);
+        $user->delete();
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus');
     }
 
 
 
-    // Get Industri
-    public function dataIndustri(){
-        return view("admin.data_industri.index");
-    }
-    public function tambahDataIndustri(){
-        return view("");
-    }
-    public function editDataIndustri(){
-        return view("");
+
+    // School Management
+    public function dataSekolah()
+    {
+            return view('admin.data_sekolah.index');
     }
 
-    // Action Industri
-    public function createIndustri(){
-        return view("");
+    public function createSekolah()
+    {
+        // Tampilkan form tambah sekolah
     }
 
-    public function updateIndustri(){
-        return view("");
+    public function storeSekolah(Request $request)
+    {
+        // Simpan sekolah baru
     }
 
-    public function deleteIndustri(){
-        return view("");
+    public function editSekolah($id)
+    {
+        // Tampilkan form edit sekolah
     }
 
-
-    // Get Mitra
-    public function dataMitra(){
-        return view("admin.data_mitra.index");
-    }
-    public function tambahDataMitra(){
-        return view("");
-    }
-    public function editDataMitra(){
-        return view("");
+    public function updateSekolah(Request $request, $id)
+    {
+        // Logika pembaruan sekolah
     }
 
-
-    // Action Mitra
-    public function createMitra(){
-        return view("");
+    public function destroySekolah($id)
+    {
+        // Hapus sekolah
     }
 
-    public function updateMitra(){
-        return view("");
+    // Industry Management
+    public function dataIndustri()
+    {
+        return view('admin.data_industri.index');
     }
 
-    public function deleteMitra(){
-        return view("");
+    public function createIndustri()
+    {
+        // Tampilkan form tambah industri
     }
 
+    public function storeIndustri(Request $request)
+    {
+        // Simpan industri baru
+    }
 
+    public function editIndustri($id)
+    {
+        // Tampilkan form edit industri
+    }
+
+    public function updateIndustri(Request $request, $id)
+    {
+        // Logika pembaruan industri
+    }
+
+    public function destroyIndustri($id)
+    {
+        // Hapus industri
+    }
+
+    // Partner Management
+    public function dataMitra()
+    {
+        return view('admin.data_mitra.index');
+    }
+
+    public function createMitra()
+    {
+        // Tampilkan form tambah mitra
+    }
+
+    public function storeMitra(Request $request)
+    {
+        // Simpan mitra baru
+    }
+
+    public function editMitra($id)
+    {
+        // Tampilkan form edit mitra
+    }
+
+    public function updateMitra(Request $request, $id)
+    {
+        // Logika pembaruan mitra
+    }
+
+    public function destroyMitra($id)
+    {
+        // Hapus mitra
+    }
 }

@@ -32,7 +32,7 @@
                 @error('password')
                 <li class="text-center" style="color: red;">{{ $message}}</li>
                 @enderror
-              <form action="{{ route('register') }}"  method="POST" novalidate autocomplete="off" class="signin-form">
+              <form action="{{ route('auth.register') }}"  method="POST" novalidate autocomplete="off" class="signin-form">
                 @csrf
                 <div class="form-group">
                   <input
@@ -71,7 +71,7 @@
                   />
                   <span
                     toggle="#password-field"
-                    class="fa fa-fw fa-eye field-icon toggle-password"
+                    class="fa fa-fw fa-eye-slash field-icon toggle-password"
                   ></span>
                 </div>
                 <div class="form-group">
@@ -84,7 +84,7 @@
                       placeholder="Confirm Password"
                       required
                     />
-                    <span toggle="#password-confirm-field" class="fa fa-fw fa-eye field-icon toggle-password1" style="top:58%!important;"></span>
+                    <span toggle="#password-confirm-field" class="fa fa-fw fa-eye-slash field-icon toggle-password1" style="top:58%!important;"></span>
                   </div>
                 <div class="form-group">
                   <label for="role"> Select Role</label>

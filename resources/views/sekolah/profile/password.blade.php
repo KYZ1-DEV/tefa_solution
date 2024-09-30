@@ -3,7 +3,7 @@
     <x-sekolah></x-sekolah>
 @endsection
 @section('profile')
-    {{ route('profileSekolah') }}
+    {{ route('schools.password.show') }}
 @endsection
 @section('main')
                     <!-- Begin Page Content -->

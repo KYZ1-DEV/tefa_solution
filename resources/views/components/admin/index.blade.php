@@ -14,14 +14,14 @@
 <li class="nav-item">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
         aria-expanded="true" aria-controls="collapsePages">
-        <i class="fas fa-fw fa-user"></i>
+        <i class="fas fa-fw fa-user-edit"></i>
         <span>Profile</span>
     </a>
     <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Edit</h6>
-            <a class="collapse-item" href="{{ route('profile') }}">Edit Profile</a>
-            <a class="collapse-item" href="{{ route('password') }}">Edit Password</a>
+            <a class="collapse-item" href="{{ route('admin.profile.show') }}">Edit Profile</a>
+            <a class="collapse-item" href="{{ route('admin.password.show') }}">Edit Password</a>
             <div class="collapse-divider"></div>
         </div>
     </div>
@@ -36,14 +36,14 @@ Kelola Data
 <li class="nav-item">
 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
     aria-expanded="true" aria-controls="collapseUtilities">
-    <i class="fas fa-fw fa-file"></i>
+    <i class="fas fa-fw fa-user"></i>
     <span>Kelola User</span>
 </a>
 <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
     data-parent="#accordionSidebar">
     <div class="bg-white py-2 collapse-inner rounded">
         <h6 class="collapse-header">CRUD</h6>
-        <a class="collapse-item" href="{{ route('user') }}">User</a>
+        <a class="collapse-item" href="{{ route('admin.users.index') }}">User</a>
         <div class="collapse-divider"></div>
     </div>
 </div>
@@ -55,16 +55,17 @@ Kelola Data
 
 <hr class="sidebar-divider d-none d-md-block">
 <li class="nav-item">
-    <a class="nav-link" href="{{ route('dataSekolah') }}" >
-        <i class="fas fa-fw fa-file"></i>
+    <a class="nav-link" href="{{ route('admin.schools.index') }}" >
+        <i class="fas fa-fw fa-school"></i>
         <span>Data Sekolah</span>
+        
     </a>
-    <a class="nav-link" href="{{ route('dataIndustri') }}" >
-        <i class="fas fa-fw fa-file"></i>
+    <a class="nav-link" href="{{ route('admin.industries.index') }}" >
+        <i class="fas fa-fw fa-building"></i>
         <span>Data Industri</span>
     </a>
-    <a class="nav-link" href="{{ route('dataMitra') }}" >
-        <i class="fas fa-fw fa-file"></i>
+    <a class="nav-link" href="{{ route('admin.partners.index') }}" >
+        <i class="fas fa-fw fa-users"></i>
         <span>Data Mitra</span>
     </a>
 </li>

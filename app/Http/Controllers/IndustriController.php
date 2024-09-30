@@ -4,40 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class IndustriController extends Controller
 {
+    // Tampilkan halaman utama Industri
     public function index()
     {
         return view("pointakses.industri.index");
     }
 
-
-    // Get Profile
+    // Tampilkan halaman profil Industri
     public function profile()
     {
-        return view(view: "industri.profile.index");
+        return view("industri.profile.index");
     }
 
-    // Action
-    public function editProfile()
+    // Update profil Industri (Action)
+    public function updateProfile(Request $request)
     {
-        return view("sdasd");
+        // Logika pembaruan profil industri di sini
+        // Validasi data, simpan ke database, dll.
     }
 
-    // Get Profile
+    // Tampilkan halaman ubah password Industri
     public function password()
     {
         return view("industri.profile.password");
     }
 
-    // Action
-    public function editPassword(Request $request)
+    // Update password Industri (Action)
+    public function updatePassword(Request $request)
     {
-
         $request->validate([
             'newPassword' => 'required|min:6|confirmed',
         ]);
@@ -45,32 +43,28 @@ class IndustriController extends Controller
         $user = User::find($request->id);
 
         if ($user) {
-
             $user->password = Hash::make($request->newPassword);
             $user->save();
 
             return redirect()->back()->with('success', 'Password berhasil diperbarui!');
         } else {
-
             return response()->json(['message' => 'User not found'], 404);
         }
-
-
     }
 
-
-
-    // Get Monitoring Bantuan
+    // Tampilkan halaman monitoring bantuan Industri
     public function monitoringBantuan()
     {
         return view("industri.monitoring_bantuan.index");
     }
 
+    // Tampilkan daftar Sekolah yang bekerja sama dengan Industri
     public function listSekolah()
     {
         return view("industri.list_sekolah.index");
     }
 
+    // Tampilkan laporan Industri
     public function laporan()
     {
         return view("industri.laporan.index");

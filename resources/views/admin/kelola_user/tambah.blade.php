@@ -3,7 +3,7 @@
     <x-admin></x-admin>
 @endsection
 @section('profile')
-    {{ route('profile') }}
+    {{ route('admin.profile.show') }}
 @endsection
 @section('main')
 
@@ -13,7 +13,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <br>
-            <a href="/admin/kelola_user" class="btn-sm text-decoration-none btn-purple">Kembali</a>
+            <a href="{{ route('admin.users.index') }}" class="btn-sm text-decoration-none btn-purple">Kembali</a>
         </div>
         <div class="card-body">
             <h3>Tambah User</h3>
@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form action="/tambahUser" method="POST">
+            <form action="{{ route('admin.users.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="name">Nama</label>

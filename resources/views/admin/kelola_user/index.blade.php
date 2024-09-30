@@ -3,7 +3,7 @@
     <x-admin></x-admin>
 @endsection
 @section('profile')
-    {{ route('profile') }}
+    {{ route('admin.profile.show') }}
 @endsection
 @section('main')
 
@@ -15,7 +15,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
                                 {{-- new --}}
                                 <br>
-                                <a href="/admin/tambah_user" class="btn-sm text-decoration-none btn-purple">Tambah data User</a>
+                                <a href="{{ route('admin.users.create') }}" class="btn-sm text-decoration-none btn-purple">Tambah data User</a>
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>
@@ -70,8 +70,8 @@
 
                                                 <td>{{ $user['role'] }}</td>
                                                 <td>
-                                                    <a href="/admin/edit_user/{{ $user['id'] }}" class="btn-purple btn-3d btn">Edit</a>
-                                                    <form onsubmit="return confirmHapus(event)" action="/hapusUser/{{ $user['id'] }}" class="d-inline" method="post">
+                                                    <a href="{{ route('admin.users.edit',[$user['id']]) }}" class="btn-purple btn-3d btn">Edit</a>
+                                                    <form onsubmit="return confirmHapus(event)" action="{{ route('admin.users.destroy',[$user['id']]) }}" class="d-inline" method="POST">
                                                         @method('delete')
                                                         @csrf
                                                         <button type="submit" class="btn-purple btn-3d btn">Hapus</button>
