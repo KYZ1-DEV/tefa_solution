@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Admin;
+use App\Models\Sekolah;
+use App\Models\Industri;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
@@ -23,6 +26,21 @@ class User extends Authenticatable
         'gambar',
     ];
 
+    public function admin()
+    {
+        return $this->hasOne(Admin::class, 'id_user');
+    }
+
+    public function sekolah()
+    {
+        return $this->hasOne(Sekolah::class, 'id_user');
+    }
+
+    public function industri()
+    {
+        return $this->hasOne(Industri::class, 'id_user');
+    }
+    
     /**
      * The attributes that should be hidden for serialization.
      *
