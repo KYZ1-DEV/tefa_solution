@@ -27,7 +27,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
         Route::get('/password', [AdminController::class, 'password'])->name('admin.password.show');
         Route::put('/password', [AdminController::class, 'updatePassword'])->name('admin.password.update');
-        
+
         // User Management
         Route::get('/users', [AdminController::class, 'user'])->name('admin.users.index');
         Route::get('/users/create', [AdminController::class, 'createUser'])->name('admin.users.create');
@@ -35,7 +35,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/{id}/edit', [AdminController::class, 'editUser'])->name('admin.users.edit');
         Route::put('/users/{id}', [AdminController::class, 'updateUser'])->name('admin.users.update');
         Route::delete('/users/{id}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
-        
+
         // School Management
         Route::get('/schools', [AdminController::class, 'dataSekolah'])->name('admin.schools.index');
         Route::get('/schools/create', [AdminController::class, 'createSekolah'])->name('admin.schools.create');
@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/schools/{id}/edit', [AdminController::class, 'editSekolah'])->name('admin.schools.edit');
         Route::put('/schools/{id}', [AdminController::class, 'updateSekolah'])->name('admin.schools.update');
         Route::delete('/schools/{id}', [AdminController::class, 'destroySekolah'])->name('admin.schools.destroy');
-        
+
         // Industry Management
         Route::get('/industries', [AdminController::class, 'dataIndustri'])->name('admin.industries.index');
         Route::get('/industries/create', [AdminController::class, 'createIndustri'])->name('admin.industries.create');
