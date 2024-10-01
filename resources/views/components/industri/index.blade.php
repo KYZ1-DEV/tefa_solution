@@ -30,21 +30,21 @@
     <hr class="sidebar-divider d-none d-md-block">
     <li class="nav-item">
         <a class="nav-link" href="{{ route('industries.assistance-monitoring') }}" >
-            <i class="fas fa-fw fa-file"></i>
+            <i class="fas fa-fw fa-eye"></i>
             <span>Monitoring Bantuan</span>
         </a>
         <a class="nav-link" href="{{ route('industries.schools.index') }}" >
-            <i class="fas fa-fw fa-file"></i>
+            <i class="fas fa-school "></i>
             <span>List Sekolah</span>
         </a>
         <a class="nav-link" href="{{ route('industries.reports.index') }}" >
-            <i class="fas fa-fw fa-file"></i>
+            <i class="fas fa-file-alt"></i>
             <span>Laporan</span>
         </a>
     </li>
 
-  
-        
+
+
 
 
     <!-- Divider -->

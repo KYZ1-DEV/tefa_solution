@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -58,10 +59,19 @@ class IndustriController extends Controller
         return view("industri.monitoring_bantuan.index");
     }
 
-    // Tampilkan daftar Sekolah yang bekerja sama dengan Industri
-    public function listSekolah()
+
+    public function listSekolah(Request $request)
     {
-        return view("industri.list_sekolah.index");
+        $search = $request->get('search');
+        if ($search) {
+            $users = User::where('name', 'like', "%{$search}%")
+                ->get();
+        } else {
+            $users = User::all();
+        }
+
+        $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))->get();
+        return view("industri.list_sekolah.index", compact('users','sekolahs'));
     }
 
     // Tampilkan laporan Industri
