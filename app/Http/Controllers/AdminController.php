@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -17,13 +19,49 @@ class AdminController extends Controller
     // Profile Management
     public function profile()
     {
-        return view('admin.profile.index');
+        $user = Auth::user();
+        // dd($user);
+        $admin =  Admin::where('id_user', $user->id)->first();
+        return view('admin.profile.index', compact('admin'));
     }
 
     public function updateProfile(Request $request)
-    {
-        // Logika pembaruan profil admin
+{
+    // Validasi request
+    $request->validate([
+        'name' => 'max:255',
+        'image' => 'max:1045|mimes:png,jpg',
+    ],[
+        'name.max' => 'Nama terlalu panjang !!',
+        'image.max' => 'Foto maksimal 1MB',
+        'image.mimes' => 'Foto harus PNG atau JPG !'
+    ]);
+
+    $auth = Auth::user();
+    $user = User::find($auth->id);
+    
+    $admin = Admin::updateOrCreate(
+        ['id_user' => $user->id], 
+        ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $request->phone]
+    );
+
+
+    // Jika ada file gambar diupload
+    if($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . uniqid() . "." . $image->extension();
+        $image->move(public_path('gambar'), $imageName);
+        $user->name = $request->name;
+        // Update gambar user
+        $user->update(['gambar' => $imageName]);
+    }else{
+        $user->name = $request->name;
+        $user->update();
     }
+
+    return redirect()->route('admin.profile.show')->with('success','Edit Profile Berhasil');
+}
+
 
     public function password()
     {

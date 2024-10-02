@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('kepsek');
             $table->text('alamat');
             $table->string('email')->unique();
-            $table->string('no_tpln_sekolah');
+            $table->string('no_tlpn_sekolah');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

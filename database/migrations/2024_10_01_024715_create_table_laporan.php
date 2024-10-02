@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('laporan', function (Blueprint $table) {
             $table->id();
             $table->string('nama_laporan');
-            $table->string('progres_laporan');
+            $table->enum('progres_laporan',['0%','50%','100%'])->default('0%');
             $table->string('bukti_laporan')->nullable();
             $table->date('tanggal_laporan');
+            $table->text('deskripsi_laporan')->nullable();
             $table->foreignId('id_sekolah')->constrained('sekolah')->onDelete('cascade');
             $table->timestamps();
         });

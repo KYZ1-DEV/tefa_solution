@@ -17,8 +17,9 @@ return new class extends Migration
             $table->string('npwp');
             $table->string('skdp');
             $table->string('email')->unique();
+            $table->text('alamat');
             $table->string('bidang_industri');
-            $table->string('no_tpln_industri');
+            $table->string('no_tlpn_industri');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

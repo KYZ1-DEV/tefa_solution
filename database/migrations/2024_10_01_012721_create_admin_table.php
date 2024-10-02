@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_admin');
             $table->string('email')->unique();
-            $table->string('no_tpln');
+            $table->string('no_tlpn');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });

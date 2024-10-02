@@ -142,7 +142,7 @@
                                                             Telepon</strong></label>
                                                     <div class="col-sm-8">
                                                         <div class="form-control-plaintext">:
-                                                            {{ $sekolah->no_tpln_sekolah }}</div>
+                                                            {{ $sekolah->no_tlpn_sekolah }}</div>
                                                     </div>
                                                 </div>
                                             </div>
