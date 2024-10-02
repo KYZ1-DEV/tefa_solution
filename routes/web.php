@@ -72,6 +72,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [IndustriController::class, 'laporan'])->name('industries.reports.index');
     });
 
+    
     // School Profile & Password
     Route::prefix('schools')->middleware('userAkses:sekolah')->group(function () {
         Route::get('/profile', [SekolahController::class, 'profile'])->name('schools.profile.show');
