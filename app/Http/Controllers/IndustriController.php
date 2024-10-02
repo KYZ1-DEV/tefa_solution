@@ -59,19 +59,20 @@ class IndustriController extends Controller
         return view("industri.monitoring_bantuan.index");
     }
 
-
+    // Tampilkan list sekolah
     public function listSekolah(Request $request)
     {
         $search = $request->get('search');
+
         if ($search) {
-            $users = User::where('name', 'like', "%{$search}%")
-                ->get();
+            $users = User::where('name', 'like', "%{$search}%")->get();
         } else {
             $users = User::all();
         }
 
         $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))->get();
-        return view("industri.list_sekolah.index", compact('users','sekolahs'));
+
+        return view("industri.list_sekolah.index", compact('users', 'sekolahs'));
     }
 
     // Tampilkan laporan Industri

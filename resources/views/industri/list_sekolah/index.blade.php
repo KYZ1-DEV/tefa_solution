@@ -6,7 +6,8 @@
     {{ route('industries.profile.show') }}
 @endsection
 @section('main')
-            <!-- Begin Page Content -->
+    <!-- Begin Page Content -->
+    <!-- Begin Page Content -->
     <div class="container-fluid">
         @if (Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show">
@@ -24,118 +25,136 @@
             <h1 class="h3 mb-0 text-gray-800 ml-3">List Sekolah</h1>
         </div>
 
+        <!-- Form Pencarian -->
+        <div class="d-flex justify-content-end mb-3">
+            <form action="" method="GET" class="form-inline">
+                <div class="input-group mb-3">
+                    <input type="text" name="search" id="searchInput" class="form-control rounded"
+                        placeholder="Nama Sekolah" value="{{ request('search') }}" style="border-radius: 20px 0 0 20px;">
+                    <button class="btn btn-search rounded-circle" type="submit" id="searchButton"
+                        style="width: 40px; height: 40px; padding: 0; margin-left: 10px;">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
         <!-- Content Row -->
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <ul class="list-group ml-2">
-                        {{-- @dd($sekolahs) --}}
-                        @foreach ($sekolahs as $sekolah)
-                            @php
-                                // Misalkan kita ingin mencari pengguna yang merupakan kepala sekolah dari sekolah ini
-                                $user = $users->firstWhere('id', $sekolah->id_user); // Ganti 'id_user' sesuai dengan kolom yang ada
-                            @endphp
+                    <ul class="list-group ml-2" id="sekolahList">
+                        @if ($sekolahs->isEmpty())
+                            <li class="list-group-item text-center ">Data yang dicari tidak ada!</li>
+                        @else
+                            @foreach ($sekolahs as $sekolah)
+                                @php
+                                    $user = $users->firstWhere('id', $sekolah->id_user);
+                                @endphp
 
-                            @if ($user)
-                                <li class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between">
-                                    <div class="d-flex align-items-center mb-2 mb-sm-0">
-                                        <img src="{{ $user['gambar'] ? asset('../gambar/'.$user['gambar']) : asset('gambar/user.jpeg') }}" alt="Logo Sekolah"
-                                            class="img-thumbnail rounded-circle" style="width: 75px; height: 75px; object-fit: cover; margin-right: 15px;">
-                                        <div>
-                                            <span style="font-size: 1.25rem; font-weight: bold; color: #555;">{{ $user->name }}</span><br>
-                                            <small class="text-muted">{{ $sekolah->alamat }}</small>
+                                @if ($user)
+                                    <li
+                                        class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
+                                        <div class="d-flex align-items-center mb-2 mb-sm-0">
+                                            <img src="{{ $user['gambar'] ? asset('../gambar/' . $user['gambar']) : asset('gambar/user.jpeg') }}"
+                                                alt="Logo Sekolah" class="img-thumbnail rounded-circle"
+                                                style="width: 75px; height: 75px; object-fit: cover; margin-right: 15px;">
+                                            <div>
+                                                <span class="school-name"
+                                                    style="font-size: 1.25rem; font-weight: bold; color: #555;">{{ $user->name }}</span><br>
+                                                <small class="text-muted">{{ $sekolah->alamat }}</small>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div class="text-end">
-                                        <!-- Lihat Detail Button -->
-                                        <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal{{ $sekolah->npsn }}">
-                                            <span class="d-none d-sm-inline">Lihat Detail</span>
-                                            <i class="fa-solid fa-eye d-sm-none"></i>
-                                        </button>
-
-                                        <!-- Beri Bantuan Button -->
-                                        <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
-                                            data-bs-target="#bantuan">
-                                            <span class="d-none d-sm-inline">Beri Bantuan</span>
-                                            <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
-                                        </button>
-                                    </div>
-                                </li>
-                            @endif
-
-                            <!-- Modal Detail for each school -->
-                            <div class="modal fade" id="detailModal{{ $sekolah->npsn }}" tabindex="-1" aria-labelledby="detailLabel{{ $sekolah->npsn }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="detailLabel{{ $sekolah->npsn }}">Detail Sekolah</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <div class="text-end">
+                                            <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
+                                                data-bs-target="#detailModal{{ $sekolah->npsn }}">
+                                                <span class="d-none d-sm-inline">Lihat Detail</span>
+                                                <i class="fa-solid fa-eye d-sm-none"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
+                                                data-bs-target="#bantuan">
+                                                <span class="d-none d-sm-inline">Beri Bantuan</span>
+                                                <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
+                                            </button>
                                         </div>
-                                        <div class="modal-body">
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>NPSN</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->npsn }}</div>
-                                                </div>
+                                    </li>
+                                @endif
+
+                                <!-- Modal Detail for each school -->
+                                <div class="modal fade" id="detailModal{{ $sekolah->npsn }}" tabindex="-1"
+                                    aria-labelledby="detailLabel{{ $sekolah->npsn }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="detailLabel{{ $sekolah->npsn }}">Detail Sekolah
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Nama Sekolah</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->nama_sekolah }}</div>
+                                            <div class="modal-body">
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>NPSN</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->npsn }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Status</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->status }}</div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Nama
+                                                            Sekolah</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->nama_sekolah }}
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Jenjang</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->jenjang }}</div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Status</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->status }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Kepala Sekolah</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->kepsek }}</div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Jenjang</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->jenjang }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Alamat</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->alamat }}</div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Kepala
+                                                            Sekolah</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->kepsek }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Email</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->email }}</div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Alamat</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->alamat }}</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Nomor Telepon</strong></label>
-                                                <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $sekolah->no_tpln_sekolah }}</div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Email</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">: {{ $sekolah->email }}</div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Nomor
+                                                            Telepon</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">:
+                                                            {{ $sekolah->no_tpln_sekolah }}</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        @endif
                     </ul>
                 </div>
             </div>
         </div>
-
-
-
-
-
 
         <!-- Modal Bantuan -->
         <div class="modal fade" id="bantuan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -153,7 +172,7 @@
                                 <option value="1">CSR</option>
                                 <option value="2">BANSOS</option>
                                 <option value="3">DLL</option>
-                              </select>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="tanggal_pemberian" class="form-label">Tanggal Pemberian</label>
@@ -185,7 +204,6 @@
     </script>
 
     <style>
-
         .btn-gradient {
             background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
             border: none;
@@ -208,10 +226,21 @@
         .btn:hover {
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
             transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-search {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            color: white;
+            background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
+            justify-content: center;
+            align-items: center;
         }
     </style>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
 @endsection
-
