@@ -7,9 +7,13 @@ use App\Models\User;
 use App\Models\Mitra;
 use App\Models\Bantuan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Industri extends Model
 {
+    use HasFactory, Notifiable;
+
     protected $table = 'industri';
 
     protected $fillable = [
@@ -17,8 +21,9 @@ class Industri extends Model
         'npwp',
         'skdp',
         'email',
+        'alamat',
         'bidang_industri',
-        'no_tpln_industri',
+        'no_tlpn_industri',
         'id_user',
     ];
 

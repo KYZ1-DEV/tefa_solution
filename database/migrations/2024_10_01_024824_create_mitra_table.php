@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('nama_mitra');
             $table->date('tanggal_bermitra');
-            $table->string('progres_bermitra');
-            $table->string('status_mitra');
+            $table->enum('progres_bermitra',allowed: ['0%','50%','100%'])->default('0%');
+            $table->enum('status_mitra',['proses','dibatalkan','selesai'])->default('proses');
             $table->foreignId('id_sekolah')->constrained('sekolah')->onDelete('cascade');
             $table->foreignId('id_industri')->constrained('industri')->onDelete('cascade');
             $table->foreignId('id_bantuan')->nullable()->constrained('bantuan')->onDelete('set null');

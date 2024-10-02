@@ -19,6 +19,17 @@
                 </ul>
             </div>
         @endif
+        
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $item )
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -38,7 +49,7 @@
                             <!-- Profile Picture (Left) -->
                             <div class="col-md-4 text-center">
                                 <img id="profilePic" class="img-fluid mt-3 mb-4" style="width: 8rem; height: 8rem; border-radius: 50%; object-fit: cover;"
-                                    src="{{ asset('gambar/user.jpeg') }}" alt="Profile Picture">
+                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.jpeg') }}" alt="Profile Picture">
                                 <button class="btn btn-primary" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
                             </div>
 
@@ -46,7 +57,8 @@
                             <div class="col-md-8">
                                 <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
-                                <input type="file" id="uploadBtn" name="profile_picture" accept="image/*" style="display: none;">
+                                    @method('PUT')
+                                <input type="file" id="uploadBtn" name="image" accept="image/*" style="display: none;">
                                     <div class="form-group">
                                         <label for="name">Name:</label>
                                         <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" required>
@@ -54,12 +66,12 @@
 
                                     <div class="form-group">
                                         <label for="email">Email:</label>
-                                        <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" required>
+                                        <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                     </div>
 
                                     <div class="form-group">
                                         <label for="phone">Phone:</label>
-                                        <input type="tel" id="phone" name="phone" class="form-control" value="{{ Auth::user()->phone }}" required>
+                                        <input type="tel" id="phone" name="phone" class="form-control" value="{{ isset($admin->no_tlpn) ? $admin->no_tlpn : '' }}" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-success mt-3">Simpan</button>

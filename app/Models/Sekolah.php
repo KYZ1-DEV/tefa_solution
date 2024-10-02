@@ -7,9 +7,13 @@ use App\Models\Mitra;
 use App\Models\Bantuan;
 use App\Models\Laporan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Sekolah extends Model
 {
+    use HasFactory, Notifiable;
+
     protected $table = 'sekolah';
 
     protected $fillable = [
@@ -20,7 +24,7 @@ class Sekolah extends Model
         'kepsek',
         'alamat',
         'email',
-        'no_tpln_sekolah',
+        'no_tlpn_sekolah',
         'id_user',
     ];
 

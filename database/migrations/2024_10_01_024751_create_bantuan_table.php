@@ -14,8 +14,7 @@ return new class extends Migration
         Schema::create('bantuan', function (Blueprint $table) {
             $table->id();
             $table->string('jenis_bantuan');
-            $table->date('tanggal_pemberian');
-            $table->foreignId('id_sekolah')->constrained('sekolah')->onDelete('cascade');
+            $table->text('deskripsi_bantuan');
             $table->foreignId('id_industri')->constrained('industri')->onDelete('cascade');
             $table->timestamps();
         });

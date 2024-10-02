@@ -3,25 +3,23 @@
 namespace App\Models;
 
 use App\Models\Mitra;
-use App\Models\Sekolah;
 use App\Models\Industri;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Bantuan extends Model
 {
+    use HasFactory, Notifiable;
+
     protected $table = 'bantuan';
 
     protected $fillable = [
         'jenis_bantuan',
-        'tanggal_pemberian',
-        'id_sekolah',
+        'deskripsi_bantuan',
         'id_industri',
     ];
 
-    public function sekolah()
-    {
-        return $this->belongsTo(Sekolah::class, 'id_sekolah');
-    }
 
     public function industri()
     {

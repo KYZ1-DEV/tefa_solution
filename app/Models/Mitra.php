@@ -6,9 +6,13 @@ use App\Models\Bantuan;
 use App\Models\Sekolah;
 use App\Models\Industri;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Mitra extends Model
 {
+    use HasFactory, Notifiable;
+
     protected $table = 'mitra';
 
     protected $fillable = [
