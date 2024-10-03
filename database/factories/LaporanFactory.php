@@ -22,6 +22,7 @@ class LaporanFactory extends Factory
             'bukti_laporan' => $this->faker->imageUrl(640, 480, 'business', true, 'report'),
             'tanggal_laporan' => $this->faker->date(),
             'deskripsi_laporan' => $this->faker->paragraph(),
+            'status_laporan' => $this->faker->randomElement(['dikirim']),
             'id_sekolah' => \App\Models\Sekolah::factory(), // Hubungkan dengan sekolah
         ];
     }

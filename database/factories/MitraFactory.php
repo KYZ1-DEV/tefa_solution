@@ -19,8 +19,9 @@ class MitraFactory extends Factory
         return [
             'nama_mitra' => $this->faker->company(),
             'tanggal_bermitra' => $this->faker->date(),
+            'periode_bermitra' => $this->faker->randomElement(['1 Tahun','2 Tahun','3 Tahun']),
             'progres_bermitra' => $this->faker->randomElement(['0%','50%','100%']),
-            'status_mitra' => $this->faker->randomElement(['proses','dibatalkan','selesai']),
+            'status_mitra' => $this->faker->randomElement(['non-aktif','aktif']),
             'id_sekolah' => \App\Models\Sekolah::factory(), // Hubungkan dengan sekolah
             'id_industri' => \App\Models\Industri::factory(), // Hubungkan dengan industri
             'id_bantuan' => null, // Atau isi dengan id dari bantuan jika ada

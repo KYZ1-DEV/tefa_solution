@@ -18,7 +18,18 @@ return new class extends Migration
             $table->string('skdp');
             $table->string('email')->unique();
             $table->text('alamat');
-            $table->string('bidang_industri');
+            $table->enum('bidang_industri', [
+                'Teknologi Informasi', 
+                'Manufaktur', 
+                'Kesehatan', 
+                'Pendidikan', 
+                'Keuangan', 
+                'Pertanian', 
+                'Energi', 
+                'Transportasi',
+                'Retail',
+                'Pariwisata'
+            ])->default('Teknologi Informasi');
             $table->string('no_tlpn_industri');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
