@@ -19,8 +19,8 @@ class SekolahFactory extends Factory
         return [
             'npsn' => $this->faker->numerify('##########'),
             'nama_sekolah' => $this->faker->company(),
-            'status' => $this->faker->randomElement(['negeri', 'swasta']),
-            'jenjang' => $this->faker->randomElement(['SD', 'SMP', 'SMA']),
+            'status' => $this->faker->randomElement(['Negeri', 'Swasta']),
+            'jenjang' => $this->faker->randomElement(['SD', 'SMP', 'SMA','SMK']),
             'kepsek' => $this->faker->name(),
             'alamat' => $this->faker->address(),
             'email' => $this->faker->unique()->safeEmail(),

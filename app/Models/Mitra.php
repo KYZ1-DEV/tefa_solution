@@ -18,6 +18,8 @@ class Mitra extends Model
     protected $fillable = [
         'nama_mitra',
         'tanggal_bermitra',
+        'periode_bermitra',
+        'durasi_bermitra',
         'progres_bermitra',
         'status_mitra',
         'id_sekolah',

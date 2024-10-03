@@ -18,6 +18,8 @@ class Laporan extends Model
         'bukti_laporan',
         'tanggal_laporan',
         'deskripsi_laporan',
+        'status_laporan',
+        'keterangan_laporan',
         'id_sekolah',
     ];
 

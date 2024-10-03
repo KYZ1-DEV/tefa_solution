@@ -22,7 +22,18 @@ class IndustriFactory extends Factory
             'skdp' => $this->faker->text(10),
             'email' => $this->faker->unique()->safeEmail(),
             'alamat' => $this->faker->address(),
-            'bidang_industri' => $this->faker->randomElement(['IT', 'Manufaktur', 'Pendidikan']),
+            'bidang_industri' => $this->faker->randomElement([
+                'Teknologi Informasi', 
+                'Manufaktur', 
+                'Kesehatan', 
+                'Pendidikan', 
+                'Keuangan', 
+                'Pertanian', 
+                'Energi', 
+                'Transportasi',
+                'Retail',
+                'Pariwisata'
+            ]),
             'no_tlpn_industri' => $this->faker->phoneNumber(),
             'id_user' => \App\Models\User::factory(), // Hubungkan dengan user
         ];

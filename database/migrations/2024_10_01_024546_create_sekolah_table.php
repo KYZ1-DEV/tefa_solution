@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('npsn')->unique();
             $table->string('nama_sekolah');
-            $table->string('status');
-            $table->string('jenjang');
+            $table->enum('status',['Negeri','Swasta'])->default('Negeri');
+            $table->enum('jenjang',['SD','SMP','SMK','SMA'])->default('SMK');
             $table->string('kepsek');
             $table->text('alamat');
             $table->string('email')->unique();
             $table->string('no_tlpn_sekolah');
-            $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
+            $table->foreignId(column: 'id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

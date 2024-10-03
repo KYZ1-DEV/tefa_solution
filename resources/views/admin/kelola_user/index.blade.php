@@ -94,7 +94,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script>
     function confirmHapus(event) {
-        event.preventDefault(); // Menghentikan form dari pengiriman langsung
+        event.preventDefault();
         Swal.fire({
             title: 'Yakin Hapus Data?',
             text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -106,10 +106,8 @@
             cancelButtonText: 'Batal'
         }).then((willDelete) => {
             if (willDelete.isConfirmed) {
-                event.target.submit(); // Melanjutkan pengiriman form
-            } else {
-                swal('Your imaginary file is safe!');
-            }
+                event.target.submit();
+            } 
         });
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Admin;
+use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -26,7 +27,7 @@ class AdminController extends Controller
     }
 
     public function updateProfile(Request $request)
-{
+    {
     // Validasi request
     $request->validate([
         'name' => 'max:255',
@@ -40,7 +41,7 @@ class AdminController extends Controller
     $auth = Auth::user();
     $user = User::find($auth->id);
     
-    $admin = Admin::updateOrCreate(
+    Admin::updateOrCreate(
         ['id_user' => $user->id], 
         ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $request->phone]
     );
@@ -60,7 +61,7 @@ class AdminController extends Controller
     }
 
     return redirect()->route('admin.profile.show')->with('success','Edit Profile Berhasil');
-}
+    }
 
 
     public function password()
@@ -102,15 +103,14 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6', // Include password validation
+            'password' => 'required|min:6', 
             'role' => 'required',
         ]);
 
-        // Create a new user
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password), // Hash the password
+            'password' => bcrypt($request->password), 
             'role' => $request->role,
         ]);
 
@@ -149,35 +149,76 @@ class AdminController extends Controller
 
 
 
-    // School Management
+    // School Management// Menampilkan data sekolah
     public function dataSekolah()
     {
-            return view('admin.data_sekolah.index');
+        $sekolah = Sekolah::all();
+        return view('admin.data_sekolah.index', compact('sekolah'));
     }
 
+    // Menampilkan form tambah sekolah
     public function createSekolah()
     {
-        // Tampilkan form tambah sekolah
+        $users = User::where('role', 'sekolah')->get();
+        return view('admin.data_sekolah.tambah',compact('users'));
     }
 
+    // Menyimpan sekolah baru
     public function storeSekolah(Request $request)
     {
-        // Simpan sekolah baru
+        $request->validate([
+            'npsn' => 'required|unique:sekolah',
+            'nama_sekolah' => 'required',
+            'status' => 'required',
+            'jenjang' => 'required',
+            'kepsek' => 'required',
+            'alamat' => 'required',
+            'email' => 'required|email|unique:sekolah',
+            'no_tlpn_sekolah' => 'required',
+            'id_user' => 'required|exists:users,id'
+        ]);
+
+        Sekolah::create($request->all());
+
+        return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil ditambahkan.');
     }
 
+    // Menampilkan form edit sekolah
     public function editSekolah($id)
     {
-        // Tampilkan form edit sekolah
+        $users = User::where('role', 'sekolah')->get();
+        $sekolah = Sekolah::findOrFail($id);
+        return view('admin.data_sekolah.edit', compact('sekolah','users'));
     }
 
+    // Memperbarui data sekolah
     public function updateSekolah(Request $request, $id)
     {
-        // Logika pembaruan sekolah
+        $request->validate([
+            'npsn' => 'required|unique:sekolah,npsn,' . $id,
+            'nama_sekolah' => 'required',
+            'status' => 'required',
+            'jenjang' => 'required',
+            'kepsek' => 'required',
+            'alamat' => 'required',
+            'email' => 'required|email|unique:sekolah,email,' . $id,
+            'no_tlpn_sekolah' => 'required',
+            'id_user' => 'required|exists:users,id'
+        ]);
+
+        $sekolah = Sekolah::findOrFail($id);
+        $sekolah->update($request->all());
+
+        return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil diperbarui.');
     }
 
+    // Menghapus sekolah
     public function destroySekolah($id)
     {
-        // Hapus sekolah
+        $sekolah = Sekolah::findOrFail($id);
+        $sekolah->delete();
+
+        return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil dihapus.');
     }
 
     // Industry Management
