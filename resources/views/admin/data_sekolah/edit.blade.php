@@ -18,7 +18,7 @@
             <form action="{{ route('admin.schools.update', $sekolah->id) }}" method="POST">
                 @csrf
                 @method('PUT')
-                
+
                 <!-- Input NPSN -->
                 <div class="form-group">
                     <label for="npsn">NPSN</label>
@@ -85,7 +85,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-purple">Update</button>
             </form>
         </div>
     </div>
