@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Sekolah;
+use App\Models\Industri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -40,9 +41,9 @@ class AdminController extends Controller
 
     $auth = Auth::user();
     $user = User::find($auth->id);
-    
+
     Admin::updateOrCreate(
-        ['id_user' => $user->id], 
+        ['id_user' => $user->id],
         ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $request->phone]
     );
 
@@ -103,14 +104,14 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6', 
+            'password' => 'required|min:6',
             'role' => 'required',
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password), 
+            'password' => bcrypt($request->password),
             'role' => $request->role,
         ]);
 
@@ -132,10 +133,10 @@ class AdminController extends Controller
         if (isset($request->password)) {
             $user->password = bcrypt($request->password);
         }
-    
+
         $user->role = $request->role;
         $user->save();
-    
+
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diupdate');
     }
 
@@ -220,37 +221,86 @@ class AdminController extends Controller
 
         return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil dihapus.');
     }
+    public function showSekolah($id)
+    {
+        $sekolah = Sekolah::findOrFail($id);
+        return view('admin.schools.show', compact('sekolah'));
+    }
+
 
     // Industry Management
     public function dataIndustri()
     {
-        return view('admin.data_industri.index');
+        $industri = Industri::all();
+        return view('admin.data_industri.index', compact('industri'));
     }
 
     public function createIndustri()
     {
-        // Tampilkan form tambah industri
+        $users = User::where('role', 'industri')->get();
+        return view('admin.data_industri.tambah',compact('users'));
     }
 
     public function storeIndustri(Request $request)
     {
-        // Simpan industri baru
+        {
+            $request->validate([
+                'nama_industri' => 'required|unique:sekolah',
+                'npwp' => 'required',
+                'skdp' => 'required',
+                'email' => 'required|email|unique:industri',
+                'alamat' => 'required',
+                'bidang_industri' => 'required',
+                'no_tlpn_industri' => 'required',
+                'id_user' => 'required|exists:users,id'
+            ]);
+
+            Industri::create($request->all());
+
+            return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil ditambahkan.');
+        }
     }
 
     public function editIndustri($id)
     {
-        // Tampilkan form edit industri
+        $users = User::where('role', 'industri')->get();
+        $industri = Industri::findOrFail($id);
+        return view('admin.data_industri.edit', compact('industri','users'));
     }
 
     public function updateIndustri(Request $request, $id)
     {
-        // Logika pembaruan industri
+        {
+            $request->validate([
+                'nama_industri' => 'required|unique:sekolah',
+                'npwp' => 'required',
+                'skdp' => 'required',
+                'email' => 'required|email|unique:industri',
+                'alamat' => 'required',
+                'bidang_industri' => 'required',
+                'no_tlpn_industri' => 'required',
+                'id_user' => 'required|exists:users,id'
+            ]);
+
+            $industri = Industri::findOrFail($id);
+            $industri->update($request->all());
+
+            return redirect()->route('admin.industries.index')->with('success', 'Data Industri berhasil diperbarui.');
+        }
     }
 
     public function destroyIndustri($id)
     {
-        // Hapus industri
+        $industri = Industri::findOrFail($id);
+        $industri->delete();
+
+        return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil dihapus.');
     }
+    public function showIndustri($id)
+{
+    $industri = Industri::findOrFail($id);
+    return view('admin.industries.show', compact('industri'));
+}
 
     // Partner Management
     public function dataMitra()

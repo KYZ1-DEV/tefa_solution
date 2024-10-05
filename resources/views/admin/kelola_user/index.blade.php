@@ -50,16 +50,7 @@
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>gambar</th>
-                                                <th>Nama</th>
-                                                <th>Email</th>
-
-                                                <th>Role</th>
-                                                <th>Aksi</th>
-                                            </tr>
-                                        </tfoot>
+                                        
                                         <tbody>
                                             @forelse ($users as $user)
                                             <tr>
@@ -107,7 +98,7 @@
         }).then((willDelete) => {
             if (willDelete.isConfirmed) {
                 event.target.submit();
-            } 
+            }
         });
     }
 

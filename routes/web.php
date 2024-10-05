@@ -43,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/schools/{id}/edit', [AdminController::class, 'editSekolah'])->name('admin.schools.edit');
         Route::put('/schools/{id}', [AdminController::class, 'updateSekolah'])->name('admin.schools.update');
         Route::delete('/schools/{id}', [AdminController::class, 'destroySekolah'])->name('admin.schools.destroy');
+        Route::get('/schools/{id}', [AdminController::class, 'showSekolah'])->name('admin.schools.show');
 
         // Industry Management
         Route::get('/industries', [AdminController::class, 'dataIndustri'])->name('admin.industries.index');
@@ -51,6 +52,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/industries/{id}/edit', [AdminController::class, 'editIndustri'])->name('admin.industries.edit');
         Route::put('/industries/{id}', [AdminController::class, 'updateIndustri'])->name('admin.industries.update');
         Route::delete('/industries/{id}', [AdminController::class, 'destroyIndustri'])->name('admin.industries.destroy');
+        Route::get('/industries/{id}', [AdminController::class, 'showIndustri'])->name('admin.industries.show');
+
 
         // Partner Management
         Route::get('/partners', [AdminController::class, 'dataMitra'])->name('admin.partners.index');
@@ -72,7 +75,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [IndustriController::class, 'laporan'])->name('industries.reports.index');
     });
 
-    
+
     // School Profile & Password
     Route::prefix('schools')->middleware('userAkses:sekolah')->group(function () {
         Route::get('/profile', [SekolahController::class, 'profile'])->name('schools.profile.show');

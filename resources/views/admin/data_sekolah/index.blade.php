@@ -60,6 +60,7 @@
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data->email }}</td>
                             <td class="text-truncate" style="max-width: 100px; font-size: 12px;">{{ $data->no_tlpn_sekolah }}</td>
                             <td class="text-center">
+                                <a href="{{ route('admin.schools.show', $data->id) }}" class="btn-purple btn-3d btn btn-sm">Lihat Detail</a>
                                 <a href="{{ route('admin.schools.edit', $data->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
                                 <form onsubmit="return confirmHapus(event)" action="{{ route('admin.schools.destroy', $data->id) }}" class="d-inline" method="POST">
                                     @csrf
@@ -75,7 +76,7 @@
                         @endforelse
                     </tbody>
                 </table>
-                
+
             </div>
         </div>
     </div>
