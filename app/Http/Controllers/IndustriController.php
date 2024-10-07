@@ -150,9 +150,35 @@ class IndustriController extends Controller
         return view("industri.list_sekolah.index", compact('users', 'sekolahs'));
     }
 
-    // Tampilkan laporan Industri
-    public function laporan()
+        // Bantuan Management
+        public function dataBantuan()
+        {
+            return view('industri.bantuan.index');
+        }
+
+        public function createBantuan()
+        {
+            // Tampilkan form tambah Bantuan
+        }
+
+        public function storeBantuan(Request $request)
+        {
+            // Simpan Bantuan baru
+        }
+
+        public function editBantuan($id)
+        {
+            // Tampilkan form edit Bantuan
+        }
+
+        public function updateBantuan(Request $request, $id)
+        {
+            // Logika pembaruan Bantuan
+        }
+
+    public function destroyBantuan($id)
     {
-        return view("industri.laporan.index");
+        // Hapus Bantuan
     }
 }
+

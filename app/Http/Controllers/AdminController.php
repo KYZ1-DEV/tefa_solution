@@ -224,7 +224,7 @@ class AdminController extends Controller
     public function showSekolah($id)
     {
         $sekolah = Sekolah::findOrFail($id);
-        return view('admin.schools.show', compact('sekolah'));
+        return view('admin.data_sekolah.show', compact('sekolah'));
     }
 
 
@@ -243,9 +243,9 @@ class AdminController extends Controller
 
     public function storeIndustri(Request $request)
     {
-        {
+
             $request->validate([
-                'nama_industri' => 'required|unique:sekolah',
+                'nama_industri' => 'required|unique:industri',
                 'npwp' => 'required',
                 'skdp' => 'required',
                 'email' => 'required|email|unique:industri',
@@ -256,9 +256,8 @@ class AdminController extends Controller
             ]);
 
             Industri::create($request->all());
-
             return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil ditambahkan.');
-        }
+
     }
 
     public function editIndustri($id)
@@ -270,12 +269,12 @@ class AdminController extends Controller
 
     public function updateIndustri(Request $request, $id)
     {
-        {
+
             $request->validate([
-                'nama_industri' => 'required|unique:sekolah',
+                'nama_industri' => 'required',
                 'npwp' => 'required',
                 'skdp' => 'required',
-                'email' => 'required|email|unique:industri',
+                'email' => 'required',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
                 'no_tlpn_industri' => 'required',
@@ -284,9 +283,10 @@ class AdminController extends Controller
 
             $industri = Industri::findOrFail($id);
             $industri->update($request->all());
-
             return redirect()->route('admin.industries.index')->with('success', 'Data Industri berhasil diperbarui.');
-        }
+
+
+
     }
 
     public function destroyIndustri($id)
@@ -299,7 +299,7 @@ class AdminController extends Controller
     public function showIndustri($id)
 {
     $industri = Industri::findOrFail($id);
-    return view('admin.industries.show', compact('industri'));
+    return view('admin.data_industri.show', compact('industri'));
 }
 
     // Partner Management
