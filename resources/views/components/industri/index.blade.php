@@ -37,9 +37,9 @@
             <i class="fas fa-school "></i>
             <span>List Sekolah</span>
         </a>
-        <a class="nav-link" href="{{ route('industries.reports.index') }}" >
+        <a class="nav-link" href="{{ route('industries.helps.index') }}" >
             <i class="fas fa-file-alt"></i>
-            <span>Laporan</span>
+            <span>Bantuan</span>
         </a>
     </li>
 

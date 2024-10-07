@@ -62,8 +62,8 @@
                             <td class="text-center">
                                 <!-- Tombol Lihat Detail -->
     <a href="{{ route('admin.industries.show', $data_industri->id) }}" class="btn-purple btn-3d btn btn-sm">Lihat Detail</a>
-                                <a href="{{ route('admin.schools.edit', $data_industri->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
-                                <form onsubmit="return confirmHapus(event)" action="{{ route('admin.schools.destroy', $data_industri->id) }}" class="d-inline" method="POST">
+                                <a href="{{ route('admin.industries.edit', $data_industri->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
+                                <form onsubmit="return confirmHapus(event)" action="{{ route('admin.industries.destroy', $data_industri->id) }}" class="d-inline" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-purple btn-3d btn btn-sm">Hapus</button>

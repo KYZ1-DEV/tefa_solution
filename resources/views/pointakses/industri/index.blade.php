@@ -82,7 +82,7 @@
 
             <!-- Laporan Card -->
             <div class="col-xl-3 col-md-6 mb-4">
-                <a href="{{ route('industries.reports.index') }}" class="text-decoration-none">
+                <a href="{{ route('industries.helps.index') }}" class="text-decoration-none">
                     <div class="card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
@@ -90,7 +90,7 @@
                                     <i class="fas fa-file-alt fa-2x text-blue-300"></i>
                                 </div>
                                 <div class="col ml-2">
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Laporan</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">Bantuan</div>
                                 </div>
                             </div>
                         </div>

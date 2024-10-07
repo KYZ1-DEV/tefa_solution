@@ -10,7 +10,7 @@
 <div class="container">
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Edit Sekolah</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Edit industri</h6>
             <br>
             <a href="{{ route('admin.industries.index') }}" class="btn-sm text-decoration-none btn-purple">Kembali</a>
         </div>
@@ -19,10 +19,9 @@
                 @csrf
                 @method('PUT')
 
-                <!-- Input NPSN -->
                 <div class="form-group">
                     <label for="nama_industri">Nama Industri</label>
-                    <input type="text" name="npsn" class="form-control" value="{{ $industri->nama_industri }}" required>
+                    <input type="text" name="nama_industri" class="form-control" value="{{ $industri->nama_industri }}" required>
                 </div>
 
                 <!-- Input NPWP -->
