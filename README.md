@@ -1,8 +1,6 @@
-# Nama Aplikasi
-
 ![Logo](gambarss/tefa%20Logo.png)
 
-Deskripsi singkat aplikasi Anda, apa yang dilakukan dan tujuan utama aplikasi.
+
 
 ## deskripsi
 
