@@ -6,6 +6,8 @@ use App\Models\User;
 use App\Models\Admin;
 use App\Models\Sekolah;
 use App\Models\Industri;
+use App\Models\Mitra;
+use App\Models\Bantuan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -305,31 +307,79 @@ class AdminController extends Controller
     // Partner Management
     public function dataMitra()
     {
-        return view('admin.data_mitra.index');
+        // Fetch all mitra from the database
+        $mitra = Mitra::all();
+        $sekolah = Sekolah::all(); 
+        $industri = Industri::all(); 
+        $bantuan = Bantuan::all();
+
+
+        // Pass mitra data to the view
+        return view('admin.data_mitra.index', compact('mitra','sekolah', 'industri', 'bantuan'));
     }
 
+    // Show form to create a new mitra
     public function createMitra()
-    {
-        // Tampilkan form tambah mitra
+    {   
+        $sekolah = Sekolah::all(); // Fetch all 
+        $industri = Industri::all(); // Fetch all
+        $bantuan = Bantuan::all(); // Fetch all 
+        // Render the form for adding mitra
+        return view('admin.data_mitra.tambah', compact('sekolah','industri','bantuan'));
     }
 
+    // Store new mitra data
     public function storeMitra(Request $request)
     {
-        // Simpan mitra baru
+        // Validate and create new mitra
+        $request->validate([
+            'nama_mitra' => 'required|string|max:255',
+            // Add other fields validation as necessary
+        ]);
+
+        // Create the new mitra
+        Mitra::create($request->all());
+
+        // Redirect to the mitra index with a success message
+        return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil ditambahkan.');
     }
 
+    // Show form to edit an existing mitra
     public function editMitra($id)
     {
-        // Tampilkan form edit mitra
+        // Find the mitra by its ID
+        $mitra = Mitra::findOrFail($id);
+
+        // Pass the mitra data to the edit view
+        return view('admin.data_mitra.edit', compact('mitra'));
     }
 
+    // Update an existing mitra
     public function updateMitra(Request $request, $id)
     {
-        // Logika pembaruan mitra
+        // Validate and update mitra
+        $request->validate([
+            'nama_mitra' => 'required|string|max:255',
+            // Add other fields validation as necessary
+        ]);
+
+        // Find the mitra by ID and update
+        $mitra = Mitra::findOrFail($id);
+        $mitra->update($request->all());
+
+        // Redirect to the mitra index with a success message
+        return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil diperbarui.');
     }
 
+    // Delete an existing mitra
     public function destroyMitra($id)
     {
-        // Hapus mitra
+        // Find the mitra by ID and delete
+        $mitra = Mitra::findOrFail($id);
+        $mitra->delete();
+
+        // Redirect to the mitra index with a success message
+        return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil dihapus.');
     }
+
 }

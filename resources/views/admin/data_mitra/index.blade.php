@@ -6,45 +6,99 @@
     {{ route('admin.profile.show') }}
 @endsection
 @section('main')
-                    <!-- Begin Page Content -->
-                <div class="container-fluid">
-                                @if (Session::get('success'))
-                            <div class="alert alert-success alert-dismissible fade show">
-                                <ul>
-                                    <li>{{ Session::get('success') }}</li>
-                                </ul>
-                            </div>
-                        @endif
 
-
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Data Mitra</h1>
-                    </div>
-                 
-                    <!-- Content Row -->
-                    <div class="row">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Data Mitra</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;"
-                                        src="{{ asset('dashboard/img/undraw_posting_photo.svg') }}" alt="...">
-                                </div>
-                                <p>Add some quality, svg illustrations to your project courtesy of <a
-                                        target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                    constantly updated collection of beautiful svg images that you can use
-                                    completely free and without attribution!</p>
-                                <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                    unDraw &rarr;</a>
-                            </div>
-                        </div>
-
-                    </div>
-
+<div class="container">
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Data Mitra</h6>
+            <br>
+            <a href="{{ route('admin.partners.create') }}" class="btn-sm text-decoration-none btn-purple">Tambah data Mitra</a>
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
                 </div>
-                <!-- /.container-fluid -->
+            @endif
+            @if (Session::has('success'))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire(
+                            'Sukses',
+                            '{{ Session::get('success') }}',
+                            'success'
+                        );
+                    });
+                </script>
+            @endif
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="text-truncate" style="max-width: 70px; font-size: 12px;">Nama Mitra</th>
+                            <th class="text-truncate" style="max-width: 120px; font-size: 12px;">Tanggal Bermitra</th>
+                            <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Periode Bermitra</th>
+                            <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Durasi Bermitra</th>
+                            <th class="text-truncate" style="max-width: 100px; font-size: 12px;">Progress Bermitra</th>
+                            <th class="text-truncate" style="max-width: 120px; font-size: 12px;">Status Mitra</th>
+                            <th class="text-center" style="font-size: 12px;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($mitra as $data_mitra)
+                        <tr>
+                            <td class="text-truncate" style="max-width: 70px; font-size: 12px;">{{ $data_mitra->nama_mitra }}</td>
+                            <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_mitra->tanggal_bermitra }}</td>
+                            <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_mitra->periode_bermitra }}</td>
+                            <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_mitra->durasi_bermitra }}</td>
+                            <td class="text-truncate" style="max-width: 100px; font-size: 12px;">{{ $data_mitra->progres_bermitra }}</td>
+                            <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_mitra->status_mitra }}</td>
+                            <td class="text-center">
+                                <!-- Tombol Lihat Detail -->
+    <a href="{{ route('admin.industries.show', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Lihat Detail</a>
+                                <a href="{{ route('admin.schools.edit', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
+                                <form onsubmit="return confirmHapus(event)" action="{{ route('admin.schools.destroy', $data_mitra->id) }}" class="d-inline" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-purple btn-3d btn btn-sm">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="8" class="text-center" style="font-size: 12px;">Data tidak ada!</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function confirmHapus(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'Yakin Hapus Data?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal'
+        }).then((willDelete) => {
+            if (willDelete.isConfirmed) {
+                event.target.submit();
+            }
+        });
+    }
+</script>
