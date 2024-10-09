@@ -59,9 +59,9 @@
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_mitra->status_mitra }}</td>
                             <td class="text-center">
                                 <!-- Tombol Lihat Detail -->
-    <a href="{{ route('admin.industries.show', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Lihat Detail</a>
-                                <a href="{{ route('admin.schools.edit', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
-                                <form onsubmit="return confirmHapus(event)" action="{{ route('admin.schools.destroy', $data_mitra->id) }}" class="d-inline" method="POST">
+    <a href="{{ route('admin.partners.show', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Lihat Detail</a>
+                                <a href="{{ route('admin.partners.edit', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
+                                <form onsubmit="return confirmHapus(event)" action="{{ route('admin.partners.destroy', $data_mitra->id) }}" class="d-inline" method="POST">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-purple btn-3d btn btn-sm">Hapus</button>

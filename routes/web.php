@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/partners/{id}/edit', [AdminController::class, 'editMitra'])->name('admin.partners.edit');
         Route::put('/partners/{id}', [AdminController::class, 'updateMitra'])->name('admin.partners.update');
         Route::delete('/partners/{id}', [AdminController::class, 'destroyMitra'])->name('admin.partners.destroy');
+        Route::get('/partners/{id}', [AdminController::class, 'showMitra'])->name('admin.partners.show');
     });
 
     // Industry Profile & Password

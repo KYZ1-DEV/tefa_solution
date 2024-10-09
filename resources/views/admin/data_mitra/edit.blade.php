@@ -28,31 +28,43 @@
                 <!-- Input Tanggal Bermitra -->
                 <div class="form-group">
                     <label for="tanggal_bermitra">Tanggal Bermitra</label>
-                    <input type="text" name="tanggal_bermitra" class="form-control" value="{{ $mitra->tanggal_bermitra }}" required>
+                    <input type="date" name="tanggal_bermitra" class="form-control" value="{{ $mitra->tanggal_bermitra }}" >
                 </div>
 
                 <!-- Input Periode Bermitra -->
                 <div class="form-group">
                     <label for="periode_bermitra">Periode Bermitra</label>
-                    <input type="text" name="periode_bermitra" class="form-control" value="{{ $mitra->periode_bermitra }}" required>
+                    <select name="periode_bermitra" class="form-control" required>
+                        <option value="1 tahun" {{ $mitra->periode_bermitra == '1 tahun' ? 'selected' : '' }}>1 tahun</option>
+                        <option value="2 tahun" {{ $mitra->periode_bermitra == '2 tahun' ? 'selected' : '' }}>2 tahun</option>
+                        <option value="3 tahun" {{ $mitra->periode_bermitra == '3 tahun' ? 'selected' : '' }}>3 tahun</option>
+                    </select>
                 </div>
 
                  <!-- Input Durasi Bermitra -->
                  <div class="form-group">
                     <label for="durasi_bermitra">Durasi Bermitra</label>
-                    <input type="text" name="durasi_bermitra" class="form-control" value="{{ $mitra->durasi_bermitra }}" required>
+                    <input type="date" name="durasi_bermitra" class="form-control" value="{{ $mitra->durasi_bermitra }}">
                 </div>
 
                 <!-- Input Progress Bermitra -->
                 <div class="form-group">
-                    <label for="progres_bermitra">Progress Bermitra</label>
-                    <input type="text" name="progres_bermitra" class="form-control" value="{{ $mitra->progres_bermitra }}" required>
+                    <label for="progres_bermitra">progres bermitra</label>
+                    <select name="progres_bermitra" class="form-control" required>
+                        <option value="0%" {{ $mitra->periode_bermitra == '0%' ? 'selected' : '' }}>0%</option>
+                        <option value="50%" {{ $mitra->periode_bermitra == '50%' ? 'selected' : '' }}>50%</option>
+                        <option value="100%" {{ $mitra->periode_bermitra == '100%' ? 'selected' : '' }}>100%</option>
+                    </select>
                 </div>
 
                 <!-- Input Status Mitra -->
                 <div class="form-group">
-                    <label for="status_mitra">Status Mitra</label>
-                    <input type="text" name="status_mitra" class="form-control" value="{{ $mitra->status_mitra }}" required>
+                    <label for="status_mitra">status mitra</label>
+                    <select name="status_mitra" class="form-control" required>
+                        <option value="aktif" {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>aktif</option>
+                        <option value="non-aktif" {{ $mitra->status_mitra == 'non aktif' ? 'selected' : '' }}>non aktif</option>
+
+                    </select>
                 </div>
 
                 <button type="submit" class="btn btn-purple">Update</button>
