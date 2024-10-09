@@ -16,6 +16,13 @@
                 </ul>
             </div>
         @endif
+        @if (Session::get('error'))
+            <div class="alert alert-danger alert-dismissible fade show">
+                <ul>
+                    <li>{{ Session::get('error') }}</li>
+                </ul>
+            </div>
+        @endif
 
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -58,6 +65,7 @@
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+                                    <input type="hidden" name="id" value="{{ isset($sekolah->id) ? $sekolah->id : '' }}" >
                                     <input type="file" id="uploadBtn" name="image" accept="image/*"
                                         style="display: none;">
 
@@ -66,11 +74,11 @@
                                         <!-- Kolom Kiri -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="npsn">npsn :</label>
+                                                <label for="npsn">Nomor Pokok Sekolah Nasional (NPSN) :</label>
                                                 <input type="text" id="npsn" name="npsn" class="form-control" value="{{ isset($sekolah->npsn) ? $sekolah->npsn : '' }}" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="name">Name :</label>
+                                                <label for="name">Nama Sekolah :</label>
                                                 <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" required>
                                             </div>
                                             <div class="form-group">
@@ -78,14 +86,14 @@
                                                 <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                             </div>
                                             <div class="form-group">
-                                                <label for="phone">Phone :</label>
+                                                <label for="phone">Nomor Telepon :</label>
                                                 <input type="tel" id="phone" name="phone" class="form-control" value="{{ isset($sekolah->no_tlpn_sekolah) ? $sekolah->no_tlpn_sekolah : '' }}" required>
                                             </div>
                                         </div>
                                         <!-- Kolom Kanan -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="kepsek">kepsek :</label>
+                                                <label for="kepsek">Kepala Sekolah :</label>
                                                 <input type="text" id="kepsek" name="kepsek" class="form-control"
                                                     value="{{ isset($sekolah->kepsek) ? $sekolah->kepsek : '' }}" required>
                                             </div>
