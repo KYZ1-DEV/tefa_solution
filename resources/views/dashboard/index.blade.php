@@ -12,8 +12,9 @@
     <title>
         {{ Request::segment(1) == 'industri' ? 'Industri' : (Request::segment(1) == 'admin' ? 'Admin' : (Request::segment(1) == 'sekolah' ? 'Sekolah' : 'Web Bantuan')) }}
     </title>
-    
-    
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('dashboard/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -23,7 +24,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('dashboard/css/sb-admin-2.min.css') }}" rel="stylesheet">
-    
+
     <!-- Custom styles for this page -->
     <link href="{{ asset('dashboard/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 
@@ -66,7 +67,7 @@
                     </button>
 
                     <!-- Topbar Search -->
-                    
+
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
@@ -88,8 +89,8 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                
-                                
+
+
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -169,13 +170,15 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('dashboard/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('dashboard/js/demo/chart-pie-demo.js') }}"></script>
-    
+
     <!-- Page level plugins -->
     <script src="{{ asset('dashboard/vendor/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dashboard/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('dashboard/js/demo/datatables-demo.js') }}"></script>
+
+
 
 </body>
 

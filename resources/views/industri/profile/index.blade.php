@@ -10,7 +10,7 @@
     <div class="container-fluid">
         <!-- Success Message -->
         @if (Session::get('success'))
-            <div class="alert alert-success alert-dismissible fade show">
+            <div id="success-alert" class="alert alert-success alert-dismissible fade fade-in">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
@@ -84,11 +84,44 @@
 
                                             <div class="form-group">
                                                 <label for="bidang_industri">Bidang Industri :</label>
-                                                <input type="text" id="bidang_industri" name="bidang_industri"
-                                                    class="form-control"
-                                                    value="{{ isset($industri->bidang_industri) ? $industri->bidang_industri : '' }}"
+                                                <select id="bidang_industri" name="bidang_industri" class="form-control"
                                                     required>
+                                                    <option value="" disabled
+                                                        {{ !isset($industri->bidang_industri) ? 'selected' : '' }}>Pilih
+                                                        Bidang Industri</option>
+                                                    <option value="Teknologi Informasi"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Teknologi Informasi' ? 'selected' : '' }}>
+                                                        Teknologi Informasi</option>
+                                                    <option value="Manufaktur"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Manufaktur' ? 'selected' : '' }}>
+                                                        Manufaktur</option>
+                                                    <option value="Kesehatan"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Kesehatan' ? 'selected' : '' }}>
+                                                        Kesehatan</option>
+                                                    <option value="Pendidikan"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Pendidikan' ? 'selected' : '' }}>
+                                                        Pendidikan</option>
+                                                    <option value="Keuangan"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Keuangan' ? 'selected' : '' }}>
+                                                        Keuangan</option>
+                                                    <option value="Pertanian"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Pertanian' ? 'selected' : '' }}>
+                                                        Pertanian</option>
+                                                    <option value="Energi"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Energi' ? 'selected' : '' }}>
+                                                        Energi</option>
+                                                    <option value="Transportasi"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Transportasi' ? 'selected' : '' }}>
+                                                        Transportasi</option>
+                                                    <option value="Retail"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Retail' ? 'selected' : '' }}>
+                                                        Retail</option>
+                                                    <option value="Pariwisata"
+                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Pariwisata' ? 'selected' : '' }}>
+                                                        Pariwisata</option>
+                                                </select>
                                             </div>
+
                                         </div>
 
                                         <!-- Kolom Kanan -->
@@ -132,11 +165,71 @@
             background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
             border: none;
             color: white;
+            border-radius: 30px;
+            padding: 10px 20px;
         }
 
         .btn-gradient:hover {
             color: white;
             background: linear-gradient(45deg, #3a0ca3, #7b2cbf);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn {
+            border-radius: 30px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .btn:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+        .btn-search {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            color: white;
+            background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
+            justify-content: center;
+            align-items: center;
+        }
+
+
+        @media (max-width: 768px) {
+            .scroll-container {
+                overflow-y: auto;
+                height: 600px;
+            }
+        }
+
+
+        @media (min-width: 769px) {
+            .scroll-container {
+                overflow-y: auto;
+                height: 370px;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+        }
+
+
+        .fade-out {
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .fade-out.hide {
+            opacity: 0;
         }
     </style>
 
@@ -155,6 +248,28 @@
                     reader.readAsDataURL(file);
                 }
             });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var successAlert = document.getElementById('success-alert');
+
+
+            if (successAlert) {
+                setTimeout(function() {
+                    successAlert.classList.add('show');
+                }, 100);
+
+
+                setTimeout(function() {
+                    successAlert.classList.remove('show');
+                    successAlert.classList.add('fade-out');
+
+
+                    setTimeout(function() {
+                        successAlert.classList.add('hide');
+                        successAlert.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }
         });
     </script>
 @endsection
