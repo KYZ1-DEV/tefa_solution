@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Mitra;
+use App\Models\Bantuan;
 use App\Models\Sekolah;
-use Illuminate\Http\Request;
 use App\Models\industri;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -99,7 +101,6 @@ class IndustriController extends Controller
 
         // Redirect kembali ke halaman profil dengan pesan sukses
         return redirect()->route('industries.profile.show')->with('success', 'Edit Profile Berhasil');
-
     }
 
 
@@ -139,46 +140,142 @@ class IndustriController extends Controller
     {
         $search = $request->get('search');
 
+        // Jika ada pencarian, filter user berdasarkan pencarian, lalu ambil sekolah-sekolah terkait
         if ($search) {
             $users = User::where('name', 'like', "%{$search}%")->get();
+            // Ambil sekolah-sekolah yang berhubungan dengan user yang dicari
+            $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))->paginate(3);
         } else {
+            // Jika tidak ada pencarian, ambil semua user dan sekolah dengan pagination
             $users = User::all();
+            $sekolahs = Sekolah::paginate(3); // Sesuaikan jumlah per halaman
         }
 
-        $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))->get();
+        $bantuan =  Bantuan::all();
 
-        return view("industri.list_sekolah.index", compact('users', 'sekolahs'));
+        return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan'));
     }
 
-        // Bantuan Management
-        public function dataBantuan()
-        {
-            return view('industri.bantuan.index');
+
+    public function giveHelp(Request $request)
+    {
+        // Validasi input
+        $request->validate([
+            'nama_mitra' => 'required|string|max:255',
+            'periode' => 'required|string|in:1 Tahun,2 Tahun,3 Tahun',
+            'id_sekolah' => 'required|exists:sekolah,id',
+            'id_user' => 'required|exists:users,id',
+            'id_bantuan' => 'required|exists:bantuan,id',
+        ]);
+
+        // Menyimpan data ke tabel mitra
+        $mitra = new Mitra();
+        $mitra->nama_mitra = $request->nama_mitra;
+        $mitra->tanggal_bermitra = now();
+        $mitra->periode_bermitra = $request->periode;
+
+        // Hitung durasi bermitra berdasarkan periode
+        $durasi = 0;
+        switch ($mitra->periode_bermitra) {
+            case '1 Tahun':
+                $durasi = 1;
+                break;
+            case '2 Tahun':
+                $durasi = 2;
+                break;
+            case '3 Tahun':
+                $durasi = 3;
+                break;
+        }
+        $mitra->durasi_bermitra = now()->addYears($durasi);
+        $mitra->progres_bermitra = '0%';
+        $mitra->status_mitra = 'non-aktif';
+        $mitra->id_sekolah = $request->id_sekolah;
+
+        // Cari data industri berdasarkan id_user
+        $industri = Industri::where('id_user', $request->id_user)->first();
+
+        if (!$industri) {
+            return redirect()->back()->withErrors('Industri dengan id_user ini tidak ditemukan.');
         }
 
-        public function createBantuan()
-        {
-            // Tampilkan form tambah Bantuan
+        $bantuan = Bantuan::find($request->id_bantuan);
+        if (!$bantuan) {
+            return redirect()->back()->withErrors('Bantuan tidak ada !');
         }
 
-        public function storeBantuan(Request $request)
-        {
-            // Simpan Bantuan baru
-        }
+        // Jika industri ditemukan, simpan id_industri ke mitra
+        $mitra->id_industri = $industri->id;
 
-        public function editBantuan($id)
-        {
-            // Tampilkan form edit Bantuan
-        }
+        // Simpan data mitra
+        $mitra->save();
 
-        public function updateBantuan(Request $request, $id)
-        {
-            // Logika pembaruan Bantuan
+        // Mengalihkan kembali dengan pesan sukses
+        return redirect()->back()->with('success', 'Data bantuan berhasil disimpan.');
+    }
+
+
+
+    // Bantuan Management
+    public function dataBantuan(Request $request)
+    {
+        // Mendapatkan input pencarian dari user
+        $search = $request->input('search');
+
+        // Filter data bantuan berdasarkan jenis_bantuan jika ada input pencarian
+        if ($search) {
+            $bantuan = Bantuan::where('jenis_bantuan', 'like', '%' . $search . '%')->get();
+        } else {
+            $bantuan = Bantuan::all();
         }
+            // Mengirim data ke view
+        return view('industri.bantuan.index', compact('bantuan'));
+    }
+
+
+    public function storeBantuan(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'jenisBantuan' => 'required|string|max:255',
+            'deskripsiBantuan' => 'required|string',
+        ]);
+
+        $industri = industri::where('id_user', Auth::user()->id)->first();
+        // dd($industri);
+
+        Bantuan::create([
+            'jenis_bantuan' => $request->jenisBantuan,
+            'deskripsi_bantuan' => $request->deskripsiBantuan,
+            'id_industri' =>  $industri->id,
+        ]);
+
+        return redirect()->route('industries.helps.index')->with('success', 'Bantuan berhasil ditambahkan!');
+    }
+
+    public function updateBantuan(Request $request)
+    {
+
+        // dd($request->all());
+        $bantuan = Bantuan::findOrFail($request->id);
+        $request->validate([
+            'editJenisBantuan' => 'required|string|max:255',
+            'editDeskripsiBantuan' => 'required|string',
+        ]);
+
+
+        $bantuan->update([
+            'jenis_bantuan' => $request->editJenisBantuan,
+            'deskripsi_bantuan' => $request->editDeskripsiBantuan,
+        ]);
+
+        return redirect()->route('industries.helps.index')->with('success', 'Bantuan berhasil diperbarui!');
+    }
 
     public function destroyBantuan($id)
     {
-        // Hapus Bantuan
+        $bantuan = Bantuan::findOrFail($id);
+        $bantuan->delete();
+        return redirect()->route('industries.helps.index')->with('success', 'Bantuan berhasil dihapus!');
     }
 }
-
