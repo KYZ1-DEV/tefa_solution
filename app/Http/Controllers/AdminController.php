@@ -309,8 +309,8 @@ class AdminController extends Controller
     {
         // Fetch all mitra from the database
         $mitra = Mitra::all();
-        $sekolah = Sekolah::all(); 
-        $industri = Industri::all(); 
+        $sekolah = Sekolah::all();
+        $industri = Industri::all();
         $bantuan = Bantuan::all();
 
 
@@ -320,10 +320,10 @@ class AdminController extends Controller
 
     // Show form to create a new mitra
     public function createMitra()
-    {   
-        $sekolah = Sekolah::all(); // Fetch all 
+    {
+        $sekolah = Sekolah::all(); // Fetch all
         $industri = Industri::all(); // Fetch all
-        $bantuan = Bantuan::all(); // Fetch all 
+        $bantuan = Bantuan::all(); // Fetch all
         // Render the form for adding mitra
         return view('admin.data_mitra.tambah', compact('sekolah','industri','bantuan'));
     }
@@ -349,8 +349,6 @@ class AdminController extends Controller
     {
         // Find the mitra by its ID
         $mitra = Mitra::findOrFail($id);
-
-        // Pass the mitra data to the edit view
         return view('admin.data_mitra.edit', compact('mitra'));
     }
 
@@ -358,17 +356,16 @@ class AdminController extends Controller
     public function updateMitra(Request $request, $id)
     {
         // Validate and update mitra
-        $request->validate([
-            'nama_mitra' => 'required|string|max:255',
-            // Add other fields validation as necessary
-        ]);
-
-        // Find the mitra by ID and update
         $mitra = Mitra::findOrFail($id);
-        $mitra->update($request->all());
+        $mitra->nama_mitra = $request->input('nama_mitra');
+        $mitra->tanggal_bermitra = $request->input('tanggal_bermitra');
+        $mitra->periode_bermitra = $request->input('periode_bermitra');
+        $mitra->durasi_bermitra = $request->input('durasi_bermitra');
+        $mitra->progres_bermitra = $request->input('progres_bermitra');
+        $mitra->status_mitra = $request->input('status_mitra');
+        $mitra->save();
 
-        // Redirect to the mitra index with a success message
-        return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil diperbarui.');
+        return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil diperbarui');
     }
 
     // Delete an existing mitra
@@ -380,6 +377,11 @@ class AdminController extends Controller
 
         // Redirect to the mitra index with a success message
         return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil dihapus.');
+    }
+    public function showMitra($id)
+    {
+        $mitra = Mitra::findOrFail($id);
+        return view('admin.data_mitra.show', compact('mitra'));
     }
 
 }
