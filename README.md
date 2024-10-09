@@ -1,4 +1,4 @@
-# Nama Aplikasi
+# CSRF
 
 ![Logo](gambarss/tefa%20Logo.png)
 
@@ -60,10 +60,41 @@ Dengan adanya situs web ini, perusahaan-perusahaan industri dapat menyalurkan ba
 
 ![Screenshot Halaman Lainnya](gambarss/lain.png)
 
-## Cara Instalasi
+# Cara Instalasi Aplikasi Laravel
 
-1. Clone repositori:
-    ```bash
+## Persyaratan Sistem
+Sebelum memulai, pastikan sistem Anda sudah memenuhi persyaratan berikut:
+- PHP >= 8.0
+- Composer
+- Database (MySQL, PostgreSQL, dll)
+- Ekstensi PHP:
+  - OpenSSL
+  - PDO
+  - Mbstring
+  - Tokenizer
+  - XML
+
+## Langkah Instalasi
+
+### 1. Clone Repository
+Clone repository proyek dari GitHub:
+1. Clone repositori
     git clone https://github.com/KYZ1-DEV/tefa_solution.git
-    cd repo-name
-    ```
+    cd repo-name   
+
+composer install
+
+cp .env.example .env
+
+php artisan key:generate
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nama_database
+DB_USERNAME=user_database
+DB_PASSWORD=password_database
+
+php artisan migrate
+
+php artisan serve
