@@ -50,7 +50,7 @@
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
-                                        
+
                                         <tbody>
                                             @forelse ($users as $user)
                                             <tr>
@@ -58,7 +58,6 @@
                                                     <img src="{{ $user->gambar ? asset('gambar/'.$user->gambar) : asset('gambar/user.jpeg') }}" alt="image" height="50" width="50"/></td>
                                                 <td>{{ $user['name'] }}</td>
                                                 <td>{{ $user['email'] }}</td>
-
                                                 <td>{{ $user['role'] }}</td>
                                                 <td>
                                                     <a href="{{ route('admin.users.edit',[$user['id']]) }}" class="btn-purple btn-3d btn">Edit</a>

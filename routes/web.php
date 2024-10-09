@@ -72,13 +72,11 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/password', [IndustriController::class, 'updatePassword'])->name('industries.password.update');
         Route::get('/assistance-monitoring', [IndustriController::class, 'monitoringBantuan'])->name('industries.assistance-monitoring');
         Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
-
+        Route::post('/giveHelp', [IndustriController::class, 'giveHelp'])->name('industries.giveHelps.store');
 
         Route::get('/helps', [IndustriController::class, 'dataBantuan'])->name('industries.helps.index');
-        Route::get('/helps/create', [IndustriController::class, 'createBantuan'])->name('industries.helps.create');
         Route::post('/helpsCreate', [IndustriController::class, 'storeBantuan'])->name('industries.helps.store');
-        Route::get('/helps/{id}/edit', [IndustriController::class, 'editBantuan'])->name('industries.helps.edit');
-        Route::put('/helps/{id}', [IndustriController::class, 'updateBantuan'])->name('industries.helps.update');
+        Route::put('/helps/Update', [IndustriController::class, 'updateBantuan'])->name('industries.helps.update');
         Route::delete('/helps/{id}', [IndustriController::class, 'destroyBantuan'])->name('industries.helps.destroy');
     });
 
