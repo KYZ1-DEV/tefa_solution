@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title>
-        {{ Request::segment(1) == 'industri' ? 'Industri' : (Request::segment(1) == 'admin' ? 'Admin' : (Request::segment(1) == 'sekolah' ? 'Sekolah' : 'Web Bantuan')) }}
+        {{ Request::segment(1) == 'industries' ? 'Dashboad Industri' : (Request::segment(1) == 'admin' ? 'Dashboard Admin' : (Request::segment(1) == 'schools' ? 'Dashboard Sekolah' : 'Web Bantuan')) }}
     </title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,7 +27,37 @@
 
     <!-- Custom styles for this page -->
     <link href="{{ asset('dashboard/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <style>
+        .btn-sidebar {
+            border-radius: 30px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            color: #7b2cbf;
+        }
 
+        .btn-sidebar:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            color: #7b2cbf;
+        }
+
+        .aktif{
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            background: linear-gradient(to right, #6A0DAD, #e6e6fa63)!important;
+        }
+
+        .btn-card {
+            border-radius: 20px;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            color: #602fb5
+        }
+
+        .btn-card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            color: #602fb5
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -36,15 +66,19 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        <ul class="navbar-nav sidebar sidebar-dark accordion" style="background-image: linear-gradient(180deg, #9e30c6 10%, #602fb5 100%);" id="accordionSidebar">
+        <ul class="navbar-nav sidebar sidebar-dark accordion"
+            style="background-image: linear-gradient(180deg, #9e30c6 10%, #602fb5 100%);" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" style="background-color: #ffff !important;"  href="/">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center"
+                style="background-color: #ffff !important;" href="/">
                 <div class="sidebar-brand-icon rotate-n-1">
-                        <img src="{{ asset('panel/img/Chlorine Digital Media.png') }}"  height="80" width="80" alt="" srcset="">
+                    <img src="{{ asset('panel/img/Chlorine Digital Media.png') }}" height="80" width="80"
+                        alt="" srcset="">
                 </div>
                 <div class="sidebar-brand-text mx-3"></div>
             </a>
+
 
             @yield('navItem')
 
@@ -78,9 +112,10 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.jpeg') }}" >
+                                    src="{{ Auth::user()->gambar ? asset('gambar/' . Auth::user()->gambar) : asset('gambar/user.jpeg') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -179,7 +214,56 @@
     <script src="{{ asset('dashboard/js/demo/datatables-demo.js') }}"></script>
 
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mengambil elemen dengan class 'alert-success'
+            var successAlerts = document.getElementsByClassName('alert-success');
 
+            // Pastikan ada elemen dengan class 'alert-success'
+            if (successAlerts.length > 0) {
+                // Ambil elemen pertama jika ada lebih dari satu
+                var successAlert = successAlerts[0];
+
+                setTimeout(function() {
+                    successAlert.classList.add('show');
+                }, 100);
+
+                setTimeout(function() {
+                    successAlert.classList.remove('show');
+                    successAlert.classList.add('fade-out');
+
+                    setTimeout(function() {
+                        successAlert.classList.add('hide');
+                        successAlert.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mengambil elemen dengan class 'alert-success'
+            var dangerAlert = document.getElementsByClassName('alert-danger');
+
+            // Pastikan ada elemen dengan class 'alert-success'
+            if (dangerAlert.length > 0) {
+                // Ambil elemen pertama jika ada lebih dari satu
+                var dangerAlert = dangerAlert[0];
+
+                setTimeout(function() {
+                    dangerAlert.classList.add('show');
+                }, 100);
+
+                setTimeout(function() {
+                    dangerAlert.classList.remove('show');
+                    dangerAlert.classList.add('fade-out');
+
+                    setTimeout(function() {
+                        dangerAlert.classList.add('hide');
+                        dangerAlert.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }
+        });
+    </script>
 </body>
 
 </html>

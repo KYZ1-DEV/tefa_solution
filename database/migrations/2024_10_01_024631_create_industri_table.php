@@ -14,18 +14,18 @@ return new class extends Migration
         Schema::create('industri', function (Blueprint $table) {
             $table->id();
             $table->string('nama_industri');
-            $table->string('npwp');
-            $table->string('skdp');
+            $table->string('npwp')->unique();
+            $table->string('skdp')->unique();
             $table->string('email')->unique();
             $table->text('alamat');
             $table->enum('bidang_industri', [
-                'Teknologi Informasi', 
-                'Manufaktur', 
-                'Kesehatan', 
-                'Pendidikan', 
-                'Keuangan', 
-                'Pertanian', 
-                'Energi', 
+                'Teknologi Informasi',
+                'Manufaktur',
+                'Kesehatan',
+                'Pendidikan',
+                'Keuangan',
+                'Pertanian',
+                'Energi',
                 'Transportasi',
                 'Retail',
                 'Pariwisata'

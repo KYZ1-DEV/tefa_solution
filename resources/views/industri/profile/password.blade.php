@@ -12,7 +12,7 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
         @if (Session::get('success'))
-            <div id="success-alert" class="alert alert-success alert-dismissible fade fade-in">
+            <div  class="alert alert-success alert-dismissible fade fade-in">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
