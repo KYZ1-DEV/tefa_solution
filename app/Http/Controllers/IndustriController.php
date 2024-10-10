@@ -235,6 +235,7 @@ class IndustriController extends Controller
         }
 
         $mitra->id_industri = $industri->id;
+        $mitra->id_bantuan = $bantuan->id;
 
         $mitra->save();
 

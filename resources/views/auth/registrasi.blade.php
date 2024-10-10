@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>Daftar Web</title>
+    <link rel="short icon" href="{{ asset('logoC.png') }}">
     <meta charset="utf-8" />
     <meta
       name="viewport"

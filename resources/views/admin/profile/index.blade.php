@@ -49,7 +49,7 @@
                             <!-- Profile Picture (Left) -->
                             <div class="col-md-4 text-center">
                                 <img id="profilePic" class="img-fluid mt-3 mb-4" style="width: 8rem; height: 8rem; border-radius: 50%; object-fit: cover;"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.jpeg') }}" alt="Profile Picture">
+                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.png') }}" alt="Profile Picture">
                                 <button class="btn btn-primary" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
                             </div>
 

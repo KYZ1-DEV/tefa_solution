@@ -59,7 +59,7 @@
                                     <li
                                         class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
                                         <div class="d-flex align-items-center mb-2 mb-sm-0">
-                                            <img src="{{ $user['gambar'] ? asset('../gambar/' . $user['gambar']) : asset('gambar/user.jpeg') }}"
+                                            <img src="{{ $user['gambar'] ? asset('../gambar/' . $user['gambar']) : asset('gambar/user.png') }}"
                                                 alt="Logo Sekolah" class="img-thumbnail rounded-circle"
                                                 style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
                                             <div>
