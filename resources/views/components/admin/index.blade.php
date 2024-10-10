@@ -3,7 +3,7 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active">
-    <a class="nav-link" href="/home">
+    <a class="btn-sidebar nav-link {{ request()->is('admin') ? 'aktif' : '' }}  nav-link" href="/home">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>
@@ -12,7 +12,7 @@
 
     {{-- Profile --}}
 <li class="nav-item">
-    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+    <a class="btn-sidebar nav-link collapsed {{ request()->is('admin/profile') ? 'aktif' : '' }} {{ request()->is('admin/password') ? 'aktif' : '' }}" href="#" data-toggle="collapse" data-target="#collapsePages"
         aria-expanded="true" aria-controls="collapsePages">
         <i class="fas fa-fw fa-user-edit"></i>
         <span>Profile</span>
@@ -34,7 +34,7 @@ Kelola Data
 </div>
 <hr class="sidebar-divider d-none d-md-block">
 <li class="nav-item">
-<a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+<a class="btn-sidebar nav-link collapsed {{ request()->is('admin/users') ? 'aktif' : '' }}" href="#" data-toggle="collapse" data-target="#collapseUtilities"
     aria-expanded="true" aria-controls="collapseUtilities">
     <i class="fas fa-fw fa-user"></i>
     <span>Kelola User</span>
@@ -55,23 +55,23 @@ Kelola Data
 
 <hr class="sidebar-divider d-none d-md-block">
 <li class="nav-item">
-    <a class="nav-link" href="{{ route('admin.schools.index') }}" >
+    <a class="btn-sidebar nav-link {{ request()->is('admin/schools') ? 'aktif' : '' }}" href="{{ route('admin.schools.index') }}" >
         <i class="fas fa-fw fa-school"></i>
         <span>Data Sekolah</span>
-        
+
     </a>
-    <a class="nav-link" href="{{ route('admin.industries.index') }}" >
+    <a class="btn-sidebar nav-link {{ request()->is('admin/industries') ? 'aktif' : '' }}" href="{{ route('admin.industries.index') }}" >
         <i class="fas fa-fw fa-building"></i>
         <span>Data Industri</span>
     </a>
-    <a class="nav-link" href="{{ route('admin.partners.index') }}" >
+    <a class="btn-sidebar nav-link {{ request()->is('admin/partners') ? 'aktif' : '' }}" href="{{ route('admin.partners.index') }}" >
         <i class="fas fa-fw fa-users"></i>
         <span>Data Mitra</span>
     </a>
 </li>
 
 
-    
+
 
 
 <!-- Divider -->

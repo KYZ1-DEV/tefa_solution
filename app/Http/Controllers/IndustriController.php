@@ -29,79 +29,82 @@ class IndustriController extends Controller
 
     // Update profil Industri (Action)
     public function updateProfile(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|max:15', // Atau sesuai panjang maksimal nomor telepon yang diharapkan
-            'alamat' => 'required|max:255',
-            'bidang_industri' => 'required|max:100',
-            'npwp' => 'required|max:15', // Sesuaikan dengan format NPWP
-            'skdp' => 'required|max:50', // Sesuaikan dengan panjang maksimal SKDP
-            'image' => 'nullable|max:1045|mimes:png,jpg',
-        ], [
-            'name.required' => 'Nama harus diisi !!',
-            'name.max' => 'Nama terlalu panjang !!',
-            'email.required' => 'Email harus diisi !!',
-            'email.email' => 'Format email tidak valid !!',
-            'email.max' => 'Email terlalu panjang !!',
-            'phone.required' => 'Nomor telepon harus diisi !!',
-            'phone.max' => 'Nomor telepon terlalu panjang !!',
-            'alamat.required' => 'Alamat harus diisi !!',
-            'alamat.max' => 'Alamat terlalu panjang !!',
-            'bidang_industri.required' => 'Bidang industri harus diisi !!',
-            'bidang_industri.max' => 'Bidang industri terlalu panjang !!',
-            'npwp.required' => 'NPWP harus diisi !!',
-            'npwp.max' => 'NPWP terlalu panjang !!',
-            'skdp.required' => 'SKDP harus diisi !!',
-            'skdp.max' => 'SKDP terlalu panjang !!',
-            'image.max' => 'Foto maksimal 1MB',
-            'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'name' => 'required|max:255',
+        'email' => 'required|email|max:255',
+        'phone' => 'required|max:15',
+        'alamat' => 'required|max:255',
+        'bidang_industri' => 'required|max:100',
+        'npwp' => 'required|max:15',
+        'skdp' => 'required|max:50',
+        'image' => 'nullable|max:1045|mimes:png,jpg',
+    ], [
+        'name.required' => 'Nama harus diisi !!',
+        'name.max' => 'Nama terlalu panjang !!',
+        'email.required' => 'Email harus diisi !!',
+        'email.email' => 'Format email tidak valid !!',
+        'email.max' => 'Email terlalu panjang !!',
+        'phone.required' => 'Nomor telepon harus diisi !!',
+        'phone.max' => 'Nomor telepon terlalu panjang !!',
+        'alamat.required' => 'Alamat harus diisi !!',
+        'alamat.max' => 'Alamat terlalu panjang !!',
+        'bidang_industri.required' => 'Bidang industri harus diisi !!',
+        'bidang_industri.max' => 'Bidang industri terlalu panjang !!',
+        'npwp.required' => 'NPWP harus diisi !!',
+        'npwp.max' => 'NPWP terlalu panjang !!',
+        'skdp.required' => 'SKDP harus diisi !!',
+        'skdp.max' => 'SKDP terlalu panjang !!',
+        'image.max' => 'Foto maksimal 1MB',
+        'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
+    ]);
 
+    $auth = Auth::user();
+    $user = User::find($auth->id);
 
-        // Ambil user yang sedang login
-        $auth = Auth::user();
-        $user = User::find($auth->id);
+    // Cek apakah email, npwp, atau skdp sudah ada di tabel industri kecuali yang sedang diperbarui
+    $exists = industri::where(function ($query) use ($request, $user) {
+        $query->where('email', $request->email)
+            ->orWhere('npwp', $request->npwp)
+            ->orWhere('skdp', $request->skdp);
+    })
+    ->where('id_user', '!=', $user->id)
+    ->exists();
 
-        // Persiapan data untuk update industri
-        $dataIndustri = [
-            'nama_industri' => $request->name,
-            'email' => $request->email,
-            'no_tlpn_industri' => $request->phone,
-            'alamat' => $request->alamat,
-            'bidang_industri' => $request->bidang_industri,
-            'npwp' => $request->npwp,
-            'skdp' => $request->skdp,
-        ];
-
-        // Jika ada file gambar diupload
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time() . uniqid() . "." . $image->extension();
-            $image->move(public_path('gambar'), $imageName);
-
-            // Menambahkan logo industri ke dalam array $dataIndustri
-            $dataIndustri['logo_industri'] = $imageName;
-
-            // Update juga gambar user
-            $user->gambar = $imageName;
-        }
-
-        // Simpan data industri
-        industri::updateOrCreate(
-            ['id_user' => $user->id],
-            $dataIndustri
-        );
-
-        // Simpan perubahan data user
-        $user->name = $request->name;
-        $user->update();
-
-        // Redirect kembali ke halaman profil dengan pesan sukses
-        return redirect()->route('industries.profile.show')->with('success', 'Edit Profile Berhasil');
+    if ($exists) {
+        return redirect()->back()->with('alert', 'EMAIL, NPWP, & SKDP TIDAK BOLEH SAMA, SILAHKAN DIPERBAIKI!');
     }
+
+    $dataIndustri = [
+        'nama_industri' => $request->name,
+        'email' => $request->email,
+        'no_tlpn_industri' => $request->phone,
+        'alamat' => $request->alamat,
+        'bidang_industri' => $request->bidang_industri,
+        'npwp' => $request->npwp,
+        'skdp' => $request->skdp,
+    ];
+
+    if ($request->hasFile('image')) {
+        $image = $request->file('image');
+        $imageName = time() . uniqid() . "." . $image->extension();
+        $image->move(public_path('gambar'), $imageName);
+
+        $dataIndustri['logo_industri'] = $imageName;
+        $user->gambar = $imageName;
+    }
+
+    industri::updateOrCreate(
+        ['id_user' => $user->id],
+        $dataIndustri
+    );
+
+    $user->name = $request->name;
+    $user->update();
+
+    return redirect()->route('industries.profile.show')->with('success', 'Edit Profile Berhasil');
+}
 
 
     // Tampilkan halaman ubah password Industri
@@ -129,31 +132,59 @@ class IndustriController extends Controller
         }
     }
 
-    // Tampilkan halaman monitoring bantuan Industri
     public function monitoringBantuan()
     {
-        return view("industri.monitoring_bantuan.index");
-    }
+        $user = Auth::user();
+        $industri = Industri::where('id_user', $user->id)->first();
 
-    // Tampilkan list sekolah
-    public function listSekolah(Request $request)
-    {
-        $search = $request->get('search');
+        if ($industri) {
+            // Mengambil data mitra beserta bantuan terkait
+            $mitraList = Mitra::where('id_industri', $industri->id)
+                        ->with('bantuan') // Mengambil relasi bantuan
+                        ->get();
 
-        // Jika ada pencarian, filter user berdasarkan pencarian, lalu ambil sekolah-sekolah terkait
-        if ($search) {
-            $users = User::where('name', 'like', "%{$search}%")->get();
-            // Ambil sekolah-sekolah yang berhubungan dengan user yang dicari
-            $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))->paginate(3);
-        } else {
-            // Jika tidak ada pencarian, ambil semua user dan sekolah dengan pagination
-            $users = User::all();
-            $sekolahs = Sekolah::paginate(3); // Sesuaikan jumlah per halaman
+
+            return view('industri.monitoring_bantuan.index', compact('mitraList'));
         }
 
-        $bantuan =  Bantuan::all();
+        return redirect()->route('industries.profile.show')->with('alert', 'Lengkapi Profile terlebih dahulu !!');
+    }
 
-        return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan'));
+
+
+    public function listSekolah(Request $request)
+    {
+        $user = Auth::user();
+        $industri = Industri::where('id_user', $user->id)->first();
+
+        if ($industri) {
+            $search = $request->input('search');
+
+            $usersQuery = User::where('role', 'sekolah');
+
+            if ($search) {
+                $usersQuery->where('name', 'like', '%' . $search . '%');
+            }
+
+            $users = $usersQuery->orderBy('id', 'desc')->get();
+            $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'));
+
+            if ($search) {
+                $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))
+                    ->orderBy('id', 'asc')
+                    ->paginate(5);
+            } else {
+                $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))
+                    ->orderBy('id', 'asc')
+                    ->paginate(5);
+            }
+
+            $bantuan = Bantuan::all(); // Mengambil semua bantuan
+
+            return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan'));
+        }
+
+        return redirect()->route('industries.profile.show')->with('alert', 'Lengkapi Profile terlebih dahulu !!');
     }
 
 
@@ -192,7 +223,6 @@ class IndustriController extends Controller
         $mitra->status_mitra = 'non-aktif';
         $mitra->id_sekolah = $request->id_sekolah;
 
-        // Cari data industri berdasarkan id_user
         $industri = Industri::where('id_user', $request->id_user)->first();
 
         if (!$industri) {
@@ -204,13 +234,10 @@ class IndustriController extends Controller
             return redirect()->back()->withErrors('Bantuan tidak ada !');
         }
 
-        // Jika industri ditemukan, simpan id_industri ke mitra
         $mitra->id_industri = $industri->id;
 
-        // Simpan data mitra
         $mitra->save();
 
-        // Mengalihkan kembali dengan pesan sukses
         return redirect()->back()->with('success', 'Data bantuan berhasil disimpan.');
     }
 
@@ -219,17 +246,22 @@ class IndustriController extends Controller
     // Bantuan Management
     public function dataBantuan(Request $request)
     {
-        // Mendapatkan input pencarian dari user
+        $user = Auth::user();
+        $industri = industri::where('id_user',$user->id)->first();
+
+
+        if ($industri) {
+
         $search = $request->input('search');
 
-        // Filter data bantuan berdasarkan jenis_bantuan jika ada input pencarian
         if ($search) {
             $bantuan = Bantuan::where('jenis_bantuan', 'like', '%' . $search . '%')->get();
         } else {
             $bantuan = Bantuan::all();
         }
-            // Mengirim data ke view
         return view('industri.bantuan.index', compact('bantuan'));
+    }
+    return redirect()->route('industries.profile.show')->with('alert','Lengkapi Profile terlebih dahulu !!');
     }
 
 
@@ -278,4 +310,6 @@ class IndustriController extends Controller
         $bantuan->delete();
         return redirect()->route('industries.helps.index')->with('success', 'Bantuan berhasil dihapus!');
     }
+
+
 }

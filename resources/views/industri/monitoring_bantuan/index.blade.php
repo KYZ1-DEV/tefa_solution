@@ -9,22 +9,15 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
         @if (Session::get('success'))
-            <div id="success-alert" class="alert alert-success alert-dismissible fade fade-in">
+            <div class="alert alert-success alert-dismissible fade fade-in">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
             </div>
         @endif
 
-
-
-
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-        <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800 ml-3">Monitoring Bantuan</h1>
-        </div>
 
         <!-- Form Pencarian -->
         <div class="d-flex justify-content-end mb-3">
@@ -45,41 +38,45 @@
             <div class="row">
                 <div class="col-md-12">
                     <ul class="list-group ml-2" id="sekolahList">
-                        {{-- @if ($sekolahs->isEmpty())
-                            <li class="list-group-item text-center">Data yang dicari tidak ada!</li>
-                        @else
-                            @foreach ($sekolahs as $sekolah)
-                                @php
-                                    $user = $users->firstWhere('id', $sekolah->id_user);
-                                @endphp
+                        @foreach ($mitraList as $mitra)
+                        <li class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
 
-                                @if ($user) --}}
-                        <li
-                            class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
                             <div class="d-flex align-items-center mb-2 mb-sm-0">
                                 <div>
-                                    <span class="jenis-Bantuan"
-                                        style="font-size: 1.25rem; font-weight: bold; color: #555;">SMK Negeri 1
-                                        Pangandaran</span>
+                                    <span class="jenis-Bantuan" style="font-size: 1.25rem; font-weight: bold; color: #555;">
+                                        {{ $mitra->nama_mitra }} <!-- Nama mitra -->
+                                    </span>
+
                                     <span class="status-active"
-                                        style="background-color: rgba(144, 238, 144, 0.5); padding: 3px px; border-radius: 5px; margin-left: 10px;">Aktif</span><br>
+                                    style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
+                                    color: {{ $mitra->status_mitra == 'aktif' ? 'green' : 'red' }};
+                                    background-color: transparent;">
+                                        {{ ucfirst($mitra->status_mitra) }} <!-- Status mitra -->
+                                    </span><br>
 
+                                    <span class="jenis-Bantuan" style="color: #333;">
+                                        Jenis Bantuan: {{ $mitra->bantuan ? $mitra->bantuan->jenis_bantuan : 'Tidak ada bantuan' }}
+                                    </span>
                                 </div>
-
                             </div>
+
                             <div class="text-end">
-                                <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
-                                    data-bs-target="#detailModal">
+                                <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal" data-bs-target="#detailModal">
                                     <span class="d-none d-sm-inline">Detail Mitra</span>
                                     <i class="fa-solid fa-eye d-sm-none"></i>
                                 </button>
-                                <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
-                                    data-bs-target="#bantuan">
+                                @if ($mitra->status_mitra == 'aktif')
+                                <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal" data-bs-target="#laporan">
                                     <span class="d-none d-sm-inline">Detail Laporan</span>
                                     <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
                                 </button>
+                            @endif
                             </div>
                         </li>
+                    @endforeach
+
+
+
 
                         <!-- Modal Detail Mitra -->
                         <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailLabel"
@@ -137,10 +134,18 @@
                                             </div>
                                         </div>
                                         <div class="mb-3 row">
+
                                             <label class="col-sm-4 col-form-label"><strong>Status Mitra</strong></label>
+
                                             <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: Jl.Merdeka</div>
+                                                <form action="" method="post">
+                                                    <select name="" id="" class="form-control col-sm-5">
+                                                        <option value="">Aktif</option>
+                                                        <option value="">Non-Aktif</option>
+                                                    </select>
+                                                </form>
                                             </div>
+
                                         </div>
 
                                     </div>
@@ -148,42 +153,81 @@
                             </div>
                         </div>
                         <!-- Modal Bantuan -->
-                        <div class="modal fade" id="bantuan" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        <div class="modal fade" id="laporan" tabindex="-1" aria-labelledby="exampleModalLabel"
                             aria-hidden="true">
-                            <div class="modal-dialog">
+                            <div class="modal-dialog modal-dialog-scrollable">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Bantuan</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Laporan</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <div class="mb-3">
-                                            <label for="jenis_bantuan" class="form-label">Jenis Bantuan</label>
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected>Pilih Jenis Bantuan</option>
-                                                <option value="1">CSR</option>
-                                                <option value="2">BANSOS</option>
-                                                <option value="3">DLL</option>
-                                            </select>
+                                        <!-- Nama Laporan -->
+                                        <div class="d-flex mb-1">
+                                            <label class="form-label w-50"><strong>Nama Laporan</strong></label>
+                                            <p class="mb-0">SMK PK</p>
                                         </div>
-                                        <div class="mb-3">
-                                            <label for="tanggal_pemberian" class="form-label">Periode</label>
-                                            <select class="form-select" aria-label="Default select example">
-                                                <option selected>Pilih Periode</option>
-                                                <option value="1">1 Tahun</option>
-                                                <option value="2">2 Tahun</option>
-                                                <option value="3">3 Tahun</option>
-                                            </select>
+                                        <!-- Progres Laporan -->
+                                        <div class="d-flex mb-1">
+                                            <label class="form-label w-50"><strong>Progres Laporan</strong></label>
+                                            <p class="mb-0">0%</p>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" id="clearButton">Clear</button>
-                                        <button type="button" class="btn btn-primary" id="saveButton">Simpan</button>
+                                        <!-- Bukti Laporan -->
+                                        <div class="d-flex align-items-center mb-1">
+                                            <label class="form-label w-50"><strong>Bukti Laporan</strong></label>
+                                            <button type="button" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-download"></i> Unduh
+                                            </button>
+                                        </div>
+                                        <!-- Tanggal Laporan -->
+                                        <div class="d-flex mb-1">
+                                            <label class="form-label w-50"><strong>Tanggal Laporan</strong></label>
+                                            <p class="mb-0">700 Hari</p>
+                                        </div>
+                                        <!-- Deskripsi Laporan -->
+                                        <div class="d-flex mb-1">
+                                            <label class="form-label w-50"><strong>Deskripsi Laporan</strong></label>
+                                            <p class="mb-0">aku laporan</p>
+                                        </div>
+
+                                        <hr>
+
+                                        <form action="" method="post">
+                                            <!-- Status Laporan -->
+                                            <div class="mb-1">
+                                                <label for="" class="form-label"><strong>Status
+                                                        Laporan</strong></label>
+                                                <select name="" id="" class="form-control">
+                                                    <option value="">Dikirim</option>
+                                                    <option value="">Diterima</option>
+                                                    <option value="">Direvisi</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Keterangan -->
+                                            <div class="mb-3">
+                                                <label for=""
+                                                    class="form-label"><strong>Keterangan</strong></label>
+                                                <textarea name="" id="" class="form-control" cols="30" rows="5"
+                                                    placeholder="Tuliskan Revisi"></textarea>
+                                            </div>
+
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger"
+                                                    id="clearButton">Clear</button>
+                                                <button type="button" class="btn btn-primary"
+                                                    id="saveButton">Simpan</button>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
+
+
                     </ul>
                     {{-- <div class="d-flex justify-content-center mt-4">
                         {{ $sekolahs->links('pagination::bootstrap-5') }}

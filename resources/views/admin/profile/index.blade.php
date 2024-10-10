@@ -13,13 +13,13 @@
     <div class="container-fluid">
         <!-- Success Message -->
         @if (Session::get('success'))
-            <div class="alert alert-success alert-dismissible fade show">
+        <div class="alert alert-success alert-dismissible fade fade-in">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
             </div>
         @endif
-        
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -78,7 +78,7 @@
                                 </form>
 
                             </div>
-                            
+
                         </div> <!-- End Row -->
                     </div>
                 </div>

@@ -29,7 +29,7 @@
             <!-- Edit Profile Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('industries.profile.show') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -47,7 +47,7 @@
             <!-- Monitoring Bantuan Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('industries.assistance-monitoring') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -65,7 +65,7 @@
             <!-- List Sekolah Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('industries.schools.index') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -83,7 +83,7 @@
             <!-- Laporan Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('industries.helps.index') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -122,4 +122,6 @@
 
         window.onload = typeMessage; // Start typing effect when page loads
     </script>
+
+
 @endsection

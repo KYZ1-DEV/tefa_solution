@@ -31,7 +31,7 @@
             <!-- Edit Profile Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('admin.profile.update') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -49,7 +49,7 @@
             <!-- Kelola user Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('admin.users.create') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -67,7 +67,7 @@
             <!-- Data Mitra Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('admin.partners.create') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -104,12 +104,12 @@
             if (index < message.length) {
                 welcomeMessageElement.textContent += message.charAt(index);
                 index++;
-                setTimeout(typeMessage, 100); 
+                setTimeout(typeMessage, 100);
             }
         }
 
-        window.onload = typeMessage; 
+        window.onload = typeMessage;
     </script>
-    
+
 @endsection
 

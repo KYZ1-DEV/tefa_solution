@@ -18,18 +18,18 @@ class IndustriFactory extends Factory
     {
         return [
             'nama_industri' => $this->faker->company(),
-            'npwp' => $this->faker->numerify('################'),
-            'skdp' => $this->faker->text(10),
+            'npwp' => $this->faker->unique()->numerify('################'),
+            'skdp' => $this->faker->unique()->text(10),
             'email' => $this->faker->unique()->safeEmail(),
             'alamat' => $this->faker->address(),
             'bidang_industri' => $this->faker->randomElement([
-                'Teknologi Informasi', 
-                'Manufaktur', 
-                'Kesehatan', 
-                'Pendidikan', 
-                'Keuangan', 
-                'Pertanian', 
-                'Energi', 
+                'Teknologi Informasi',
+                'Manufaktur',
+                'Kesehatan',
+                'Pendidikan',
+                'Keuangan',
+                'Pertanian',
+                'Energi',
                 'Transportasi',
                 'Retail',
                 'Pariwisata'

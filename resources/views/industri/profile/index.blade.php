@@ -10,22 +10,19 @@
     <div class="container-fluid">
         <!-- Success Message -->
         @if (Session::get('success'))
-            <div id="success-alert" class="alert alert-success alert-dismissible fade fade-in">
+            <div  class="alert alert-success alert-dismissible fade fade-in">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
             </div>
+
         @endif
 
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $item)
-                        <li>{{ $item }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @if (Session::has('alert'))
+        <div class="alert alert-danger">
+            {{ Session::get('alert') }}
+        </div>
+    @endif
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -66,12 +63,12 @@
                                         <!-- Kolom Kiri -->
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="name">Name :</label>
+                                                <label for="name">Nama Industi :</label>
                                                 <input type="text" id="name" name="name" class="form-control"
                                                     value="{{ Auth::user()->name }}" required>
                                             </div>
                                             <div class="form-group">
-                                                <label for="phone">Phone :</label>
+                                                <label for="phone">Nomor Telepon :</label>
                                                 <input type="tel" id="phone" name="phone" class="form-control"
                                                     value="{{ isset($industri->no_tlpn_industri) ? $industri->no_tlpn_industri : '' }}"
                                                     required>
@@ -222,7 +219,6 @@
             opacity: 1;
         }
 
-
         .fade-out {
             opacity: 1;
             transition: opacity 0.5s ease-in-out;
@@ -252,20 +248,19 @@
         document.addEventListener('DOMContentLoaded', function() {
             var successAlert = document.getElementById('success-alert');
 
-
             if (successAlert) {
+                // Memunculkan alert dengan transisi
                 setTimeout(function() {
                     successAlert.classList.add('show');
                 }, 100);
 
-
+                // Menghilangkan alert setelah 1.5 detik dengan efek fade-out
                 setTimeout(function() {
                     successAlert.classList.remove('show');
                     successAlert.classList.add('fade-out');
 
-
+                    // Menghilangkan alert dari DOM setelah transisi selesai
                     setTimeout(function() {
-                        successAlert.classList.add('hide');
                         successAlert.style.display = 'none';
                     }, 500);
                 }, 1500);
