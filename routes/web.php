@@ -1,11 +1,12 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\IndustriController;
 
-Route::middleware(['guest'])->group(function() {
+Route::middleware(['guest'])->group(function () {
     Route::view('/', 'home');
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
@@ -73,9 +74,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/password', [IndustriController::class, 'password'])->name('industries.password.show');
         Route::put('/password', [IndustriController::class, 'updatePassword'])->name('industries.password.update');
         Route::get('/assistance-monitoring', [IndustriController::class, 'monitoringBantuan'])->name('industries.assistance-monitoring');
+        Route::put('/mitra/{id}', [IndustriController::class, 'updateMitra'])->name('mitra.update');
+        Route::put('/laporan/{id}', [IndustriController::class, 'updateLaporan'])->name('laporan.update');
+
         Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
         Route::post('/giveHelp', [IndustriController::class, 'giveHelp'])->name('industries.giveHelps.store');
-
         Route::get('/helps', [IndustriController::class, 'dataBantuan'])->name('industries.helps.index');
         Route::post('/helpsCreate', [IndustriController::class, 'storeBantuan'])->name('industries.helps.store');
         Route::put('/helps/Update', [IndustriController::class, 'updateBantuan'])->name('industries.helps.update');
@@ -94,5 +97,4 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/progress/50', [SekolahController::class, 'progress50Persen'])->name('schools.progress.50');
         Route::get('/progress/100', [SekolahController::class, 'progress100Persen'])->name('schools.progress.100');
     });
-
 });
