@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <link rel="short icon" href="{{ asset('logoC.png') }}">
     <title>
         {{ Request::segment(1) == 'industries' ? 'Dashboad Industri' : (Request::segment(1) == 'admin' ? 'Dashboard Admin' : (Request::segment(1) == 'schools' ? 'Dashboard Sekolah' : 'Web Bantuan')) }}
     </title>
@@ -115,7 +115,7 @@
                                 <span
                                     class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/' . Auth::user()->gambar) : asset('gambar/user.jpeg') }}">
+                                    src="{{ Auth::user()->gambar ? asset('gambar/' . Auth::user()->gambar) : asset('gambar/user.png') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

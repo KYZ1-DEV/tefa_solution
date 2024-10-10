@@ -55,7 +55,7 @@
                                             @forelse ($users as $user)
                                             <tr>
                                                 <td class="py-1">
-                                                    <img src="{{ $user->gambar ? asset('gambar/'.$user->gambar) : asset('gambar/user.jpeg') }}" alt="image" height="50" width="50"/></td>
+                                                    <img src="{{ $user->gambar ? asset('gambar/'.$user->gambar) : asset('gambar/user.png') }}" alt="image" height="50" width="50"/></td>
                                                 <td>{{ $user['name'] }}</td>
                                                 <td>{{ $user['email'] }}</td>
                                                 <td>{{ $user['role'] }}</td>

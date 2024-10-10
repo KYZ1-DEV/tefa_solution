@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <title>CSR Website</title>
     <link rel="stylesheet" href="{{ asset('panel/style.css') }}" />
+    <link rel="short icon" href="{{ asset('logoC.png') }}">
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
