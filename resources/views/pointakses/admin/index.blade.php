@@ -22,9 +22,38 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard Admin</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Upload Template Laporan</a>
+                        <a id="template" href="#" data-toggle="modal" data-target="#uploadModal" style="background: linear-gradient(45deg, #7b2cbf, #3a0ca3); color:white;" class="d-none d-sm-inline-block btn btn-sm shadow-sm">
+                            <i class="fas fa-upload fa-sm text-white-50"></i> Upload Template Laporan
+                        </a>
                     </div>
+                    
+                    <!-- Modal for Upload -->
+                    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <form action="{{ route('admin.upload.template') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="uploadModalLabel">Upload Template Laporan</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div class="modal-body">
+                              <div class="form-group">
+                                <label for="templateFile">Pilih file PDF</label>
+                                <input type="file" class="form-control" id="templateFile" name="template" accept="application/pdf" required>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                              <button type="submit" class="btn btn-primary">Upload</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                    
 
         <!-- Content Row for Menu Cards -->
         <div class="row mb-2 d-flex" style="justify-content: space-evenly !important;">

@@ -23,6 +23,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Admin Profile & Password
     Route::prefix('admin')->middleware('userAkses:admin')->group(function () {
+        Route::post('/upload-template', [AdminController::class, 'uploadTemplate'])->name('admin.upload.template');
         Route::get('/profile', [AdminController::class, 'profile'])->name('admin.profile.show');
         Route::put('/profile', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
         Route::get('/password', [AdminController::class, 'password'])->name('admin.password.show');

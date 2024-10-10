@@ -20,6 +20,25 @@ class AdminController extends Controller
         return view("pointakses.admin.index");
     }
 
+
+    public function uploadTemplate(Request $request)
+    {
+        // Validasi file PDF
+        $request->validate([
+            'template' => 'required|mimes:pdf|max:2048', // file harus PDF dan max 2MB
+        ]);
+
+        // Simpan file ke dalam folder storage
+        $file = $request->file('template');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+
+        // Simpan file ke storage/public/templates
+        $filePath = $file->move(public_path('templates'), $fileName);
+
+        // Jika sukses, kembalikan respon atau redirect ke halaman lain
+        return back()->with('success', 'File berhasil diunggah!');
+    }
+
     // Profile Management
     public function profile()
     {
