@@ -76,6 +76,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/assistance-monitoring', [IndustriController::class, 'monitoringBantuan'])->name('industries.assistance-monitoring');
         Route::put('/mitra/{id}', [IndustriController::class, 'updateMitra'])->name('mitra.update');
         Route::put('/laporan/{id}', [IndustriController::class, 'updateLaporan'])->name('laporan.update');
+        Route::get('/laporan/download/{id}', [IndustriController::class, 'downloadLaporan'])->name('downloadLaporan');
 
         Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
         Route::post('/giveHelp', [IndustriController::class, 'giveHelp'])->name('industries.giveHelps.store');

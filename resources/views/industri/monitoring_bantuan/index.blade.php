@@ -16,15 +16,21 @@
             </div>
         @endif
 
+        @if (session('alert-danger'))
+            <div class="alert alert-danger">
+                {{ session('alert-danger') }}
+            </div>
+        @endif
+
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
         <!-- Form Pencarian -->
-        <div class="d-flex justify-content-end mb-3">
+        <div class="d-flex justify-content-end mb-1">
             <form action="" method="GET" class="form-inline">
-                <div class="input-group mb-3">
+                <div class="input-group mb-1">
                     <input type="text" name="search" id="searchInput" class="form-control rounded"
-                        placeholder="Nama Sekolah" style="border-radius: 20px 0 0 20px;">
+                        placeholder="Nama Sekolah" style="border-radius: 20px 0 0 20px;" value="{{ request('search') }}">
                     <button class="btn btn-search rounded-circle" type="submit" id="searchButton"
                         style="width: 40px; height: 40px; padding: 0; margin-left: 10px;">
                         <i class="fa fa-search"></i>
@@ -34,204 +40,205 @@
         </div>
 
         <!-- Content Row -->
-        <div class="container scroll-container">
+        <div class="container scroll-container" style="height: 460px">
             <div class="row">
                 <div class="col-md-12">
                     <ul class="list-group ml-2" id="sekolahList">
                         @foreach ($mitraList as $mitra)
-                        <li class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
+                            <li
+                                class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
 
-                            <div class="d-flex align-items-center mb-2 mb-sm-0">
-                                <div>
-                                    <span class="jenis-Bantuan" style="font-size: 1.25rem; font-weight: bold; color: #555;">
-                                        {{ $mitra->nama_mitra }} <!-- Nama mitra -->
-                                    </span>
+                                <div class="d-flex align-items-center mb-2 mb-sm-0">
+                                    <div>
+                                        <span class="jenis-Bantuan"
+                                            style="font-size: 1.25rem; font-weight: bold; color: #555;">
+                                            {{ $mitra->sekolah->nama_sekolah . " Mitra " . $mitra->nama_mitra}}
+                                             <!-- Nama mitra -->
+                                        </span>
 
-                                    <span class="status-active"
-                                    style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
-                                    color: {{ $mitra->status_mitra == 'aktif' ? 'green' : 'red' }};
-                                    background-color: transparent;">
-                                        {{ ucfirst($mitra->status_mitra) }} <!-- Status mitra -->
-                                    </span><br>
+                                        <span class="status-active"
+                                            style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
+                                                 color: {{ $mitra->status_mitra == 'aktif' ? 'green' : 'red' }};
+                                                 background-color: transparent;">
+                                            {{ ucfirst($mitra->status_mitra) }} <!-- Status mitra -->
+                                        </span><br>
 
-                                    <span class="jenis-Bantuan" style="color: #333;">
-                                        Jenis Bantuan: {{ $mitra->bantuan ? $mitra->bantuan->jenis_bantuan : 'Tidak ada bantuan' }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="text-end">
-                                <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal" data-bs-target="#detailModal">
-                                    <span class="d-none d-sm-inline">Detail Mitra</span>
-                                    <i class="fa-solid fa-eye d-sm-none"></i>
-                                </button>
-                                @if ($mitra->status_mitra == 'aktif')
-                                <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal" data-bs-target="#laporan">
-                                    <span class="d-none d-sm-inline">Detail Laporan</span>
-                                    <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
-                                </button>
-                            @endif
-                            </div>
-                        </li>
-                    @endforeach
-
-
-
-
-                        <!-- Modal Detail Mitra -->
-                        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="detailLabel">Detail Mitra</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
+                                        <span class="jenis-Bantuan" style="color: #333;">
+                                            Jenis Bantuan:
+                                            {{ $mitra->bantuan ? $mitra->bantuan->jenis_bantuan : 'Tidak ada bantuan' }}
+                                        </span>
                                     </div>
-                                    <div class="modal-body">
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Nama Mitra</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: 12345</div>
-                                            </div>
+                                </div>
+
+                                <div class="text-end">
+                                    <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal{{ $mitra->id }}">
+                                        <span class="d-none d-sm-inline">Detail Mitra</span>
+                                        <i class="fa-solid fa-eye d-sm-none"></i>
+                                    </button>
+
+                                    @if ($mitra->status_mitra == 'aktif')
+                                        <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
+                                            data-bs-target="#laporan{{ $mitra->id }}">
+                                            <span class="d-none d-sm-inline">Detail Laporan</span>
+                                            <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
+                                        </button>
+                                    @endif
+                                </div>
+                            </li>
+
+                            <!-- Modal Detail Mitra -->
+                            <div class="modal fade" id="detailModal{{ $mitra->id }}" tabindex="-1"
+                                aria-labelledby="detailLabel{{ $mitra->id }}" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailLabel{{ $mitra->id }}">Detail Mitra</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
                                         </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Jenis Bantuan</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: 12345</div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Deskripsi
-                                                    Bantuan</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: 12345</div>
-                                            </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Tanggal Bemitra</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: SMK Negeri 1 Pangandaran
+                                        <div class="modal-body">
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Nama Mitra</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="form-control-plaintext">: {{ $mitra->nama_mitra }}</div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Periode Bermitra</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: Negeri</div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Jenis
+                                                        Bantuan</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="form-control-plaintext">:
+                                                        {{ $mitra->bantuan->jenis_bantuan ?? 'Tidak ada bantuan' }}</div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Durasi Bermitra</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: SMK</div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Tanggal
+                                                        Bermitra</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="form-control-plaintext">: {{ $mitra->tanggal_bermitra }}
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-                                            <label class="col-sm-4 col-form-label"><strong>Progres Bermitra</strong></label>
-                                            <div class="col-sm-8">
-                                                <div class="form-control-plaintext">: Rezky</div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Status Mitra</strong></label>
+                                                <div class="col-sm-8">
+                                                    <form action="{{ route('mitra.update', $mitra->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <select name="status_mitra" id="status_mitra" class="form-control">
+                                                            <option value="aktif"
+                                                                {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
+                                                                Aktif</option>
+                                                            <option value="non-aktif"
+                                                                {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
+                                                                Non-Aktif</option>
+                                                        </select>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="mb-3 row">
-
-                                            <label class="col-sm-4 col-form-label"><strong>Status Mitra</strong></label>
-
-                                            <div class="col-sm-8">
-                                                <form action="" method="post">
-                                                    <select name="" id="" class="form-control col-sm-5">
-                                                        <option value="">Aktif</option>
-                                                        <option value="">Non-Aktif</option>
-                                                    </select>
-                                                </form>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Modal Bantuan -->
-                        <div class="modal fade" id="laporan" tabindex="-1" aria-labelledby="exampleModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Laporan</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Nama Laporan -->
-                                        <div class="d-flex mb-1">
-                                            <label class="form-label w-50"><strong>Nama Laporan</strong></label>
-                                            <p class="mb-0">SMK PK</p>
-                                        </div>
-                                        <!-- Progres Laporan -->
-                                        <div class="d-flex mb-1">
-                                            <label class="form-label w-50"><strong>Progres Laporan</strong></label>
-                                            <p class="mb-0">0%</p>
-                                        </div>
-                                        <!-- Bukti Laporan -->
-                                        <div class="d-flex align-items-center mb-1">
-                                            <label class="form-label w-50"><strong>Bukti Laporan</strong></label>
-                                            <button type="button" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-download"></i> Unduh
-                                            </button>
-                                        </div>
-                                        <!-- Tanggal Laporan -->
-                                        <div class="d-flex mb-1">
-                                            <label class="form-label w-50"><strong>Tanggal Laporan</strong></label>
-                                            <p class="mb-0">700 Hari</p>
-                                        </div>
-                                        <!-- Deskripsi Laporan -->
-                                        <div class="d-flex mb-1">
-                                            <label class="form-label w-50"><strong>Deskripsi Laporan</strong></label>
-                                            <p class="mb-0">aku laporan</p>
-                                        </div>
-
-                                        <hr>
-
-                                        <form action="" method="post">
-                                            <!-- Status Laporan -->
-                                            <div class="mb-1">
-                                                <label for="" class="form-label"><strong>Status
-                                                        Laporan</strong></label>
-                                                <select name="" id="" class="form-control">
-                                                    <option value="">Dikirim</option>
-                                                    <option value="">Diterima</option>
-                                                    <option value="">Direvisi</option>
-                                                </select>
-                                            </div>
-
-                                            <!-- Keterangan -->
-                                            <div class="mb-3">
-                                                <label for=""
-                                                    class="form-label"><strong>Keterangan</strong></label>
-                                                <textarea name="" id="" class="form-control" cols="30" rows="5"
-                                                    placeholder="Tuliskan Revisi"></textarea>
-                                            </div>
-
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger"
-                                                    id="clearButton">Clear</button>
-                                                <button type="button" class="btn btn-primary"
-                                                    id="saveButton">Simpan</button>
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Simpan</button>
                                             </div>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
 
+                            <div class="modal fade" id="laporan{{ $mitra->id }}" tabindex="-1"
+                                aria-labelledby="exampleModalLabel{{ $mitra->id }}" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel{{ $mitra->id }}">Laporan
+                                                Mitra {{ $mitra->nama_mitra }}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Nama Laporan -->
+                                            <div class="d-flex mb-1">
+                                                <label class="form-label w-50"><strong>Nama Laporan</strong></label>
+                                                <p class="mb-0">
+                                                    {{ $mitra->laporan->nama_laporan ?? 'Belum ada laporan' }}</p>
+                                            </div>
+                                            <!-- Progres Laporan -->
+                                            <div class="d-flex mb-1">
+                                                <label class="form-label w-50"><strong>Progres Laporan</strong></label>
+                                                <p class="mb-0">{{ $mitra->laporan->progres_laporan ?? '0' }}</p>
+                                            </div>
+                                            <!-- Bukti Laporan -->
+                                            <div class="d-flex align-items-center mb-1">
+                                                <label class="form-label w-50"><strong>Bukti Laporan</strong></label>
+                                                <a href="{{ route('downloadLaporan', $mitra->laporan->id ?? 0) }}"
+                                                    class="btn btn-outline-primary" download>
+                                                    <i class="fa fa-download"></i> Unduh
+                                                </a>
+                                            </div>
+                                            <!-- Tanggal Laporan -->
+                                            <div class="d-flex mb-1">
+                                                <label class="form-label w-50"><strong>Tanggal Laporan</strong></label>
+                                                <p class="mb-0">
+                                                    {{ $mitra->laporan->tanggal_laporan ?? 'Belum ada tanggal laporan' }}
+                                                </p>
+                                            </div>
+                                            <!-- Deskripsi Laporan -->
+                                            <div class="d-flex mb-1">
+                                                <label class="form-label w-50"><strong>Deskripsi Laporan</strong></label>
+                                                <p class="mb-0">
+                                                    {{ $mitra->laporan->deskripsi_laporan ?? 'Belum ada deskripsi' }}</p>
+                                            </div>
 
+                                            <hr>
 
+                                            <form action="{{ route('laporan.update', $mitra->laporan->id ?? '') }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('PUT')
+                                                <!-- Status Laporan -->
+                                                <div class="mb-1">
+                                                    <label for="statusLaporan" class="form-label"><strong>Status
+                                                            Laporan</strong></label>
+                                                    <select name="status_laporan" id="statusLaporan"
+                                                        class="form-control">
+                                                        <option value="dikirim"
+                                                            {{ isset($mitra->laporan->status_laporan) && $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>
+                                                            Dikirim</option>
+                                                        <option value="diterima"
+                                                            {{ isset($mitra->laporan->status_laporan) && $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>
+                                                            Diterima</option>
+                                                        <option value="direvisi"
+                                                            {{ isset($mitra->laporan->status_laporan) && $mitra->laporan->status_laporan == 'direvisi' ? 'selected' : '' }}>
+                                                            Direvisi</option>
+                                                    </select>
+                                                </div>
+
+                                                <!-- Keterangan Laporan -->
+                                                <div class="mb-3">
+                                                    <label for="keterangan_laporan" class="form-label"><strong>Keterangan
+                                                            Laporan</strong></label>
+                                                    <textarea name="keterangan_laporan" id="keterangan_laporan" class="form-control" cols="30" rows="5">{{ $mitra->laporan->keterangan_laporan ?? '' }}</textarea>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger"
+                                                        data-bs-dismiss="modal">Tutup</button>
+                                                    <button type="submit" class="btn btn-primary">Simpan</button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
                     </ul>
-                    {{-- <div class="d-flex justify-content-center mt-4">
-                        {{ $sekolahs->links('pagination::bootstrap-5') }}
-                    </div> --}}
+                    <div class="d-flex justify-content-center mt-4">
+                        {{ $mitraList->links('pagination::bootstrap-5') }}
+                    </div>
                 </div>
             </div>
         </div>
