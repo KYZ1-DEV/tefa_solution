@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\IndustriController;
+use App\Http\Controllers\LaporanController;
 
 Route::middleware(['guest'])->group(function () {
     Route::view('/', 'home');
@@ -93,8 +94,15 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/password', [SekolahController::class, 'password'])->name('schools.password.show');
         Route::put('/password', [SekolahController::class, 'updatePassword'])->name('schools.password.update');
         Route::get('/assistance-monitoring', [SekolahController::class, 'monitoringBantuan'])->name('schools.assistance-monitoring');
-        Route::get('/progress/0', [SekolahController::class, 'progress0Persen'])->name('schools.progress.0');
-        Route::get('/progress/50', [SekolahController::class, 'progress50Persen'])->name('schools.progress.50');
-        Route::get('/progress/100', [SekolahController::class, 'progress100Persen'])->name('schools.progress.100');
+        Route::get('/progress', [SekolahController::class, 'progress'])->name('progress');
+        Route::get('/information_progress', [SekolahController::class, 'information_progress'])->name('information_progress');
+        Route::post('/laporan', [SekolahController::class, 'storeLaporan'])->name('upload.laporan');
+        Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
+        Route::post('/laporan/{id}/update-status', [IndustriController::class, 'updateLaporanStatus'])->name('laporan.update.status');
+    });
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/laporan', [LaporanController::class, 'showInformationProgress'])->name('laporan.index');
+        Route::put('/laporan/{id}', [LaporanController::class, 'updateLaporanStatus'])->name('laporan.update');
     });
 });

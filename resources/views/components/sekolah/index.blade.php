@@ -49,9 +49,8 @@
             data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Progres</h6>
-                <a class="collapse-item" href="{{ route('schools.progress.0') }}">Progres 0%</a>
-                <a class="collapse-item" href="{{ route('schools.progress.50') }}">Progres 50%</a>
-                <a class="collapse-item" href="{{ route('schools.progress.100') }}">Progres 100%</a>
+                <a class="collapse-item" href="{{ route('progress') }}">Progres</a>
+                <a class="collapse-item" href="{{ route('information_progress') }}">Keterangan</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
