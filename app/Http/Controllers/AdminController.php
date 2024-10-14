@@ -350,16 +350,42 @@ class AdminController extends Controller
     // Store new mitra data
     public function storeMitra(Request $request)
     {
-        // Validate and create new mitra
+        // Validasi data yang masuk
         $request->validate([
             'nama_mitra' => 'required|string|max:255',
-            // Add other fields validation as necessary
+            'tanggal_bermitra' => 'required|date',
+            'periode_bermitra' => 'required|integer',
+            'progres_bermitra' => 'required|string',
+            'status_mitra' => 'required|string',
+            'id_sekolah' => 'required|exists:sekolah,id',
+            'id_industri' => 'required|exists:industri,id',
+            // Field tambahan sesuai kebutuhan
         ]);
 
-        // Create the new mitra
-        Mitra::create($request->all());
+        // Menghitung tanggal akhir bermitra (durasi bermitra)
+        $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
+        $periodeBermitra = (int) $request->input('periode_bermitra');
 
-        // Redirect to the mitra index with a success message
+        // Menambahkan tahun sesuai dengan periode bermitra
+        $tanggalBermitra->modify("+{$periodeBermitra} years");
+
+        // Format tanggal akhir menjadi string format YYYY-MM-DD
+        $durasiBermitra = $tanggalBermitra->format('Y-m-d');
+
+        // Simpan data ke database, termasuk durasi_bermitra
+        Mitra::create([
+            'nama_mitra' => $request->input('nama_mitra'),
+            'tanggal_bermitra' => $request->input('tanggal_bermitra'),
+            'periode_bermitra' => $request->input('periode_bermitra'),
+            'durasi_bermitra' => $durasiBermitra, // Tanggal akhir hasil perhitungan
+            'progres_bermitra' => $request->input('progres_bermitra'),
+            'status_mitra' => $request->input('status_mitra'),
+            'id_sekolah' => $request->input('id_sekolah'),
+            'id_industri' => $request->input('id_industri'),
+            'id_bantuan' => $request->input('id_bantuan'), // Jika ada
+        ]);
+
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil ditambahkan.');
     }
 

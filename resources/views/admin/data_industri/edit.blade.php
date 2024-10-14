@@ -12,7 +12,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Edit industri</h6>
             <br>
-            <a href="{{ route('admin.industries.index') }}" class="btn-sm text-decoration-none btn-purple">Kembali</a>
+            <a href="{{ route('admin.industries.index') }}" class="btn btn-gradient">Kembali</a>
         </div>
         <div class="card-body">
             <form action="{{ route('admin.industries.update', $industri->id) }}" method="POST">
@@ -80,7 +80,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-purple">Update</button>
+                <button type="submit" class="btn btn-gradient">Update</button>
             </form>
         </div>
     </div>

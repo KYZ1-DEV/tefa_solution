@@ -12,7 +12,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Data Mitra</h6>
             <br>
-            <a href="{{ route('admin.partners.create') }}" class="btn-sm text-decoration-none btn-purple">Tambah data Mitra</a>
+            <a href="{{ route('admin.partners.create') }}" class="btn btn-gradient">Tambah data Mitra</a>
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -59,12 +59,12 @@
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_mitra->status_mitra }}</td>
                             <td class="text-center">
                                 <!-- Tombol Lihat Detail -->
-    <a href="{{ route('admin.partners.show', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Lihat Detail</a>
-                                <a href="{{ route('admin.partners.edit', $data_mitra->id) }}" class="btn-purple btn-3d btn btn-sm">Edit</a>
+    <a href="{{ route('admin.partners.show', $data_mitra->id) }}" class="btn btn-gradient">Lihat Detail</a>
+                                <a href="{{ route('admin.partners.edit', $data_mitra->id) }}" class="btn btn-gradient">Edit</a>
                                 <form onsubmit="return confirmHapus(event)" action="{{ route('admin.partners.destroy', $data_mitra->id) }}" class="d-inline" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-purple btn-3d btn btn-sm">Hapus</button>
+                                    <button type="submit" class="btn btn-gradient">Hapus</button>
                                 </form>
                             </td>
                         </tr>
