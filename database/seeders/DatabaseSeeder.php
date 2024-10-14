@@ -27,6 +27,26 @@ class DatabaseSeeder extends Seeder
                 'role' => 'admin'
             ]
         );
+        \App\Models\User::factory()->create(
+            [
+                'name' => 'industri',
+                'email'=> 'industri@gmail.com',
+                'password'=> bcrypt('industri123'),
+                'email_verified_at' => now(),
+                'role' => 'industri'
+            ]
+        );
+        \App\Models\User::factory()->create(
+            [
+                'name' => 'sekolah',
+                'email'=> 'sekolah@gmail.com',
+                'password'=> bcrypt('sekolah123'),
+                'email_verified_at' => now(),
+                'role' => 'sekolah'
+            ]
+        );
+
+
 
     }
 }

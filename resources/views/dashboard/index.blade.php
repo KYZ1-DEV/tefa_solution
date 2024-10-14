@@ -241,7 +241,7 @@
         });
         document.addEventListener('DOMContentLoaded', function() {
             // Mengambil elemen dengan class 'alert-success'
-            var dangerAlert = document.getElementsByClassName('alert-danger');
+            var dangerAlert = document.getElementsByClassName('alert-dangers');
 
             // Pastikan ada elemen dengan class 'alert-success'
             if (dangerAlert.length > 0) {

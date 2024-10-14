@@ -352,7 +352,7 @@ class AdminController extends Controller
     {
         // Validasi data yang masuk
         $request->validate([
-            'nama_mitra' => 'required|string|max:255',
+            'nama_mitra' => 'required|string|max:50',
             'tanggal_bermitra' => 'required|date',
             'periode_bermitra' => 'required|integer',
             'progres_bermitra' => 'required|string',
@@ -360,7 +360,15 @@ class AdminController extends Controller
             'id_sekolah' => 'required|exists:sekolah,id',
             'id_industri' => 'required|exists:industri,id',
             // Field tambahan sesuai kebutuhan
-        ]);
+        ],[
+           'nama_mitra.max' => 'tidak boleh lebih dari 50',
+            'tanggal_bermitra.date' => 'harus memasukan tanggal',
+            'periode_bermitra.integer' => 'harus memasukan tahun',
+            'status_mitra.string' => 'masukan status mitra',
+            'id_sekolah.id' => 'masukan sekolah',
+            'id_industri.id' => 'masukan industri',
+        ]
+    );
 
         // Menghitung tanggal akhir bermitra (durasi bermitra)
         $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));

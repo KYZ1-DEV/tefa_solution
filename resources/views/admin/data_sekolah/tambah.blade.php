@@ -9,13 +9,22 @@
 
 <div class="container">
     <div class="card shadow mb-4">
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $item )
+                    <li>{{ $item }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Tambah Sekolah</h6>
             <br>
             <a href="{{ route('admin.schools.index') }}" class="btn btn-gradient">Kembali</a>
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.schools.store') }}" method="POST">
+            <form action="{{ route('admin.schools.store') }}" novalidate method="POST">
                 @csrf
                 <!-- Input NPSN -->
                 <div class="form-group">
