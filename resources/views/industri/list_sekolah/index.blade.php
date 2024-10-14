@@ -49,38 +49,37 @@
                             @endif
 
                             @if ($sekolahs->isEmpty())
-                                <li class="list-group-item text-center">Data yang dicari tidak ada!</li>
-                            @else
-                                @foreach ($sekolahs as $sekolah)
-                                    @php
-                                        $user = $users->firstWhere('id', $sekolah->id_user);
-                                    @endphp
+                            <li class="list-group-item text-center">Data yang dicari tidak ada!</li>
+                        @else
+                            @foreach ($sekolahs as $sekolah)
+                                @php
+                                    $user = $users->firstWhere('id', $sekolah->id_user);
+                                @endphp
 
-                                    <li
-                                        class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
-                                        <div class="d-flex align-items-center mb-2 mb-sm-0">
-                                            <img src="{{ $user['gambar'] ? asset('../gambar/' . $user['gambar']) : asset('gambar/user.png') }}"
-                                                alt="Logo Sekolah" class="img-thumbnail rounded-circle"
-                                                style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
-                                            <div>
-                                                <span class="school-name"
-                                                    style="font-size: 1.25rem; font-weight: bold; color: #555;">{{ $user->name }}</span><br>
-                                                <small class="text-muted">{{ $sekolah->alamat }}</small>
-                                            </div>
+                                <li class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
+                                    <div class="d-flex align-items-center mb-2 mb-sm-0">
+                                        <img src="{{ $user['gambar'] ? asset('../gambar/' . $user['gambar']) : asset('gambar/user.png') }}"
+                                            alt="Logo Sekolah" class="img-thumbnail rounded-circle"
+                                            style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
+                                        <div>
+                                            <span class="school-name"
+                                                style="font-size: 1.25rem; font-weight: bold; color: #555;">{{ $user->name }}</span><br>
+                                            <small class="text-muted">{{ $sekolah->alamat }}</small>
                                         </div>
-                                        <div class="text-end">
-                                            <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
-                                                data-bs-target="#detailModal{{ $sekolah->npsn }}">
-                                                <span class="d-none d-sm-inline">Lihat Detail</span>
-                                                <i class="fa-solid fa-eye d-sm-none"></i>
-                                            </button>
-                                            <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
-                                                data-bs-target="#bantuan">
-                                                <span class="d-none d-sm-inline">Beri Bantuan</span>
-                                                <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
-                                            </button>
-                                        </div>
-                                    </li>
+                                    </div>
+                                    <div class="text-end">
+                                        <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
+                                            data-bs-target="#detailModal{{ $sekolah->npsn }}">
+                                            <span class="d-none d-sm-inline">Lihat Detail</span>
+                                            <i class="fa-solid fa-eye d-sm-none"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
+                                            data-bs-target="#bantuanModal{{ $sekolah->id }}">
+                                            <span class="d-none d-sm-inline">Beri Bantuan</span>
+                                            <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
+                                        </button>
+                                    </div>
+                                </li>
 
 
                                     <!-- Modal Detail for each school -->
@@ -169,17 +168,17 @@
                                         </div>
                                     </div>
                                     <!-- Modal Bantuan -->
-                                    <div class="modal fade" id="bantuan" tabindex="-1"
-                                        aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal fade" id="bantuanModal{{ $sekolah->id }}" tabindex="-1"
+                                        aria-labelledby="bantuanLabel{{ $sekolah->id }}" aria-hidden="true">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="exampleModalLabel">Bantuan</h5>
+                                                    <h5 class="modal-title" id="bantuanLabel{{ $sekolah->id }}">Bantuan</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <form id="bantuanForm" method="POST"
+                                                    <form id="bantuanForm{{ $sekolah->id }}" method="POST"
                                                         action="{{ route('industries.giveHelps.store') }}">
                                                         @csrf
 
@@ -187,7 +186,7 @@
                                                             value="{{ $sekolah->id }}">
                                                         <input type="hidden" name="id_user"
                                                             value="{{ Auth::user()->id }}">
-                                                        {{-- <input type="hidden" name="id_bantuan"> --}}
+
                                                         <div class="mb-3">
                                                             <label for="nama_mitra" class="form-label">Nama Mitra</label>
                                                             <input type="text" name="nama_mitra"
@@ -218,13 +217,13 @@
                                                                 <option value="3 Tahun">3 Tahun</option>
                                                             </select>
                                                         </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-danger"
+                                                                data-bs-dismiss="modal">Batal</button>
+                                                            <button type="submit" form="bantuanForm{{ $sekolah->id }}"
+                                                                class="btn btn-primary">Simpan</button>
+                                                        </div>
                                                     </form>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger"
-                                                        data-bs-dismiss="modal">Batal</button>
-                                                    <button type="submit" form="bantuanForm"
-                                                        class="btn btn-primary">Simpan</button>
                                                 </div>
                                             </div>
                                         </div>

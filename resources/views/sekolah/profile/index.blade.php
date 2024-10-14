@@ -79,23 +79,23 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Nama Sekolah :</label>
-                                                <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" required>
+                                                <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" style="text-transform: uppercase;" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Email :</label>
                                                 <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="phone">Nomor Telepon :</label>
-                                                <input type="tel" id="phone" name="phone" class="form-control" value="{{ isset($sekolah->no_tlpn_sekolah) ? $sekolah->no_tlpn_sekolah : '' }}" required>
+                                            <label for="phone">Nomor Telepon :</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">+62</span>
+                                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nomor Telepon" value="{{ isset($sekolah->no_tlpn_sekolah) ? preg_replace('/^\+62/', '', $sekolah->no_tlpn_sekolah) : '' }}" required>
                                             </div>
                                         </div>
                                         <!-- Kolom Kanan -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="kepsek">Kepala Sekolah :</label>
-                                                <input type="text" id="kepsek" name="kepsek" class="form-control"
-                                                    value="{{ isset($sekolah->kepsek) ? $sekolah->kepsek : '' }}" required>
+                                                <input type="text" id="kepsek" name="kepsek" class="form-control" value="{{ isset($sekolah->kepsek) ? $sekolah->kepsek : '' }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenjang">Jenjang :</label>

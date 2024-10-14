@@ -30,8 +30,9 @@ class SekolahController extends Controller
     // Update profil Sekolah (Action)
     public function updateProfile(Request $request)
     {
+        // Validasi input
         $request->validate([
-            'npsn' => 'required|min:8',
+            'npsn' => 'required|min:8|max:8',
             'name' => 'required|min:8|max:255',
             'status' => 'required|max:10',
             'jenjang' => 'required|max:10',
@@ -41,7 +42,10 @@ class SekolahController extends Controller
             'phone' => 'required|max:15',
             'image' => 'nullable|max:1045|mimes:png,jpg',
         ], [
-            'npsn.required' => 'npsn harus diisi !!',
+            // pesan kesalahan
+            'npsn.required' => 'NPSN harus diisi !!',
+            'npsn.max' => 'NPSN maksimal 8 digit !!',
+            'npsn.min' => 'NPSN minimal 8 digit !!',
             'name.required' => 'Nama harus diisi !!',
             'name.max' => 'Nama terlalu panjang !!',
             'email.required' => 'Email harus diisi !!',
@@ -54,85 +58,44 @@ class SekolahController extends Controller
             'image.max' => 'Foto maksimal 1MB',
             'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
         ]);
-
+    
+        // Mengubah data menjadi uppercase dan mempersiapkan data
         $dataSekolah = [
-                    'npsn' => $request->npsn,
-                    'nama_sekolah' => $request->name,
-                    'email' => $request->email,
-                    'no_tlpn_sekolah' => $request->phone,
-                    'alamat' => $request->alamat,
-                    'status' => $request->status,
-                    'jenjang' => $request->jenjang,
-                    'kepsek' => $request->kepsek,
-                ];
-
-
+            'npsn' => $request->npsn,
+            'nama_sekolah' => $request->name,
+            'email' => $request->email,
+            'no_tlpn_sekolah' => '+62'.$request->phone,
+            'alamat' => $request->alamat,
+            'status' => $request->status,
+            'jenjang' => $request->jenjang,
+            'kepsek' => $request->kepsek,
+        ];
+    
         $user = Auth::user();
-
-        if (is_null($request->id)) {
-            $checkNpsn = Sekolah::where('npsn', $request->npsn)->first();
-            if ($checkNpsn) {
-                $sekolah = [
-                    'npsn' => '',
-                    'nama_sekolah' => $request->name,
-                    'email' => $request->email,
-                    'no_tlpn_sekolah' => $request->phone,
-                    'alamat' => $request->alamat,
-                    'status' => $request->status,
-                    'jenjang' => $request->jenjang,
-                    'kepsek' => $request->kepsek,
-                ];
-                $sekolah = Sekolah::updateOrCreate(['id_user' => $user->id],$sekolah);
-                return redirect()->route('schools.profile.show')->with('error','Gagal Edit Profile, Nomor pokok sekolah sudah ada');
-            }
-
-            if ($request->hasFile('image')) {
-                $imageName = time() . uniqid() . "." . $request->file('image')->extension();
-                $request->file('image')->move(public_path('gambar'), $imageName);
-                $dataSekolah['logo_sekolah'] = $imageName;
-                $user->gambar = $imageName; 
-            }
-
-            Sekolah::updateOrCreate(['id_user' => $user->id],$dataSekolah);
-            $user->name = $request->name;
-            $user->save();
-            return redirect()->route('schools.profile.show')->with('success', 'Edit Profile Berhasil');
-        }else {
-            if ($request->hasFile('image')) {
-                $imageName = time() . uniqid() . "." . $request->file('image')->extension();
-                $request->file('image')->move(public_path('gambar'), $imageName);
-                $dataSekolah['logo_sekolah'] = $imageName;
-                $user->gambar = $imageName; 
-            }
-            $sekolah = Sekolah::find($request->id);
-            $checkNpsn = Sekolah::where('npsn', $request->npsn)->first();
-
-            // dd($checkNpsn);
-            if ($checkNpsn && $checkNpsn->npsn === $sekolah->npsn) {
-                $updateSekolah = [
-                    'nama_sekolah' => $request->name,
-                    'email' => $request->email,
-                    'no_tlpn_sekolah' => $request->phone,
-                    'alamat' => $request->alamat,
-                    'status' => $request->status,
-                    'jenjang' => $request->jenjang,
-                    'kepsek' => $request->kepsek,
-                ];
-                $user->name = $request->name;
-                $user->save();
-                $sekolah->update($updateSekolah);
-                return redirect()->route('schools.profile.show')->with('success', 'Edit Profile Berhasil');
-            }elseif ($checkNpsn && $checkNpsn->npsn !== $sekolah->npsn) {
-                return redirect()->route('schools.profile.show')->with('error','Gagal Edit Profile, Nomor pokok sekolah sudah ada');
-            }
-
-            
-            $sekolah->update($dataSekolah);
-            $user->name = $request->name;
-            $user->save();
-            return redirect()->route('schools.profile.show')->with('success', 'Edit Profile Berhasil');
+    
+        // Proses upload gambar
+        if ($request->hasFile('image')) {
+            $imageName = time() . uniqid() . "." . $request->file('image')->extension();
+            $request->file('image')->move(public_path('gambar'), $imageName);
+            $dataSekolah['logo_sekolah'] = $imageName;
+            $user->gambar = $imageName; 
         }
-
+    
+        // Cek apakah profile baru atau update
+        $sekolah = Sekolah::where('id_user', $user->id)->first();
+        $checkNpsn = Sekolah::where('npsn', $request->npsn)->first();
+    
+        // Jika NPSN sudah ada
+        if ($checkNpsn && (!$sekolah || $checkNpsn->npsn !== $sekolah->npsn)) {
+            return redirect()->route('schools.profile.show')->with('error', 'Gagal Edit Profile, Nomor pokok sekolah(NPSN) sudah ada!!');
+        }
+    
+        // Update atau buat data sekolah
+        Sekolah::updateOrCreate(['id_user' => $user->id], $dataSekolah);
+        $user->name = strtoupper($request->name);
+        $user->save();
+    
+        return redirect()->route('schools.profile.show')->with('success', 'Edit Profile Berhasil');
     }
 
     // Tampilkan halaman ubah password Sekolah
