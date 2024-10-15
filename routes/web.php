@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -16,7 +17,22 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Dashboard
-    Route::redirect('/home', '/schools');
+    Route::get('/', function () {
+        if (Auth::check()) {
+            $user = Auth::user();
+            // Redirect sesuai dengan role user
+            if ($user && $user->role === 'industri') {
+                return redirect('/industries');
+            } else if ($user && $user->role === 'sekolah') {
+                return redirect('/schools');
+            } else {
+                $url = "/" . $user->role;
+                return redirect($url);
+            }
+        }
+        return redirect('/login');
+    });
+    
     Route::get('/schools', [SekolahController::class, 'index'])->name('schools.index')->middleware('userAkses:sekolah');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('userAkses:admin');
     Route::get('/industries', [IndustriController::class, 'index'])->name('industries.index')->middleware('userAkses:industri');

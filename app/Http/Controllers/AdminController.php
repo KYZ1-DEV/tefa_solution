@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Admin;
-use App\Models\Sekolah;
-use App\Models\Industri;
 use App\Models\Mitra;
 use App\Models\Bantuan;
+use App\Models\Sekolah;
+use App\Models\Industri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -25,16 +26,29 @@ class AdminController extends Controller
     {
         // Validasi file PDF
         $request->validate([
-            'template' => 'required|mimes:pdf|max:2048', // file harus PDF dan max 2MB
+            'template' => 'required|mimes:pdf', // file harus PDF
+        ], [
+            'template.required' => 'File template harus di tambahkan!',
+            'template.mimes' => 'File harus berupa PDF!',
         ]);
-
-        // Simpan file ke dalam folder storage
+    
+        // Mendapatkan file dari request
         $file = $request->file('template');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-
-        // Simpan file ke storage/public/templates
-        $filePath = $file->move(public_path('templates'), $fileName);
-
+        
+        // Nama file yang akan disimpan, dengan ekstensi yang benar
+        $fileName = 'template_laporan.' . $file->getClientOriginalExtension(); // Menambahkan titik sebelum ekstensi
+        
+        // Path tempat menyimpan file
+        $path = 'template/' . $fileName;
+        
+        // Hapus template lama jika ada
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path); // Hapus file lama
+        }
+    
+        // Simpan file baru ke storage/app/public/template
+        Storage::disk('public')->put($path, file_get_contents($file));
+    
         // Jika sukses, kembalikan respon atau redirect ke halaman lain
         return back()->with('success', 'File berhasil diunggah!');
     }
@@ -50,39 +64,45 @@ class AdminController extends Controller
 
     public function updateProfile(Request $request)
     {
-    // Validasi request
-    $request->validate([
-        'name' => 'max:255',
-        'image' => 'max:1045|mimes:png,jpg',
-    ],[
-        'name.max' => 'Nama terlalu panjang !!',
-        'image.max' => 'Foto maksimal 1MB',
-        'image.mimes' => 'Foto harus PNG atau JPG !'
-    ]);
+        // Validasi request
+        $request->validate([
+            'name' => 'max:255',
+            'image' => 'max:1045|mimes:png,jpg',
+        ],[
+            'name.max' => 'Nama terlalu panjang !!',
+            'image.max' => 'Foto maksimal 1MB',
+            'image.mimes' => 'Foto Harus PNG atau JPG !'
+        ]);
 
-    $auth = Auth::user();
-    $user = User::find($auth->id);
+        $auth = Auth::user();
+        $user = User::find($auth->id);
+        $tpln = '+62'.$request->phone;
 
-    Admin::updateOrCreate(
-        ['id_user' => $user->id],
-        ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $request->phone]
-    );
+        Admin::updateOrCreate(
+            ['id_user' => $user->id],
+            ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $tpln]
+        );
 
+        if($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . uniqid() . "." . $image->extension();
+            $path = "photo-user/".$imageName;
 
-    // Jika ada file gambar diupload
-    if($request->hasFile('image')) {
-        $image = $request->file('image');
-        $imageName = time() . uniqid() . "." . $image->extension();
-        $image->move(public_path('gambar'), $imageName);
-        $user->name = $request->name;
-        // Update gambar user
-        $user->update(['gambar' => $imageName]);
-    }else{
-        $user->name = $request->name;
-        $user->update();
-    }
+            if($user->gambar) {
+                Storage::disk('public')->delete("photo-user/".$user->gambar);
+            }
 
-    return redirect()->route('admin.profile.show')->with('success','Edit Profile Berhasil');
+            Storage::disk('public')->put($path, file_get_contents($image));
+
+            $user->name = $request->name;
+            $user->update(['gambar' => $imageName]);
+
+        } else {
+            $user->name = $request->name;
+            $user->update();
+        }
+
+        return redirect()->route('admin.profile.show')->with('success','Edit Profile Berhasil');
     }
 
 
@@ -123,10 +143,20 @@ class AdminController extends Controller
     public function storeUser(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+            'password' => 'required|min:6|confirmed', 
             'role' => 'required',
+        ], [
+            'name.required' => 'Nama harus diisi!!',
+            'name.max' => 'Nama terlalu panjang (maksimal 255 karakter)!',
+            'email.required' => 'Email harus diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'email.unique' => 'Email sudah terdaftar!',
+            'password.required' => 'Password harus diisi!',
+            'password.min' => 'Password minimal 6 karakter!',
+            'password.confirmed' => 'Konfirmasi password tidak cocok!',
+            'role.required' => 'Role harus diisi!',
         ]);
 
         User::create([
@@ -139,6 +169,7 @@ class AdminController extends Controller
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
     }
 
+
     public function editUser($id)
     {
         $user = User::find($id);
@@ -147,19 +178,36 @@ class AdminController extends Controller
 
     public function updateUser(Request $request, $id)
     {
-        $user = User::findOrFail($request->id);
-
+        $user = User::findOrFail($id);
+    
+        $request->validate([
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'nullable|min:6|confirmed', // Password tidak harus diisi, tapi jika diisi harus valid
+            'role' => 'required',
+        ], [
+            'name.required' => 'Nama harus diisi!!',
+            'name.max' => 'Nama terlalu panjang (maksimal 255 karakter)!',
+            'email.required' => 'Email harus diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'email.unique' => 'Email sudah terdaftar!',
+            'password.min' => 'Password minimal 6 karakter!',
+            'password.confirmed' => 'Konfirmasi password tidak cocok!',
+            'role.required' => 'Role harus diisi!',
+        ]);
+    
         $user->name = $request->name;
         $user->email = $request->email;
-        if (isset($request->password)) {
+    
+        if ($request->filled('password')) {
             $user->password = bcrypt($request->password);
         }
-
+    
         $user->role = $request->role;
         $user->save();
-
+    
         return redirect()->route('admin.users.index')->with('success', 'User berhasil diupdate');
-    }
+    }    
 
     public function destroyUser($id)
     {
@@ -190,20 +238,38 @@ class AdminController extends Controller
     {
         $request->validate([
             'npsn' => 'required|unique:sekolah',
-            'nama_sekolah' => 'required',
+            'nama_sekolah' => 'required|max:255',
             'status' => 'required',
             'jenjang' => 'required',
-            'kepsek' => 'required',
-            'alamat' => 'required',
+            'kepsek' => 'required|max:255',
+            'alamat' => 'required|max:255',
             'email' => 'required|email|unique:sekolah',
-            'no_tlpn_sekolah' => 'required',
+            'no_tlpn_sekolah' => 'required|regex:/^\+?[0-9]{1,3}?[0-9]{7,14}$/',
             'id_user' => 'required|exists:users,id'
+        ], [
+            'npsn.required' => 'NPSN harus diisi!',
+            'npsn.unique' => 'NPSN sudah terdaftar!',
+            'nama_sekolah.required' => 'Nama sekolah harus diisi!',
+            'nama_sekolah.max' => 'Nama sekolah terlalu panjang (maksimal 255 karakter)!',
+            'status.required' => 'Status harus diisi!',
+            'jenjang.required' => 'Jenjang harus diisi!',
+            'kepsek.required' => 'Nama Kepala Sekolah harus diisi!',
+            'kepsek.max' => 'Nama Kepala Sekolah terlalu panjang (maksimal 255 karakter)!',
+            'alamat.required' => 'Alamat harus diisi!',
+            'alamat.max' => 'Alamat terlalu panjang (maksimal 255 karakter)!',
+            'email.required' => 'Email harus diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'email.unique' => 'Email sudah terdaftar!',
+            'no_tlpn_sekolah.required' => 'Nomor telepon harus diisi!',
+            'no_tlpn_sekolah.regex' => 'Format nomor telepon tidak valid!',
+            'id_user.required' => 'ID pengguna harus diisi!',
+            'id_user.exists' => 'ID pengguna tidak terdaftar!'
         ]);
-
+    
         Sekolah::create($request->all());
-
+    
         return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil ditambahkan.');
-    }
+    }   
 
     // Menampilkan form edit sekolah
     public function editSekolah($id)
@@ -218,22 +284,40 @@ class AdminController extends Controller
     {
         $request->validate([
             'npsn' => 'required|unique:sekolah,npsn,' . $id,
-            'nama_sekolah' => 'required',
+            'nama_sekolah' => 'required|max:255',
             'status' => 'required',
             'jenjang' => 'required',
-            'kepsek' => 'required',
-            'alamat' => 'required',
+            'kepsek' => 'required|max:255',
+            'alamat' => 'required|max:255',
             'email' => 'required|email|unique:sekolah,email,' . $id,
-            'no_tlpn_sekolah' => 'required',
+            'no_tlpn_sekolah' => 'required|regex:/^\+?[0-9]{1,3}?[0-9]{7,14}$/',
             'id_user' => 'required|exists:users,id'
+        ], [
+            'npsn.required' => 'NPSN harus diisi!',
+            'npsn.unique' => 'NPSN sudah terdaftar!',
+            'nama_sekolah.required' => 'Nama sekolah harus diisi!',
+            'nama_sekolah.max' => 'Nama sekolah terlalu panjang (maksimal 255 karakter)!',
+            'status.required' => 'Status harus diisi!',
+            'jenjang.required' => 'Jenjang harus diisi!',
+            'kepsek.required' => 'Nama Kepala Sekolah harus diisi!',
+            'kepsek.max' => 'Nama Kepala Sekolah terlalu panjang (maksimal 255 karakter)!',
+            'alamat.required' => 'Alamat harus diisi!',
+            'alamat.max' => 'Alamat terlalu panjang (maksimal 255 karakter)!',
+            'email.required' => 'Email harus diisi!',
+            'email.email' => 'Format email tidak valid!',
+            'email.unique' => 'Email sudah terdaftar!',
+            'no_tlpn_sekolah.required' => 'Nomor telepon harus diisi!',
+            'no_tlpn_sekolah.regex' => 'Format nomor telepon tidak valid!',
+            'id_user.required' => 'ID pengguna harus diisi!',
+            'id_user.exists' => 'ID pengguna tidak terdaftar!'
         ]);
-
+    
         $sekolah = Sekolah::findOrFail($id);
         $sekolah->update($request->all());
-
+    
         return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil diperbarui.');
     }
-
+    
     // Menghapus sekolah
     public function destroySekolah($id)
     {
@@ -266,14 +350,20 @@ class AdminController extends Controller
     {
 
             $request->validate([
-                'nama_industri' => 'required|unique:industri',
-                'npwp' => 'required',
+                'nama_industri' => 'required|unique:industri|string|max:50',
+                'npwp' => 'required|integer|max:15',
                 'skdp' => 'required',
                 'email' => 'required|email|unique:industri',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
-                'no_tlpn_industri' => 'required',
+                'no_tlpn_industri' => 'required|integer|max:13',
                 'id_user' => 'required|exists:users,id'
+            ],[
+                'nama_industri.max'=>'maxsimal kata yang boleh di masukan tidak lebih dari 50',
+                'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
+                'npwp.max'=> 'maximal nomer npwp adalah 15 digit',
+                'no_tlpn_industri' =>'maxsimal nomer telepon adalah 13 digit',
+                'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
             ]);
 
             Industri::create($request->all());
@@ -292,14 +382,20 @@ class AdminController extends Controller
     {
 
             $request->validate([
-                'nama_industri' => 'required',
-                'npwp' => 'required',
+                'nama_industri' => 'required|string|max:50',
+                'npwp' => 'required|integer|max:15',
                 'skdp' => 'required',
                 'email' => 'required',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
                 'no_tlpn_industri' => 'required',
                 'id_user' => 'required|exists:users,id'
+            ],[
+               'nama_industri.max'=>'maxsimal kata yang boleh di masukan tidak lebih dari 50',
+                'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
+                'npwp.max'=> 'maximal nomer npwp adalah 15 digit',
+                'no_tlpn_industri' =>'maxsimal nomer telepon adalah 13 digit',
+                'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
             ]);
 
             $industri = Industri::findOrFail($id);
@@ -350,16 +446,40 @@ class AdminController extends Controller
     // Store new mitra data
     public function storeMitra(Request $request)
     {
-        // Validate and create new mitra
+        // Validasi data yang masuk
         $request->validate([
-            'nama_mitra' => 'required|string|max:255',
-            // Add other fields validation as necessary
+            'nama_mitra' => 'required|string|max:50',
+
+            // Field tambahan sesuai kebutuhan
+        ],[
+           'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
+        ]
+    );
+
+        // Menghitung tanggal akhir bermitra (durasi bermitra)
+        $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
+        $periodeBermitra = (int) $request->input('periode_bermitra');
+
+        // Menambahkan tahun sesuai dengan periode bermitra
+        $tanggalBermitra->modify("+{$periodeBermitra} years");
+
+        // Format tanggal akhir menjadi string format YYYY-MM-DD
+        $durasiBermitra = $tanggalBermitra->format('Y-m-d');
+
+        // Simpan data ke database, termasuk durasi_bermitra
+        Mitra::create([
+            'nama_mitra' => $request->input('nama_mitra'),
+            'tanggal_bermitra' => $request->input('tanggal_bermitra'),
+            'periode_bermitra' => $request->input('periode_bermitra'),
+            'durasi_bermitra' => $durasiBermitra, // Tanggal akhir hasil perhitungan
+            'progres_bermitra' => $request->input('progres_bermitra'),
+            'status_mitra' => $request->input('status_mitra'),
+            'id_sekolah' => $request->input('id_sekolah'),
+            'id_industri' => $request->input('id_industri'),
+            'id_bantuan' => $request->input('id_bantuan'), // Jika ada
         ]);
 
-        // Create the new mitra
-        Mitra::create($request->all());
-
-        // Redirect to the mitra index with a success message
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil ditambahkan.');
     }
 
@@ -375,6 +495,24 @@ class AdminController extends Controller
     public function updateMitra(Request $request, $id)
     {
         // Validate and update mitra
+        $request->validate([
+            'nama_mitra' => 'required|string|max:50',
+            
+
+        ],[
+           'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
+
+        ]
+    );
+
+    $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
+    $periodeBermitra = (int) $request->input('periode_bermitra');
+
+    // Menambahkan tahun sesuai dengan periode bermitra
+    $tanggalBermitra->modify("+{$periodeBermitra} years");
+
+    $durasiBermitra = $tanggalBermitra->format('Y-m-d');
+
         $mitra = Mitra::findOrFail($id);
         $mitra->nama_mitra = $request->input('nama_mitra');
         $mitra->tanggal_bermitra = $request->input('tanggal_bermitra');

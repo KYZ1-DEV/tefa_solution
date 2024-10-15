@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserAkses
@@ -15,18 +16,19 @@ class UserAkses
      */
     public function handle(Request $request, Closure $next,$role): Response
     {
-        if (auth()->user()->role === $role) {
-            return $next($request);
-        }else {
-            // dd(auth()->user()->role);
-            if(auth()->user()->role === 'industri'){
-                return redirect('/industries')->withErrors('Anda tidak dapat mengakses halaman ini');
-            }else if(auth()->user()->role === 'sekolah'){
-                return redirect('/schools')->withErrors('Anda tidak dapat mengakses halaman ini');
-            }else{
-                $url = "/".auth()->user()->role;
-                return redirect($url)->withErrors('Anda tidak dapat mengakses halaman ini');
-            }
-        }
+         $user = Auth::user(); 
+
+         if ($user && $user->role === $role) {
+             return $next($request);
+         } else {
+             if ($user && $user->role === 'industri') {
+                 return redirect('/industries')->withErrors('Anda tidak dapat mengakses halaman tersebut!');
+             } else if ($user && $user->role === 'sekolah') {
+                 return redirect('/schools')->withErrors('Anda tidak dapat mengakses halaman tersebut!');
+             } else {
+                 $url = "/" . $user->role;
+                 return redirect($url)->withErrors('Anda tidak dapat mengakses halaman tersebut!');
+             }
+         }
     }
 }

@@ -15,7 +15,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
                                 {{-- new --}}
                                 <br>
-                                <a href="{{ route('admin.users.create') }}" class="btn-sm text-decoration-none btn-purple">Tambah data User</a>
+                                <a href="{{ route('admin.users.create') }}" class="btn btn-gradient">Tambah data User</a>
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>
@@ -42,7 +42,7 @@
                                     <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>foto</th>
+                                                <th>Foto</th>
                                                 <th>Nama</th>
                                                 <th>Email</th>
 
@@ -55,16 +55,16 @@
                                             @forelse ($users as $user)
                                             <tr>
                                                 <td class="py-1">
-                                                    <img src="{{ $user->gambar ? asset('gambar/'.$user->gambar) : asset('gambar/user.png') }}" alt="image" height="50" width="50"/></td>
+                                                    <img src="{{ $user->gambar ? asset('storage/photo-user/'.$user->gambar) : asset('gambar/user.png') }}" alt="image" height="50" width="50"/></td>
                                                 <td>{{ $user['name'] }}</td>
                                                 <td>{{ $user['email'] }}</td>
                                                 <td>{{ $user['role'] }}</td>
                                                 <td>
-                                                    <a href="{{ route('admin.users.edit',[$user['id']]) }}" class="btn-purple btn-3d btn">Edit</a>
+                                                    <a href="{{ route('admin.users.edit',[$user['id']]) }}" class="btn btn-gradient">Edit</a>
                                                     <form onsubmit="return confirmHapus(event)" action="{{ route('admin.users.destroy',[$user['id']]) }}" class="d-inline" method="POST">
                                                         @method('delete')
                                                         @csrf
-                                                        <button type="submit" class="btn-purple btn-3d btn">Hapus</button>
+                                                        <button type="submit" class="btn btn-gradient">Hapus</button>
                                                     </form>
                                                 </td>
                                             </tr>
