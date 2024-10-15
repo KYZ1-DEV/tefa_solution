@@ -12,7 +12,7 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Detail Mitra</h6>
             <br>
-            <a href="{{ route('admin.partners.index') }}" class="btn-sm text-decoration-none btn-purple">Kembali</a>
+            <a href="{{ route('admin.partners.index') }}" class="btn btn-gradient">Kembali</a>
         </div>
         <div class="card-body">
             <table class="table table-bordered">

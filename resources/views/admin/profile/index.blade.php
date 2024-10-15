@@ -13,7 +13,7 @@
     <div class="container-fluid">
         <!-- Success Message -->
         @if (Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade fade-in">
+            <div class="alert alert-success alert-dismissible fade show">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
@@ -49,8 +49,8 @@
                             <!-- Profile Picture (Left) -->
                             <div class="col-md-4 text-center">
                                 <img id="profilePic" class="img-fluid mt-3 mb-4" style="width: 8rem; height: 8rem; border-radius: 50%; object-fit: cover;"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.png') }}" alt="Profile Picture">
-                                <button class="btn btn-primary" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
+                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.jpeg') }}" alt="Profile Picture">
+                                <button class="btn btn-gradient" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
                             </div>
 
                             <!-- Profile Edit Form (Right) -->
@@ -74,7 +74,7 @@
                                         <input type="tel" id="phone" name="phone" class="form-control" value="{{ isset($admin->no_tlpn) ? $admin->no_tlpn : '' }}" required>
                                     </div>
 
-                                    <button type="submit" class="btn btn-success mt-3">Simpan</button>
+                                    <button type="submit" class="btn btn-gradient">Simpan</button>
                                 </form>
 
                             </div>
