@@ -12,7 +12,27 @@
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Tambah Industri</h6>
             <br>
-            <a href="{{ route('admin.industries.index') }}" class="btn-sm text-decoration-none btn-purple">Kembali</a>
+            <a href="{{ route('admin.industries.index') }}" class="btn btn-gradient">Kembali</a>
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (Session::has('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire(
+                        'Sukses',
+                        '{{ Session::get('success') }}',
+                        'success'
+                    );
+                });
+            </script>
+        @endif
         </div>
         <div class="card-body">
             <form action="{{ route('admin.industries.store') }}" method="POST">
@@ -82,7 +102,7 @@
                     </select>
                 </div>
 
-                <button type="submit" class="btn btn-purple">Simpan</button>
+                <button type="submit" class="btn btn-gradient">Simpan</button>
             </form>
         </div>
     </div>

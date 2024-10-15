@@ -67,7 +67,7 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav sidebar sidebar-dark accordion"
-            style="background-image: linear-gradient(180deg, #9e30c6 10%, #602fb5 100%);" id="accordionSidebar">
+            style="background-image: linear-gradient(50deg, #7b2cbf, #3a0ca3);" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center"

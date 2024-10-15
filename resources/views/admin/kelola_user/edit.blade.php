@@ -13,7 +13,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <br>
-            <a href="{{ route('admin.users.index') }}" class="btn-sm text-decoration-none btn-purple">Kembali</a>
+            <a href="{{ route('admin.users.index') }}" class="btn btn-gradient">Kembali</a>
         </div>
         <div class="card-body">
             <h3>Tambah User</h3>
@@ -53,7 +53,7 @@
 
                 </div>
 
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-gradient">Update</button>
             </form>
 
 @endsection

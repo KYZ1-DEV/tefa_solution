@@ -15,7 +15,7 @@
                                 <h6 class="m-0 font-weight-bold text-primary">Data User</h6>
                                 {{-- new --}}
                                 <br>
-                                <a href="{{ route('admin.users.create') }}" class="btn-sm text-decoration-none btn-purple">Tambah data User</a>
+                                <a href="{{ route('admin.users.create') }}" class="btn btn-gradient">Tambah data User</a>
                                 @if ($errors->any())
                                     <div class="alert alert-danger">
                                         <ul>
@@ -60,11 +60,11 @@
                                                 <td>{{ $user['email'] }}</td>
                                                 <td>{{ $user['role'] }}</td>
                                                 <td>
-                                                    <a href="{{ route('admin.users.edit',[$user['id']]) }}" class="btn-purple btn-3d btn">Edit</a>
+                                                    <a href="{{ route('admin.users.edit',[$user['id']]) }}" class="btn btn-gradient">Edit</a>
                                                     <form onsubmit="return confirmHapus(event)" action="{{ route('admin.users.destroy',[$user['id']]) }}" class="d-inline" method="POST">
                                                         @method('delete')
                                                         @csrf
-                                                        <button type="submit" class="btn-purple btn-3d btn">Hapus</button>
+                                                        <button type="submit" class="btn btn-gradient">Hapus</button>
                                                     </form>
                                                 </td>
                                             </tr>

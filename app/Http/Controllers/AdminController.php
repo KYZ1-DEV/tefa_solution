@@ -350,14 +350,20 @@ class AdminController extends Controller
     {
 
             $request->validate([
-                'nama_industri' => 'required|unique:industri',
-                'npwp' => 'required',
+                'nama_industri' => 'required|unique:industri|string|max:50',
+                'npwp' => 'required|integer|max:15',
                 'skdp' => 'required',
                 'email' => 'required|email|unique:industri',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
-                'no_tlpn_industri' => 'required',
+                'no_tlpn_industri' => 'required|integer|max:13',
                 'id_user' => 'required|exists:users,id'
+            ],[
+                'nama_industri.max'=>'maxsimal kata yang boleh di masukan tidak lebih dari 50',
+                'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
+                'npwp.max'=> 'maximal nomer npwp adalah 15 digit',
+                'no_tlpn_industri' =>'maxsimal nomer telepon adalah 13 digit',
+                'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
             ]);
 
             Industri::create($request->all());
@@ -376,14 +382,20 @@ class AdminController extends Controller
     {
 
             $request->validate([
-                'nama_industri' => 'required',
-                'npwp' => 'required',
+                'nama_industri' => 'required|string|max:50',
+                'npwp' => 'required|integer|max:15',
                 'skdp' => 'required',
                 'email' => 'required',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
                 'no_tlpn_industri' => 'required',
                 'id_user' => 'required|exists:users,id'
+            ],[
+               'nama_industri.max'=>'maxsimal kata yang boleh di masukan tidak lebih dari 50',
+                'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
+                'npwp.max'=> 'maximal nomer npwp adalah 15 digit',
+                'no_tlpn_industri' =>'maxsimal nomer telepon adalah 13 digit',
+                'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
             ]);
 
             $industri = Industri::findOrFail($id);
@@ -434,16 +446,40 @@ class AdminController extends Controller
     // Store new mitra data
     public function storeMitra(Request $request)
     {
-        // Validate and create new mitra
+        // Validasi data yang masuk
         $request->validate([
-            'nama_mitra' => 'required|string|max:255',
-            // Add other fields validation as necessary
+            'nama_mitra' => 'required|string|max:50',
+
+            // Field tambahan sesuai kebutuhan
+        ],[
+           'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
+        ]
+    );
+
+        // Menghitung tanggal akhir bermitra (durasi bermitra)
+        $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
+        $periodeBermitra = (int) $request->input('periode_bermitra');
+
+        // Menambahkan tahun sesuai dengan periode bermitra
+        $tanggalBermitra->modify("+{$periodeBermitra} years");
+
+        // Format tanggal akhir menjadi string format YYYY-MM-DD
+        $durasiBermitra = $tanggalBermitra->format('Y-m-d');
+
+        // Simpan data ke database, termasuk durasi_bermitra
+        Mitra::create([
+            'nama_mitra' => $request->input('nama_mitra'),
+            'tanggal_bermitra' => $request->input('tanggal_bermitra'),
+            'periode_bermitra' => $request->input('periode_bermitra'),
+            'durasi_bermitra' => $durasiBermitra, // Tanggal akhir hasil perhitungan
+            'progres_bermitra' => $request->input('progres_bermitra'),
+            'status_mitra' => $request->input('status_mitra'),
+            'id_sekolah' => $request->input('id_sekolah'),
+            'id_industri' => $request->input('id_industri'),
+            'id_bantuan' => $request->input('id_bantuan'), // Jika ada
         ]);
 
-        // Create the new mitra
-        Mitra::create($request->all());
-
-        // Redirect to the mitra index with a success message
+        // Redirect ke halaman index dengan pesan sukses
         return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil ditambahkan.');
     }
 
@@ -459,6 +495,24 @@ class AdminController extends Controller
     public function updateMitra(Request $request, $id)
     {
         // Validate and update mitra
+        $request->validate([
+            'nama_mitra' => 'required|string|max:50',
+            
+
+        ],[
+           'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
+
+        ]
+    );
+
+    $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
+    $periodeBermitra = (int) $request->input('periode_bermitra');
+
+    // Menambahkan tahun sesuai dengan periode bermitra
+    $tanggalBermitra->modify("+{$periodeBermitra} years");
+
+    $durasiBermitra = $tanggalBermitra->format('Y-m-d');
+
         $mitra = Mitra::findOrFail($id);
         $mitra->nama_mitra = $request->input('nama_mitra');
         $mitra->tanggal_bermitra = $request->input('tanggal_bermitra');

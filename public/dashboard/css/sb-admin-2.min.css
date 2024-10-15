@@ -10349,3 +10349,13 @@ body.sidebar-toggled footer.sticky-footer {
 .btn-purple:hover {
     background-color: #993399; /* Lighter purple on hover */
 }
+.btn-gradient {
+    background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
+    border: none;
+    color: white;
+}
+
+.btn-gradient:hover {
+    color: white;
+    background: linear-gradient(45deg, #3a0ca3, #7b2cbf);
+}

@@ -13,7 +13,7 @@
     <div class="container-fluid">
         <!-- Success Message -->
         @if (Session::get('success'))
-        <div class="alert alert-success alert-dismissible fade fade-in">
+            <div class="alert alert-success alert-dismissible fade show">
                 <ul>
                     <li>{{ Session::get('success') }}</li>
                 </ul>
@@ -79,7 +79,7 @@
                                         <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nomor Telepon" value="{{ isset($admin->no_tlpn) ? preg_replace('/^\+62/', '', $admin->no_tlpn) : '' }}" required>
                                     </div>
 
-                                    <button type="submit" class="btn btn-success mt-3">Simpan</button>
+                                    <button type="submit" class="btn btn-gradient">Simpan</button>
                                 </form>
 
                             </div>
