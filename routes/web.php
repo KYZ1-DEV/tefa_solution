@@ -17,21 +17,21 @@ Route::middleware(['guest'])->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     // Dashboard
-    Route::get('/', function () {
-        if (Auth::check()) {
-            $user = Auth::user();
-            // Redirect sesuai dengan role user
-            if ($user && $user->role === 'industri') {
-                return redirect('/industries');
-            } else if ($user && $user->role === 'sekolah') {
-                return redirect('/schools');
-            } else {
-                $url = "/" . $user->role;
-                return redirect($url);
-            }
-        }
-        return redirect('/login');
-    });
+    // Route::get('/', function () {
+    //     if (Auth::check()) {
+    //         $user = Auth::user();
+    //         // Redirect sesuai dengan role user
+    //         if ($user && $user->role === 'industri') {
+    //             return redirect('/industries');
+    //         } else if ($user && $user->role === 'sekolah') {
+    //             return redirect('/schools');
+    //         } else {
+    //             $url = "/" . $user->role;
+    //             return redirect($url);
+    //         }
+    //     }
+    //     return redirect('/home');
+    // });
     
     Route::get('/schools', [SekolahController::class, 'index'])->name('schools.index')->middleware('userAkses:sekolah');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('userAkses:admin');

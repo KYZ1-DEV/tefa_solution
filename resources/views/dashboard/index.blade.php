@@ -67,7 +67,7 @@
 
         <!-- Sidebar -->
         <ul class="navbar-nav sidebar sidebar-dark accordion"
-            style="background-image: linear-gradient(50deg, #7b2cbf, #3a0ca3);" id="accordionSidebar">
+            style="background-image: linear-gradient(50deg, #7b2cbf, #4b1cb7);" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center"
@@ -114,8 +114,7 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span
                                     class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                                <img class="img-profile rounded-circle"
-                                    src="{{ Auth::user()->gambar ? asset('storage/photo-user/' . Auth::user()->gambar) : asset('gambar/user.png') }}">
+                                <img class="img-profile rounded-circle" src="{{ Auth::user()->gambar ? asset('storage/photo-user/' . Auth::user()->gambar) : asset('gambar/user.png') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Laporan;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
-use App\Models\industri;
-use App\Models\Laporan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class SekolahController extends Controller
 {
@@ -60,7 +60,6 @@ class SekolahController extends Controller
             'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
         ]);
     
-        // Mengubah data menjadi uppercase dan mempersiapkan data
         $dataSekolah = [
             'npsn' => $request->npsn,
             'nama_sekolah' => $request->name,
@@ -72,14 +71,27 @@ class SekolahController extends Controller
             'kepsek' => $request->kepsek,
         ];
     
-        $user = Auth::user();
-    
+        $auth = Auth::user();
+        $user = User::find($auth->id);
+        
         // Proses upload gambar
-        if ($request->hasFile('image')) {
-            $imageName = time() . uniqid() . "." . $request->file('image')->extension();
-            $request->file('image')->move(public_path('gambar'), $imageName);
-            $dataSekolah['logo_sekolah'] = $imageName;
-            $user->gambar = $imageName; 
+        if($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . uniqid() . "." . $image->extension();
+            $path = "photo-user/".$imageName;
+
+            if($user->gambar) {
+                Storage::disk('public')->delete("photo-user/".$user->gambar);
+            }
+
+            Storage::disk('public')->put($path, file_get_contents($image));
+
+            $user->name = $request->name;
+            $user->update(['gambar' => $imageName]);
+
+        } else {
+            $user->name = $request->name;
+            $user->update();
         }
     
         // Cek apakah profile baru atau update

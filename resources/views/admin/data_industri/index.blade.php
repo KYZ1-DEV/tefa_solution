@@ -61,12 +61,12 @@
                             <td class="text-truncate" style="max-width: 100px; font-size: 12px;">{{ $data_industri->no_tlpn_industri }}</td>
                             <td class="text-center">
                                 <!-- Tombol Lihat Detail -->
-    <a href="{{ route('admin.industries.show', $data_industri->id) }}" class="btn btn-gradient">Lihat Detail</a>
-                                <a href="{{ route('admin.industries.edit', $data_industri->id) }}" class="btn btn-gradient">Edit</a>
+                                <a href="{{ route('admin.industries.show', $data_industri->id) }}" class="btn btn-gradient btn-sm">Lihat Detail</a>
+                                <a href="{{ route('admin.industries.edit', $data_industri->id) }}" class="btn btn-gradient btn-sm">Edit</a>
                                 <form onsubmit="return confirmHapus(event)" action="{{ route('admin.industries.destroy', $data_industri->id) }}" class="d-inline" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-gradient">Hapus</button>
+                                    <button type="submit" class="btn btn-gradient btn-sm">Hapus</button>
                                 </form>
                             </td>
                         </tr>
