@@ -69,10 +69,6 @@
                                         <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                     </div>
 
-                                    {{-- <div class="form-group">
-                                        <label for="phone">Phone:</label>
-                                        <input type="tel" id="phone" name="phone" class="form-control" value="{{ isset($admin->no_tlpn) ? $admin->no_tlpn : '' }}" required>
-                                    </div> --}}
                                     <label for="phone">Nomor Telepon :</label>
                                     <div class="input-group">
                                         <span class="input-group-text" id="basic-addon1">+62</span>

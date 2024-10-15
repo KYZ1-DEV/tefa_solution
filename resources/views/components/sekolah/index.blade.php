@@ -1,18 +1,9 @@
 <!-- Divider -->
 <hr class="sidebar-divider my-0">
 
-<!-- Nav Item - Dashboard -->
-<li class="nav-item active">
-<a class="btn-sidebar nav-link  {{ request()->is('schools') ? 'aktif' : '' }}" href="/home">
-        <i class="fas fa-fw fa-tachometer-alt"></i>
-        <span>Dashboard</span></a>
-    </li>
-    <hr class="sidebar-divider my-0">
-<!-- Nav Item - Pages Collapse Menu -->
-
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="/schools">
+        <a class="btn-sidebar nav-link  {{ request()->is('schools') ? 'aktif' : '' }} nav-link" href="/schools">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
         </li>

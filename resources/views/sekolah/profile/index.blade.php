@@ -53,7 +53,7 @@
                             <div class="col-md-3 text-center">
                                 <img id="profilePic" class="img-fluid mt-3 mb-4"
                                     style="width: 8rem; height: 8rem; border-radius: 50%; object-fit: cover;"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/' . Auth::user()->gambar) : asset('gambar/user.png') }}"
+                                    src="{{ Auth::user()->gambar ? asset('storage/photo-user/' . Auth::user()->gambar) : asset('gambar/user.png') }}"
                                     alt="Profile Picture">
                                 <a href="#" onclick="document.getElementById('uploadBtn').click()"
                                     class="btn btn-gradient beri-bantuan-btn">Upload Photo</a>
