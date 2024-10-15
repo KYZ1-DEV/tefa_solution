@@ -13,6 +13,26 @@
             <h6 class="m-0 font-weight-bold text-primary">Tambah Mitra</h6>
             <br>
             <a href="{{ route('admin.partners.index') }}" class="btn btn-gradient">Kembali</a>
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+        @if (Session::has('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    Swal.fire(
+                        'Sukses',
+                        '{{ Session::get('success') }}',
+                        'success'
+                    );
+                });
+            </script>
+        @endif
         </div>
         <div class="card-body">
             <form action="{{ route('admin.partners.store') }}" method="POST">

@@ -266,14 +266,20 @@ class AdminController extends Controller
     {
 
             $request->validate([
-                'nama_industri' => 'required|unique:industri',
-                'npwp' => 'required',
+                'nama_industri' => 'required|unique:industri|string|max:50',
+                'npwp' => 'required|integer|max:15',
                 'skdp' => 'required',
                 'email' => 'required|email|unique:industri',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
-                'no_tlpn_industri' => 'required',
+                'no_tlpn_industri' => 'required|integer|max:13',
                 'id_user' => 'required|exists:users,id'
+            ],[
+                'nama_industri.max'=>'maxsimal kata yang boleh di masukan tidak lebih dari 50',
+                'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
+                'npwp.max'=> 'maximal nomer npwp adalah 15 digit',
+                'no_tlpn_industri' =>'maxsimal nomer telepon adalah 13 digit',
+                'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
             ]);
 
             Industri::create($request->all());
@@ -292,14 +298,20 @@ class AdminController extends Controller
     {
 
             $request->validate([
-                'nama_industri' => 'required',
-                'npwp' => 'required',
+                'nama_industri' => 'required|string|max:50',
+                'npwp' => 'required|integer|max:15',
                 'skdp' => 'required',
                 'email' => 'required',
                 'alamat' => 'required',
                 'bidang_industri' => 'required',
                 'no_tlpn_industri' => 'required',
                 'id_user' => 'required|exists:users,id'
+            ],[
+               'nama_industri.max'=>'maxsimal kata yang boleh di masukan tidak lebih dari 50',
+                'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
+                'npwp.max'=> 'maximal nomer npwp adalah 15 digit',
+                'no_tlpn_industri' =>'maxsimal nomer telepon adalah 13 digit',
+                'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
             ]);
 
             $industri = Industri::findOrFail($id);
@@ -353,20 +365,10 @@ class AdminController extends Controller
         // Validasi data yang masuk
         $request->validate([
             'nama_mitra' => 'required|string|max:50',
-            'tanggal_bermitra' => 'required|date',
-            'periode_bermitra' => 'required|integer',
-            'progres_bermitra' => 'required|string',
-            'status_mitra' => 'required|string',
-            'id_sekolah' => 'required|exists:sekolah,id',
-            'id_industri' => 'required|exists:industri,id',
+
             // Field tambahan sesuai kebutuhan
         ],[
-           'nama_mitra.max' => 'tidak boleh lebih dari 50',
-            'tanggal_bermitra.date' => 'harus memasukan tanggal',
-            'periode_bermitra.integer' => 'harus memasukan tahun',
-            'status_mitra.string' => 'masukan status mitra',
-            'id_sekolah.id' => 'masukan sekolah',
-            'id_industri.id' => 'masukan industri',
+           'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
         ]
     );
 
@@ -409,6 +411,24 @@ class AdminController extends Controller
     public function updateMitra(Request $request, $id)
     {
         // Validate and update mitra
+        $request->validate([
+            'nama_mitra' => 'required|string|max:50',
+            
+
+        ],[
+           'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
+
+        ]
+    );
+
+    $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
+    $periodeBermitra = (int) $request->input('periode_bermitra');
+
+    // Menambahkan tahun sesuai dengan periode bermitra
+    $tanggalBermitra->modify("+{$periodeBermitra} years");
+
+    $durasiBermitra = $tanggalBermitra->format('Y-m-d');
+
         $mitra = Mitra::findOrFail($id);
         $mitra->nama_mitra = $request->input('nama_mitra');
         $mitra->tanggal_bermitra = $request->input('tanggal_bermitra');
