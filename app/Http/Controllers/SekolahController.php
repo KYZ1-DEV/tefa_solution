@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
 use App\Models\industri;
+use App\Models\Laporan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,7 +15,8 @@ class SekolahController extends Controller
     // Tampilkan halaman utama Sekolah
     public function index()
     {
-        return view("pointakses.sekolah.index");
+        $user = Auth::user();
+        return view("pointakses.sekolah.index", ['user' => $user]);
     }
 
     // Tampilkan halaman profil Sekolah
@@ -31,7 +33,7 @@ class SekolahController extends Controller
         // Validasi input
         $request->validate([
             'npsn' => 'required|min:8|max:8',
-            'name' => 'required|min:8|max:255',
+            'name' => 'required|min:4|max:255',
             'status' => 'required|max:10',
             'jenjang' => 'required|max:10',
             'kepsek' => 'required|max:255',
@@ -46,6 +48,7 @@ class SekolahController extends Controller
             'npsn.min' => 'NPSN minimal 8 digit !!',
             'name.required' => 'Nama harus diisi !!',
             'name.max' => 'Nama terlalu panjang !!',
+            'name.min' => 'Nama terlalu pendek !!',
             'email.required' => 'Email harus diisi !!',
             'email.email' => 'Format email tidak valid !!',
             'phone.required' => 'Nomor telepon harus diisi !!',
@@ -127,21 +130,108 @@ class SekolahController extends Controller
         return view("sekolah.monitoring_bantuan.index");
     }
 
-    // Tampilkan laporan progress 0% Sekolah
-    public function progress0Persen()
+    // Tampilkan laporan progress Sekolah
+    public function progress()
     {
-        return view("sekolah.laporan.progress0Persen");
+        return view("sekolah.laporan.progress");
     }
 
-    // Tampilkan laporan progress 50% Sekolah
-    public function progress50Persen()
+    // Tampilkan laporan information progress Sekolah
+    public function information_progress()
     {
-        return view("sekolah.laporan.progress50Persen");
+        $user = Auth::user();
+    
+        // Check if user is authenticated
+        if (!$user) {
+            return redirect()->route('login'); // Redirect to login if not authenticated
+        }
+    
+        // Retrieve the reports for the logged-in school
+        $sekolah = Sekolah::where('id_user', $user->id)->first();
+    
+        if (!$sekolah) {
+            return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
+        }
+    
+        $laporan = Laporan::where('id_sekolah', $sekolah->id)->get();
+    
+        // Pass the $laporan variable to the view
+        return view('sekolah.laporan.information_progress', compact('laporan'));
+    }
+    
+
+
+    public function storeLaporan(Request $request)
+    {
+        $request->validate([
+            'nama_laporan' => 'required|max:255',
+            'progres_laporan' => 'required|in:0%,50%,100%',
+            'bukti_laporan' => 'required|file|mimes:pdf|max:2048',
+            'deskripsi_laporan' => 'nullable',
+        ],[
+            'nama_laporan.required' => 'Nama laporan harus diisi !!',
+            'nama_laporan.max' => 'Nama laporan terlalu panjang !!',
+            'bukti_laporan.required' => 'Bukti laporan harus ada !!',
+            'bukti_laporan.mimes' => 'Bukti laporan harus berupa pdf !!',
+            'bukti_laporan.max' => 'Bukti laporan maksimal ukuran 2 MB !!',
+        ]);
+
+        $sekolah = Sekolah::where('id_user', Auth::id())->first();
+
+        // Jika tidak ditemukan sekolah untuk user tersebut
+        if (!$sekolah) {
+            return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
+        }
+
+        // Simpan file PDF
+        $pdfPath = null;
+        if ($request->hasFile('bukti_laporan')) {
+            $pdfName = time() . '_' . $request->file('bukti_laporan')->getClientOriginalName();
+            $pdfPath = $request->file('bukti_laporan')->storeAs('laporan', $pdfName, 'public');
+        }
+
+        // Simpan laporan ke database
+        Laporan::create([
+            'nama_laporan' => $request->nama_laporan,
+            'progres_laporan' => $request->progres_laporan,
+            'bukti_laporan' => $pdfPath,
+            'tanggal_laporan' => now(),
+            'deskripsi_laporan' => $request->deskripsi_laporan,
+            'status_laporan' => 'dikirim', // Default status saat laporan dikirim
+            'id_sekolah' => $sekolah->id,
+        ]);
+
+        return redirect()->route('information_progress')->with('success', 'Laporan berhasil dikirim');
+    }
+    
+    public function showInformationProgress()
+    {
+        $sekolah = Sekolah::where('id_user', Auth::id())->first();
+        $laporan = Laporan::where('id_sekolah', $sekolah->id)->get();
+        // dd($laporan);   
+        return view('sekolah.laporan.information_progress', compact('laporan'));
     }
 
-    // Tampilkan laporan progress 100% Sekolah
-    public function progress100Persen()
+    public function updateLaporanStatus(Request $request, $id)
     {
-        return view("sekolah.laporan.progress100Persen");
+        $laporan = Laporan::findOrFail($id);
+
+        $request->validate([
+            'status_laporan' => 'required|in:diterima,direvisi',
+        ]);
+
+        $laporan->update([
+            'status_laporan' => $request->status_laporan,
+        ]);
+
+        return redirect()->back()->with('success', 'Status laporan berhasil diperbarui');
     }
+
+    public function show($id)
+    {
+        $laporan = Laporan::findOrFail($id);
+        return view('sekolah.laporan.show', compact('laporan'));
+    }
+
+
 }

@@ -92,7 +92,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/assistance-monitoring', [IndustriController::class, 'monitoringBantuan'])->name('industries.assistance-monitoring');
         Route::put('/mitra/{id}', [IndustriController::class, 'updateMitra'])->name('mitra.update');
         Route::put('/laporan/{id}', [IndustriController::class, 'updateLaporan'])->name('laporan.update');
-        Route::get('/laporan/download/{id}', [IndustriController::class, 'downloadLaporan'])->name('downloadLaporan');
 
         Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
         Route::post('/giveHelp', [IndustriController::class, 'giveHelp'])->name('industries.giveHelps.store');
@@ -110,8 +109,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/password', [SekolahController::class, 'password'])->name('schools.password.show');
         Route::put('/password', [SekolahController::class, 'updatePassword'])->name('schools.password.update');
         Route::get('/assistance-monitoring', [SekolahController::class, 'monitoringBantuan'])->name('schools.assistance-monitoring');
-        Route::get('/progress/0', [SekolahController::class, 'progress0Persen'])->name('schools.progress.0');
-        Route::get('/progress/50', [SekolahController::class, 'progress50Persen'])->name('schools.progress.50');
-        Route::get('/progress/100', [SekolahController::class, 'progress100Persen'])->name('schools.progress.100');
+        Route::get('/progress', [SekolahController::class, 'progress'])->name('progress');
+        Route::get('/information_progress', [SekolahController::class, 'information_progress'])->name('information_progress');
+        Route::post('/laporan', [SekolahController::class, 'storeLaporan'])->name('upload.laporan');
+        Route::get('/laporan', [SekolahController::class, 'showInformationProgress'])->name('schools.laporan.show');
+        Route::get('/laporan/{id}', [SekolahController::class, 'show'])->name('laporan.show');
+        // Route::post('/laporan/{id}/update-status', [IndustriController::class, 'updateLaporanStatus'])->name('laporan.update.status');
     });
 });
