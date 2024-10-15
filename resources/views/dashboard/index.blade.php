@@ -115,7 +115,7 @@
                                 <span
                                     class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
                                 <img class="img-profile rounded-circle"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/' . Auth::user()->gambar) : asset('gambar/user.png') }}">
+                                    src="{{ Auth::user()->gambar ? asset('storage/photo-user/' . Auth::user()->gambar) : asset('gambar/user.png') }}">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -171,12 +171,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Yakin untuk Keluar?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-body">Pilih "Logout" Jika kamu ingin keluar dari aplikasi <div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <form action="{{ route('auth.logout') }}" method="post">
@@ -239,6 +239,7 @@
                 }, 1500);
             }
         });
+
         document.addEventListener('DOMContentLoaded', function() {
             // Mengambil elemen dengan class 'alert-success'
             var dangerAlert = document.getElementsByClassName('alert-danger');
@@ -260,7 +261,7 @@
                         dangerAlert.classList.add('hide');
                         dangerAlert.style.display = 'none';
                     }, 500);
-                }, 1500);
+                }, 7500);
             }
         });
     </script>
