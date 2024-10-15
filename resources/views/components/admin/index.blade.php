@@ -3,7 +3,7 @@
 
 <!-- Nav Item - Dashboard -->
 <li class="nav-item active">
-    <a class="btn-sidebar nav-link {{ request()->is('admin') ? 'aktif' : '' }}  nav-link" href="/home">
+    <a class="btn-sidebar nav-link {{ request()->is('admin') ? 'aktif' : '' }}  nav-link" href="/admin">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>

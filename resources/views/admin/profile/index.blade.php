@@ -49,7 +49,7 @@
                             <!-- Profile Picture (Left) -->
                             <div class="col-md-4 text-center">
                                 <img id="profilePic" class="img-fluid mt-3 mb-4" style="width: 8rem; height: 8rem; border-radius: 50%; object-fit: cover;"
-                                    src="{{ Auth::user()->gambar ? asset('gambar/'.Auth::user()->gambar) : asset('gambar/user.png') }}" alt="Profile Picture">
+                                    src="{{ Auth::user()->gambar ? asset('storage/photo-user/'.Auth::user()->gambar) : asset('gambar/user.png') }}" alt="Profile Picture">
                                 <button class="btn btn-primary" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
                             </div>
 
@@ -69,9 +69,14 @@
                                         <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                     </div>
 
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="phone">Phone:</label>
                                         <input type="tel" id="phone" name="phone" class="form-control" value="{{ isset($admin->no_tlpn) ? $admin->no_tlpn : '' }}" required>
+                                    </div> --}}
+                                    <label for="phone">Nomor Telepon :</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1">+62</span>
+                                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nomor Telepon" value="{{ isset($admin->no_tlpn) ? preg_replace('/^\+62/', '', $admin->no_tlpn) : '' }}" required>
                                     </div>
 
                                     <button type="submit" class="btn btn-success mt-3">Simpan</button>

@@ -38,15 +38,16 @@
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <div class="input-group">
-                        <input type="password" name="password" class="form-control" id="password-field" required>
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" id="toggle-password">
-                                <i class="fa fa-fw fa-eye" id="eyeIcon"></i>
-                            </button>
-                        </div>
+                    <div class="input-group mb-2">
+                        <input id="password-field" type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
+                        <span style="width: 40px; @error('password') margin-top: -14px; @enderror" 
+                            toggle="#password-field"
+                            class="input-group-text fa fa-fw fa-eye-slash field-icon toggle-password"
+                        ></span>
                     </div>
                 </div>
+
+                
 
                 <div class="form-group">
                     <label for="role">Role</label>
@@ -64,24 +65,21 @@
     </div>
 </div>
 
-@endsection
-
-@section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    // Toggle password visibility
-    $(document).ready(function () {
-        $('#toggle-password').on('click', function () {
-            const passwordField = $('#password-field');
-            const eyeIcon = $('#eyeIcon');
+    document.addEventListener("DOMContentLoaded", function () {
+        // Toggle for first password field
+        document.querySelectorAll(".toggle-password").forEach(function (element) {
+            element.addEventListener("click", function () {
+                this.classList.toggle("fa-eye");
+                this.classList.toggle("fa-eye-slash");
 
-            if (passwordField.attr('type') === 'password') {
-                passwordField.attr('type', 'text');
-                eyeIcon.removeClass('fa-eye').addClass('fa-eye-slash');
-            } else {
-                passwordField.attr('type', 'password');
-                eyeIcon.removeClass('fa-eye-slash').addClass('fa-eye');
-            }
+                var input = document.querySelector(this.getAttribute("toggle"));
+                if (input.getAttribute("type") === "password") {
+                    input.setAttribute("type", "text");
+                } else {
+                    input.setAttribute("type", "password");
+                }
+            });
         });
     });
 </script>
