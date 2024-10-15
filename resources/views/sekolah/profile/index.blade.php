@@ -75,11 +75,11 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="npsn">Nomor Pokok Sekolah Nasional (NPSN) :</label>
-                                                <input type="text" id="npsn" name="npsn" class="form-control" value="{{ isset($sekolah->npsn) ? $sekolah->npsn : '' }}" required>
+                                                <input type="text" id="npsn" name="npsn" class="form-control" value="{{ isset($sekolah->npsn) ? $sekolah->npsn : '' }}" placeholder="Masukan NPSN" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Nama Sekolah :</label>
-                                                <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" style="text-transform: uppercase;" required>
+                                                <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" style="text-transform: uppercase;" placeholder="Masukan Nama Sekolah" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Email :</label>
@@ -88,14 +88,14 @@
                                             <label for="phone">Nomor Telepon :</label>
                                             <div class="input-group">
                                                 <span class="input-group-text" id="basic-addon1">+62</span>
-                                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nomor Telepon" value="{{ isset($sekolah->no_tlpn_sekolah) ? preg_replace('/^\+62/', '', $sekolah->no_tlpn_sekolah) : '' }}" required>
+                                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Masukan Nomor Telepon" value="{{ isset($sekolah->no_tlpn_sekolah) ? preg_replace('/^\+62/', '', $sekolah->no_tlpn_sekolah) : '' }}" required>
                                             </div>
                                         </div>
                                         <!-- Kolom Kanan -->
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="kepsek">Kepala Sekolah :</label>
-                                                <input type="text" id="kepsek" name="kepsek" class="form-control" value="{{ isset($sekolah->kepsek) ? $sekolah->kepsek : '' }}" required>
+                                                <input type="text" id="kepsek" name="kepsek" class="form-control" value="{{ isset($sekolah->kepsek) ? $sekolah->kepsek : '' }}" placeholder="Masukan Nama Kepala Sekolah" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenjang">Jenjang :</label>
@@ -117,7 +117,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="alamat">Alamat :</label>
-                                                <input type="text" id="alamat" name="alamat" class="form-control" value="{{ isset($sekolah->alamat) ? $sekolah->alamat : '' }}" required>
+                                                <input type="text" id="alamat" name="alamat" class="form-control" value="{{ isset($sekolah->alamat) ? $sekolah->alamat : '' }}" placeholder="Masukan Alamat Sekolah" required>
                                             </div>
                                         </div>
                                     </div>

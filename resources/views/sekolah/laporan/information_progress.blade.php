@@ -49,15 +49,15 @@
                             <td>{{ $item->tanggal_laporan }}</td>
                             <td>
                                 @if ($item->status_laporan == 'dikirim')
-                                    <span class="badge badge-warning">Menunggu Konfirmasi</span>
+                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Menunggu Konfirmasi</span>
                                 @elseif ($item->status_laporan == 'diterima')
-                                    <span class="badge badge-success">Diterima</span>
+                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Diterima</span>
                                 @elseif ($item->status_laporan == 'direvisi')
-                                    <span class="badge badge-danger">Revisi</span>
+                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Revisi</span>
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('laporan.show', $item->id) }}" class="btn btn-info btn-sm">Detail</a>
+                                <a href="{{ route('laporan.show', $item->id) }}" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Detail</a>
                             </td>                              
                         </tr>
                     @endforeach

@@ -10,19 +10,15 @@
 
 @section('main')
     <div class="container-fluid">
-        @if (Session::get('success'))
-            <div class="alert alert-success alert-dismissible fade show">
-                <ul>
-                    <li>{{ Session::get('success') }}</li>
-                </ul>
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
             </div>
         @endif
 
-        @if (Session::get('error'))
-            <div class="alert alert-danger alert-dismissible fade show">
-                <ul>
-                    <li>{{ Session::get('error') }}</li>
-                </ul>
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
             </div>
         @endif
 
@@ -67,19 +63,23 @@
                         <textarea class="form-control" id="deskripsi_laporan" name="deskripsi_laporan"></textarea>
                     </div>
                 
-                    <button type="submit" class="btn btn-primary">Upload</button>
+                    <button type="submit" class="btn btn-gradient">Upload</button>
                 </form>                              
-
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
             </div>
         </div>       
     </div> 
+    <!-- Custom CSS untuk tombol ungu -->
+    <style>
+        .btn-gradient {
+            background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
+            border: none;
+            color: white;
+        }
+
+        .btn-gradient:hover {
+            color: white;
+            background: linear-gradient(45deg, #3a0ca3, #7b2cbf);
+        }
+    </style>
+
 @endsection

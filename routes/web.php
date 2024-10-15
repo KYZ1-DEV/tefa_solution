@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\IndustriController;
-use App\Http\Controllers\LaporanController;
 
 Route::middleware(['guest'])->group(function () {
     Route::view('/', 'home');
@@ -77,7 +76,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/assistance-monitoring', [IndustriController::class, 'monitoringBantuan'])->name('industries.assistance-monitoring');
         Route::put('/mitra/{id}', [IndustriController::class, 'updateMitra'])->name('mitra.update');
         Route::put('/laporan/{id}', [IndustriController::class, 'updateLaporan'])->name('laporan.update');
-        Route::get('/laporan/download/{id}', [IndustriController::class, 'downloadLaporan'])->name('downloadLaporan');
 
         Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
         Route::post('/giveHelp', [IndustriController::class, 'giveHelp'])->name('industries.giveHelps.store');
@@ -98,12 +96,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/progress', [SekolahController::class, 'progress'])->name('progress');
         Route::get('/information_progress', [SekolahController::class, 'information_progress'])->name('information_progress');
         Route::post('/laporan', [SekolahController::class, 'storeLaporan'])->name('upload.laporan');
-        Route::get('/laporan/{id}', [LaporanController::class, 'show'])->name('laporan.show');
-        Route::post('/laporan/{id}/update-status', [IndustriController::class, 'updateLaporanStatus'])->name('laporan.update.status');
-    });
-
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/laporan', [LaporanController::class, 'showInformationProgress'])->name('laporan.index');
-        Route::put('/laporan/{id}', [LaporanController::class, 'updateLaporanStatus'])->name('laporan.update');
+        Route::get('/laporan', [SekolahController::class, 'showInformationProgress'])->name('schools.laporan.show');
+        Route::get('/laporan/{id}', [SekolahController::class, 'show'])->name('laporan.show');
+        // Route::post('/laporan/{id}/update-status', [IndustriController::class, 'updateLaporanStatus'])->name('laporan.update.status');
     });
 });
