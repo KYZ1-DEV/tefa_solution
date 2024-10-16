@@ -50,7 +50,7 @@
                             <div class="col-md-4 text-center">
                                 <img id="profilePic" class="img-fluid mt-3 mb-4" style="width: 8rem; height: 8rem; border-radius: 50%; object-fit: cover;"
                                     src="{{ Auth::user()->gambar ? asset('storage/photo-user/'.Auth::user()->gambar) : asset('gambar/user.png') }}" alt="Profile Picture">
-                                <button class="btn btn-primary" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
+                                <button class="btn  btn-gradient" onclick="document.getElementById('uploadBtn').click()">Upload Photo</button>
                             </div>
 
                             <!-- Profile Edit Form (Right) -->
@@ -75,7 +75,9 @@
                                         <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nomor Telepon" value="{{ isset($admin->no_tlpn) ? preg_replace('/^\+62/', '', $admin->no_tlpn) : '' }}" required>
                                     </div>
 
-                                    <button type="submit" class="btn btn-gradient">Simpan</button>
+                                    <div class="text-center m-4">
+                                        <button type="submit" class="btn btn-gradient beri-bantuan-btn">Simpan</button>
+                                    </div>
                                 </form>
 
                             </div>

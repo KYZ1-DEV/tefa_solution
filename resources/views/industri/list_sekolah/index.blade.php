@@ -17,6 +17,12 @@
                 </div>
             @endif
 
+            @if (session('alert-danger'))
+                                <div class="alert alert-danger">
+                                    {{ session('alert-danger') }}
+                                </div>
+                                @endif
+
 
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -56,9 +62,12 @@
                                     $user = $users->firstWhere('id', $sekolah->id_user);
                                 @endphp
 
+                                
+                        
+
                                 <li class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
                                     <div class="d-flex align-items-center mb-2 mb-sm-0">
-                                        <img src="{{ $user['gambar'] ? asset('../gambar/' . $user['gambar']) : asset('gambar/user.png') }}"
+                                        <img src="{{ $user['gambar'] ? asset('../storage/photo-user/' . $user['gambar']) : asset('gambar/user.png') }}"
                                             alt="Logo Sekolah" class="img-thumbnail rounded-circle"
                                             style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
                                         <div>
