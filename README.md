@@ -65,7 +65,7 @@ Dengan adanya situs web ini, perusahaan-perusahaan industri dapat menyalurkan ba
 
 ## Persyaratan Sistem
 Sebelum memulai, pastikan sistem Anda sudah memenuhi persyaratan berikut:
-- PHP >= 8.0
+- PHP >= 8.2
 - Composer
 - Database (MySQL, PostgreSQL, dll)
 - Ekstensi PHP:
@@ -89,6 +89,9 @@ cp .env.example .env
 
 php artisan key:generate
 
+php artisan storage:link
+
+#atur Konfigurasi
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
