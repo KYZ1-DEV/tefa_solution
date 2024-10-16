@@ -94,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/laporan/{id}', [IndustriController::class, 'updateLaporan'])->name('laporan.update');
 
         Route::get('/schools', [IndustriController::class, 'listSekolah'])->name('industries.schools.index');
+        Route::get('/download/{id}', [IndustriController::class, 'downloadLaporan'])->name('downloadLaporan');
         Route::post('/giveHelp', [IndustriController::class, 'giveHelp'])->name('industries.giveHelps.store');
         Route::get('/helps', [IndustriController::class, 'dataBantuan'])->name('industries.helps.index');
         Route::post('/helpsCreate', [IndustriController::class, 'storeBantuan'])->name('industries.helps.store');

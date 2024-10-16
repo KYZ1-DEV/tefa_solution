@@ -17,6 +17,12 @@
                 </ul>
             </div>
         @endif
+        @if (session('alert-danger'))
+        <div class="alert alert-danger">
+            {{ session('alert-danger') }}
+        </div>
+        @endif
+
 
         <div class="d-flex justify-content-end">
             <form action="{{ url()->current() }}" method="GET" class="form-inline">

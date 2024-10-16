@@ -59,7 +59,7 @@
                             <th style="width: 10px;">:</th>
                             <td>
                                 @if ($laporan->bukti_laporan)
-                                    <a href="{{ asset('storage/' . $laporan->bukti_laporan) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Lihat Bukti</a>
+                                    <a href="{{ asset('storage/laporan/' . $laporan->bukti_laporan) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Lihat Bukti</a>
                                 @else
                                     <span class="text-danger">Tidak ada bukti</span>
                                 @endif

@@ -198,7 +198,7 @@ class SekolahController extends Controller
         // Simpan file PDF
         $pdfPath = null;
         if ($request->hasFile('bukti_laporan')) {
-            $pdfName = time() . '_' . $request->file('bukti_laporan')->getClientOriginalName();
+            $pdfName = 'bukti_laporan_'.time().'.'. $request->file('bukti_laporan')->extension();
             $pdfPath = $request->file('bukti_laporan')->storeAs('laporan', $pdfName, 'public');
         }
 
@@ -206,7 +206,7 @@ class SekolahController extends Controller
         Laporan::create([
             'nama_laporan' => $request->nama_laporan,
             'progres_laporan' => $request->progres_laporan,
-            'bukti_laporan' => $pdfPath,
+            'bukti_laporan' => $pdfName,
             'tanggal_laporan' => now(),
             'deskripsi_laporan' => $request->deskripsi_laporan,
             'status_laporan' => 'dikirim', // Default status saat laporan dikirim

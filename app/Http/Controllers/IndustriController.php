@@ -11,6 +11,7 @@ use App\Models\industri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class IndustriController extends Controller
 {
@@ -87,22 +88,33 @@ class IndustriController extends Controller
             'skdp' => $request->skdp,
         ];
 
-        if ($request->hasFile('image')) {
+        if($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . uniqid() . "." . $image->extension();
-            $image->move(public_path('gambar'), $imageName);
+            $path = "photo-user/".$imageName;
 
-            $dataIndustri['logo_industri'] = $imageName;
-            $user->gambar = $imageName;
+            if($user->gambar) {
+                Storage::disk('public')->delete("photo-user/".$user->gambar);
+            }
+
+            Storage::disk('public')->put($path, file_get_contents($image));
+
+            $user->name = $request->name;
+            $user->update(['gambar' => $imageName]);
+
+        } else {
+            $user->name = $request->name;
+            $user->update();
         }
+
+
+
 
         industri::updateOrCreate(
             ['id_user' => $user->id],
             $dataIndustri
         );
 
-        $user->name = $request->name;
-        $user->update();
 
         return redirect()->route('industries.profile.show')->with('success', 'Edit Profile Berhasil');
     }
@@ -140,6 +152,7 @@ class IndustriController extends Controller
         $user = Auth::user();
         $industri = Industri::where('id_user', $user->id)->first();
 
+        // dd($industri);
         if ($industri) {
             // Ambil kata kunci pencarian
             $search = $request->input('search');
@@ -154,8 +167,9 @@ class IndustriController extends Controller
 
             // Jika tidak ada data setelah pencarian
             if ($mitraList->isEmpty()) {
-                return redirect()->back()->with('alert-danger', 'Tidak Ada Data!');
+                return redirect()->back()->with('alert-danger', 'Tidak ada mitra!');
             }
+
             // dd($mitraList);
             return view('industri.monitoring_bantuan.index', compact('mitraList', 'search'));
         }
@@ -203,33 +217,37 @@ class IndustriController extends Controller
         return redirect()->back()->with('success', 'Laporan berhasil diperbarui');
     }
 
+
     public function downloadLaporan($id)
-    {
-        // Cari laporan berdasarkan ID
-        $laporan = Laporan::find($id);
+{
+    // Cari laporan berdasarkan ID
+    $laporan = Laporan::find($id);
 
-        // Jika laporan dan bukti laporan ditemukan
-        if ($laporan && $laporan->bukti_laporan) {
-            // Path file dari folder templates yang ada di public
-            $filePath = public_path('templates/' . $laporan->bukti_laporan);
+    // Jika laporan dan bukti laporan ditemukan
+    if ($laporan && $laporan->bukti_laporan) {
+        // Path file dari storage public disk
+        $filePath = 'laporan/' . $laporan->bukti_laporan;
 
-            // Cek apakah file ada di server
-            if (file_exists($filePath)) {
-                // Jika file ditemukan, mengunduh file tersebut
-                return response()->download($filePath);
-            }
+        // Cek apakah file ada di storage
+        if (Storage::disk('public')->exists($filePath)) {
+            // Menggunakan response()->streamDownload() jika metode download tidak tersedia
+            return response()->streamDownload(function() use ($filePath) {
+                echo Storage::disk('public')->get($filePath);
+            }, basename($filePath));
         }
-
-        // Jika laporan tidak ada atau file tidak ditemukan, gunakan file default dari folder public/templates
-        $defaultFile = public_path('templates/1728564026_laporan_pengajuan_20240926_142642.pdf');
-
-        if (file_exists($defaultFile)) {
-            return response()->download($defaultFile);
-        }
-
-        return redirect()->back()->with('alert-danger', 'File tidak ditemukan!');
     }
 
+    $defaultFile = 'template/template_laporan.pdf';
+
+    if (Storage::disk('public')->exists($defaultFile)) {
+        return response()->streamDownload(function() use ($defaultFile) {
+            echo Storage::disk('public')->get($defaultFile);
+        }, basename($defaultFile));
+    }
+
+    return redirect()->back()->with('alert-danger', 'File tidak ditemukan!');
+}
+    
 
 
     public function listSekolah(Request $request)
