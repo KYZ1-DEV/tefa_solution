@@ -67,12 +67,13 @@
                                                 <input type="text" id="name" name="name" class="form-control"
                                                     value="{{ Auth::user()->name }}" required>
                                             </div>
-                                            <div class="form-group">
-                                                <label for="phone">Nomor Telepon :</label>
-                                                <input type="tel" id="phone" name="phone" class="form-control"
-                                                    value="{{ isset($industri->no_tlpn_industri) ? $industri->no_tlpn_industri : '' }}"
-                                                    required>
+
+                                            <label for="phone">Nomor Telepon :</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text" id="basic-addon1">+62</span>
+                                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="" value="{{ isset($industri->no_tlpn_industri) ? preg_replace('/^\+62/', '', $industri->no_tlpn_industri) : '' }}" required>
                                             </div>
+
                                             <div class="form-group">
                                                 <label for="npwp">NPWP :</label>
                                                 <input type="text" id="npwp" name="npwp" class="form-control"

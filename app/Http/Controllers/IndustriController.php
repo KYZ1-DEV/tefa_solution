@@ -77,10 +77,11 @@ class IndustriController extends Controller
             return redirect()->back()->with('alert', 'EMAIL, NPWP, & SKDP TIDAK BOLEH SAMA, SILAHKAN DIPERBAIKI!');
         }
 
+        $tpln = '+62'.$request->phone;
         $dataIndustri = [
             'nama_industri' => $request->name,
             'email' => $request->email,
-            'no_tlpn_industri' => $request->phone,
+            'no_tlpn_industri' => $tpln,
             'alamat' => $request->alamat,
             'bidang_industri' => $request->bidang_industri,
             'npwp' => $request->npwp,
