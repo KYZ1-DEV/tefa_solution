@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
@@ -8,31 +7,19 @@ use App\Http\Controllers\SekolahController;
 use App\Http\Controllers\IndustriController;
 
 Route::middleware(['guest'])->group(function () {
-    Route::view('/', 'home');
+    Route::view('/home', 'home');
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('/register', [AuthController::class, 'registrasi'])->name('register.show');
     Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
 });
 
+
+Route::get('/',[AuthController::class,'auth']);
+
+
 Route::middleware(['auth'])->group(function () {
-    // Dashboard
-    // Route::get('/', function () {
-    //     if (Auth::check()) {
-    //         $user = Auth::user();
-    //         // Redirect sesuai dengan role user
-    //         if ($user && $user->role === 'industri') {
-    //             return redirect('/industries');
-    //         } else if ($user && $user->role === 'sekolah') {
-    //             return redirect('/schools');
-    //         } else {
-    //             $url = "/" . $user->role;
-    //             return redirect($url);
-    //         }
-    //     }
-    //     return redirect('/home');
-    // });
-    
+    // Dashboard    
     Route::get('/schools', [SekolahController::class, 'index'])->name('schools.index')->middleware('userAkses:sekolah');
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard')->middleware('userAkses:admin');
     Route::get('/industries', [IndustriController::class, 'index'])->name('industries.index')->middleware('userAkses:industri');
