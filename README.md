@@ -91,13 +91,20 @@ php artisan key:generate
 
 php artisan storage:link
 
-#atur Konfigurasi
+### Atur Konfigurasi .env
+sama kan konfigurasi nya dengan yang di bawah
+
 DB_CONNECTION=mysql
+
 DB_HOST=127.0.0.1
+
 DB_PORT=3306
-DB_DATABASE=nama_database
-DB_USERNAME=user_database
-DB_PASSWORD=password_database
+
+DB_DATABASE=web_bantuan
+
+DB_USERNAME=root
+
+DB_PASSWORD=
 
 php artisan migrate
 
