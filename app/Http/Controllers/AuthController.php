@@ -25,7 +25,7 @@ class AuthController extends Controller
                 return redirect($url);
             }
         }
-        return redirect('/home')->with('success','Log out Berhasil');;
+        return redirect('/home');
     }
 
     public function login(Request $request) {
@@ -102,7 +102,7 @@ class AuthController extends Controller
 
     public function logout() {
         Auth::logout();
-        return redirect('/')->with('success','Log out Berhasil');
+        return redirect('/');
     }
 
 }
