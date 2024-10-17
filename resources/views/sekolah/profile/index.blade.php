@@ -85,11 +85,12 @@
                                                 <label for="email">Email :</label>
                                                 <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                             </div>
-                                            <label for="phone">Nomor Telepon :</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text" id="basic-addon1">+62</span>
-                                                <input type="tel" id="phone" name="phone" class="form-control" placeholder="Masukan Nomor Telepon" value="{{ isset($sekolah->no_tlpn_sekolah) ? preg_replace('/^\+62/', '', $sekolah->no_tlpn_sekolah) : '' }}" required>
+
+                                            <div class="form-group">
+                                                <label for="phone">Nomor Telepon</label>
+                                                <input type="tel" id="phone" name="phone" placeholder="Nomor Telepon" class="form-control" value="{{ isset($sekolah->no_tlpn_sekolah) ? $sekolah->no_tlpn_sekolah : '' }}" required>
                                             </div>
+
                                         </div>
                                         <!-- Kolom Kanan -->
                                         <div class="col-md-6">
@@ -117,8 +118,9 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="alamat">Alamat :</label>
-                                                <input type="text" id="alamat" name="alamat" class="form-control" value="{{ isset($sekolah->alamat) ? $sekolah->alamat : '' }}" placeholder="Masukan Alamat Sekolah" required>
+                                                <textarea id="alamat" name="alamat" class="form-control" placeholder="Masukan Alamat Sekolah" required>{{ isset($sekolah->alamat) ? $sekolah->alamat : '' }}</textarea>
                                             </div>
+                                            
                                         </div>
                                     </div>
                                     <!-- Tombol Submit -->

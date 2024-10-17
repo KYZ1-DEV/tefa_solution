@@ -62,9 +62,9 @@ class SekolahController extends Controller
     
         $dataSekolah = [
             'npsn' => $request->npsn,
-            'nama_sekolah' => $request->name,
+            'nama_sekolah' => strtoupper($request->name),
             'email' => $request->email,
-            'no_tlpn_sekolah' => '+62'.$request->phone,
+            'no_tlpn_sekolah' => $request->phone,
             'alamat' => $request->alamat,
             'status' => $request->status,
             'jenjang' => $request->jenjang,

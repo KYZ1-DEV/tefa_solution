@@ -76,11 +76,10 @@ class AdminController extends Controller
 
         $auth = Auth::user();
         $user = User::find($auth->id);
-        $tpln = '+62'.$request->phone;
 
         Admin::updateOrCreate(
             ['id_user' => $user->id],
-            ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $tpln]
+            ['nama_admin' => $request->name, 'email' => $request->email, 'no_tlpn' => $request->phone]
         );
 
         if($request->hasFile('image')) {

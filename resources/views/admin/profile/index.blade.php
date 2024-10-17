@@ -69,10 +69,9 @@
                                         <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
                                     </div>
 
-                                    <label for="phone">Nomor Telepon :</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon1">+62</span>
-                                        <input type="tel" id="phone" name="phone" class="form-control" placeholder="Nomor Telepon" value="{{ isset($admin->no_tlpn) ? preg_replace('/^\+62/', '', $admin->no_tlpn) : '' }}" required>
+                                    <div class="form-group">
+                                        <label for="phone">Nomor Telepon</label>
+                                        <input type="tel" id="phone" name="phone"  placeholder="Nomor Telepon" class="form-control" value="{{ isset($admin->no_tlpn) ? $admin->no_tlpn : '' }}" required>
                                     </div>
 
                                     <div class="text-center m-4">
