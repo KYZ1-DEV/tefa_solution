@@ -12,7 +12,8 @@ class AuthController extends Controller
         return view(view: 'auth.login');
     }
 
-    public function auth() {
+    public function auth(Request $request) {
+        // dd($request->all());
         if (Auth::check()) {
             $user = Auth::user();
             // Redirect sesuai dengan role user
@@ -24,6 +25,10 @@ class AuthController extends Controller
                 $url = "/" . $user->role;
                 return redirect($url);
             }
+        }
+
+        if($request->auth === 'logout'){
+            return redirect('/home')->with('success','Log out Berhasil');
         }
         return redirect('/home');
     }
@@ -102,7 +107,7 @@ class AuthController extends Controller
 
     public function logout() {
         Auth::logout();
-        return redirect('/');
+        return redirect('/?auth=logout');
     }
 
 }
