@@ -52,8 +52,8 @@
                                     <div>
                                         <span class="jenis-Bantuan"
                                             style="font-size: 1.25rem; font-weight: bold; color: #555;">
-                                            {{ $mitra->sekolah->nama_sekolah . " Mitra " . $mitra->nama_mitra}}
-                                             <!-- Nama mitra -->
+                                            {{ $mitra->sekolah->nama_sekolah . ' Mitra ' . $mitra->nama_mitra }}
+                                            <!-- Nama mitra -->
                                         </span>
 
                                         <span class="status-active"
@@ -121,19 +121,55 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Status Mitra</strong></label>
+                                                <label class="col-sm-4 col-form-label"><strong>Durasi
+                                                        Bermitra</strong></label>
                                                 <div class="col-sm-8">
+                                                    <div class="form-control-plaintext">:
+                                                        {{ $mitra->durasi_bermitra }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Periode
+                                                        Bermitra</strong></label>
+                                                <div class="col-sm-8">
+                                                    <div class="form-control-plaintext">:
+                                                        {{ $mitra->periode_bermitra }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Progres
+                                                        Bermitra</strong></label>
+                                                <div class="col-sm-8">
+                                                    {{-- <div class="form-control-plaintext">:
+                                                        {{ $mitra->progres_bermitra }}</div> --}}
                                                     <form action="{{ route('mitra.update', $mitra->id) }}" method="POST">
                                                         @csrf
                                                         @method('PUT')
-                                                        <select name="status_mitra" id="status_mitra" class="form-control">
-                                                            <option value="aktif"
-                                                                {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
-                                                                Aktif</option>
-                                                            <option value="non-aktif"
-                                                                {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
-                                                                Non-Aktif</option>
+                                                        <select name="progres_mitra" id="progres_mitra"
+                                                            class="form-control">
+                                                            <option value="0%"
+                                                                {{ $mitra->progres_bermitra == '0%' ? 'selected' : '' }}>
+                                                                0%</option>
+                                                            <option value="50%"
+                                                                {{ $mitra->progres_bermitra == '50%' ? 'selected' : '' }}>
+                                                                50%</option>
+                                                            <option value="100%"
+                                                                {{ $mitra->progres_bermitra == '100%' ? 'selected' : '' }}>
+                                                                100%</option>
                                                         </select>
+                                                </div>
+                                            </div>
+                                            <div class="mb-3 row">
+                                                <label class="col-sm-4 col-form-label"><strong>Status Mitra</strong></label>
+                                                <div class="col-sm-8">
+                                                    <select name="status_mitra" id="status_mitra" class="form-control">
+                                                        <option value="aktif"
+                                                            {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
+                                                            Aktif</option>
+                                                        <option value="non-aktif"
+                                                            {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
+                                                            Non-Aktif</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
@@ -160,75 +196,83 @@
                                         </div>
                                         <div class="modal-body">
                                             <!-- Nama Laporan -->
-                                            <div class="d-flex mb-1">
-                                                <label class="form-label w-50"><strong>Nama Laporan</strong></label>
-                                                <p class="mb-0">
-                                                    {{ $mitra->laporan->nama_laporan ?? 'Belum ada laporan' }}</p>
-                                            </div>
-                                            <!-- Progres Laporan -->
-                                            <div class="d-flex mb-1">
-                                                <label class="form-label w-50"><strong>Progres Laporan</strong></label>
-                                                <p class="mb-0">{{ $mitra->laporan->progres_laporan ?? '0' }}</p>
-                                            </div>
-                                            <!-- Bukti Laporan -->
-                                            <div class="d-flex align-items-center mb-1">
-                                                <label class="form-label w-50"><strong>Bukti Laporan</strong></label>
-                                                <a href="{{ route('downloadLaporan', $mitra->laporan->id ?? 0) }}"
-                                                    class="btn btn-outline-primary" download>
-                                                    <i class="fa fa-download"></i> Unduh
-                                                </a>
-                                            </div>
-                                            <!-- Tanggal Laporan -->
-                                            <div class="d-flex mb-1">
-                                                <label class="form-label w-50"><strong>Tanggal Laporan</strong></label>
-                                                <p class="mb-0">
-                                                    {{ $mitra->laporan->tanggal_laporan ?? 'Belum ada tanggal laporan' }}
-                                                </p>
-                                            </div>
-                                            <!-- Deskripsi Laporan -->
-                                            <div class="d-flex mb-1">
-                                                <label class="form-label w-50"><strong>Deskripsi Laporan</strong></label>
-                                                <p class="mb-0">
-                                                    {{ $mitra->laporan->deskripsi_laporan ?? 'Belum ada deskripsi' }}</p>
-                                            </div>
-
-                                            <hr>
-
-                                            <form action="{{ route('laporan.update', $mitra->laporan->id ?? '') }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('PUT')
-                                                <!-- Status Laporan -->
-                                                <div class="mb-1">
-                                                    <label for="statusLaporan" class="form-label"><strong>Status
+                                            @if (isset($mitra->laporan))
+                                                <div class="d-flex mb-1">
+                                                    <label class="form-label w-50"><strong>Nama Laporan</strong></label>
+                                                    <p class="mb-0">
+                                                        {{ $mitra->laporan->nama_laporan ?? 'Belum ada laporan' }}</p>
+                                                </div>
+                                                <!-- Progres Laporan -->
+                                                <div class="d-flex mb-1">
+                                                    <label class="form-label w-50"><strong>Progres Laporan</strong></label>
+                                                    <p class="mb-0">{{ $mitra->laporan->progres_laporan ?? '0' }}</p>
+                                                </div>
+                                                <!-- Bukti Laporan -->
+                                                <div class="d-flex align-items-center mb-1">
+                                                    <label class="form-label w-50"><strong>Bukti Laporan</strong></label>
+                                                    <a href="{{ route('downloadLaporan', $mitra->laporan->id ?? 0) }}"
+                                                        class="btn btn-outline-primary" download>
+                                                        <i class="fa fa-download"></i> Unduh
+                                                    </a>
+                                                </div>
+                                                <!-- Tanggal Laporan -->
+                                                <div class="d-flex mb-1">
+                                                    <label class="form-label w-50"><strong>Tanggal Laporan</strong></label>
+                                                    <p class="mb-0">
+                                                        {{ $mitra->laporan->tanggal_laporan ?? 'Belum ada tanggal laporan' }}
+                                                    </p>
+                                                </div>
+                                                <!-- Deskripsi Laporan -->
+                                                <div class="d-flex mb-1">
+                                                    <label class="form-label w-50"><strong>Deskripsi
                                                             Laporan</strong></label>
-                                                    <select name="status_laporan" id="statusLaporan"
-                                                        class="form-control">
-                                                        <option value="dikirim"
-                                                            {{ isset($mitra->laporan->status_laporan) && $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>
-                                                            Dikirim</option>
-                                                        <option value="diterima"
-                                                            {{ isset($mitra->laporan->status_laporan) && $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>
-                                                            Diterima</option>
-                                                        <option value="direvisi"
-                                                            {{ isset($mitra->laporan->status_laporan) && $mitra->laporan->status_laporan == 'direvisi' ? 'selected' : '' }}>
-                                                            Direvisi</option>
-                                                    </select>
+                                                    <p class="mb-0">
+                                                        {{ $mitra->laporan->deskripsi_laporan ?? 'Belum ada deskripsi' }}
+                                                    </p>
                                                 </div>
+                                            @else
+                                                <li class="list-group-item text-center">Belum Ada Laporan!</li>
+                                            @endif
 
-                                                <!-- Keterangan Laporan -->
-                                                <div class="mb-3">
-                                                    <label for="keterangan_laporan" class="form-label"><strong>Keterangan
-                                                            Laporan</strong></label>
-                                                    <textarea name="keterangan_laporan" id="keterangan_laporan" class="form-control" cols="30" rows="5">{{ $mitra->laporan->keterangan_laporan ?? '' }}</textarea>
-                                                </div>
 
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-danger"
-                                                        data-bs-dismiss="modal">Tutup</button>
-                                                    <button type="submit" class="btn btn-primary">Simpan</button>
-                                                </div>
-                                            </form>
+                                            @if (isset($mitra->laporan))
+                                                <!-- Form Status dan Keterangan Laporan -->
+                                                <form action="{{ route('laporan.update', $mitra->laporan->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <!-- Status Laporan -->
+                                                    <div class="mb-1">
+                                                        <label for="statusLaporan" class="form-label"><strong>Status
+                                                                Laporan</strong></label>
+                                                        <select name="status_laporan" id="statusLaporan"
+                                                            class="form-control">
+                                                            <option value="dikirim"
+                                                                {{ $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>
+                                                                Dikirim</option>
+                                                            <option value="diterima"
+                                                                {{ $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>
+                                                                Diterima</option>
+                                                            <option value="direvisi"
+                                                                {{ $mitra->laporan->status_laporan == 'direvisi' ? 'selected' : '' }}>
+                                                                Direvisi</option>
+                                                        </select>
+                                                    </div>
+
+                                                    <!-- Keterangan Laporan -->
+                                                    <div class="mb-3">
+                                                        <label for="keterangan_laporan"
+                                                            class="form-label"><strong>Keterangan Laporan</strong></label>
+                                                        <textarea name="keterangan_laporan" id="keterangan_laporan" class="form-control" cols="30" rows="5">{{ $mitra->laporan->keterangan_laporan }}</textarea>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-dismiss="modal">Tutup</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </div>
+                                                </form>
+                                            @endif
 
                                         </div>
                                     </div>

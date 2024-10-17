@@ -123,20 +123,24 @@
 
 
     <script>
-        const message = "Selamat Datang, Industri!";
+        const username = "{{ $user->name }}";
+        const message = "Selamat Datang<br>" + username + "!";
         let index = 0;
         const welcomeMessageElement = document.getElementById("welcome-message");
 
         function typeMessage() {
             if (index < message.length) {
-                welcomeMessageElement.textContent += message.charAt(index);
+
+                welcomeMessageElement.innerHTML = message.substring(0, index + 1);
                 index++;
-                setTimeout(typeMessage, 100); // Delay in milliseconds
+                setTimeout(typeMessage, 100);
             }
         }
 
-        window.onload = typeMessage; // Start typing effect when page loads
+        window.onload = typeMessage; 
     </script>
+
+
 
 
 @endsection

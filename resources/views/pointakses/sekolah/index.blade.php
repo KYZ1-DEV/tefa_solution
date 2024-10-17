@@ -35,7 +35,7 @@
             <!-- Edit Profile Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('schools.profile.show') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -53,7 +53,7 @@
             <!-- Kelola user Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('schools.assistance-monitoring') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -71,7 +71,7 @@
             <!-- Data Mitra Card -->
             <div class="col-xl-3 col-md-6 mb-4">
                 <a href="{{ route('progress') }}" class="text-decoration-none">
-                    <div class="card shadow h-100 py-2">
+                    <div class="btn-card card shadow h-100 py-2">
                         <div class="card-body">
                             <div class="row no-gutters align-items-center">
                                 <div class="col-auto">
@@ -95,21 +95,22 @@
     <!-- /.container-fluid -->
 
     <script>
-        // Ambil nama pengguna dari Laravel Blade
-        const username = "{{ $user->name }}"; 
-        const message = "Selamat Datang, " + username + "!";
+        const username = "{{ $user->name }}";
+        const message = "Selamat Datang<br>" + username + "!";
         let index = 0;
         const welcomeMessageElement = document.getElementById("welcome-message");
 
         function typeMessage() {
             if (index < message.length) {
-                welcomeMessageElement.textContent += message.charAt(index);
+
+                welcomeMessageElement.innerHTML = message.substring(0, index + 1);
                 index++;
-                setTimeout(typeMessage, 100); // Delay in milliseconds
+                setTimeout(typeMessage, 100);
             }
         }
-        window.onload = typeMessage; // Start typing effect when page loads
+
+        window.onload = typeMessage;
     </script>
-    
+
 @endsection
 

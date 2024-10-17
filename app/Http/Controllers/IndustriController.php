@@ -18,7 +18,8 @@ class IndustriController extends Controller
     // Tampilkan halaman utama Industri
     public function index()
     {
-        return view("pointakses.industri.index");
+        $user = Auth::user();
+        return view("pointakses.industri.index", ['user' => $user]);
     }
 
     // Tampilkan halaman profil Industri
@@ -65,7 +66,6 @@ class IndustriController extends Controller
         $auth = Auth::user();
         $user = User::find($auth->id);
 
-        // Cek apakah email, npwp, atau skdp sudah ada di tabel industri kecuali yang sedang diperbarui
         $exists = industri::where(function ($query) use ($request, $user) {
             $query->where('email', $request->email)
                 ->orWhere('npwp', $request->npwp)
@@ -78,31 +78,30 @@ class IndustriController extends Controller
             return redirect()->back()->with('alert', 'EMAIL, NPWP, & SKDP TIDAK BOLEH SAMA, SILAHKAN DIPERBAIKI!');
         }
 
-        $tpln = '+62'.$request->phone;
+
         $dataIndustri = [
             'nama_industri' => $request->name,
             'email' => $request->email,
-            'no_tlpn_industri' => $tpln,
+            'no_tlpn_industri' => $request->phone,
             'alamat' => $request->alamat,
             'bidang_industri' => $request->bidang_industri,
             'npwp' => $request->npwp,
             'skdp' => $request->skdp,
         ];
 
-        if($request->hasFile('image')) {
+        if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . uniqid() . "." . $image->extension();
-            $path = "photo-user/".$imageName;
+            $path = "photo-user/" . $imageName;
 
-            if($user->gambar) {
-                Storage::disk('public')->delete("photo-user/".$user->gambar);
+            if ($user->gambar) {
+                Storage::disk('public')->delete("photo-user/" . $user->gambar);
             }
 
             Storage::disk('public')->put($path, file_get_contents($image));
 
             $user->name = $request->name;
             $user->update(['gambar' => $imageName]);
-
         } else {
             $user->name = $request->name;
             $user->update();
@@ -155,20 +154,19 @@ class IndustriController extends Controller
 
         // dd($industri);
         if ($industri) {
-            // Ambil kata kunci pencarian
+
             $search = $request->input('search');
 
-            // Query data mitra beserta bantuan dan laporan terkait
+
             $mitraList = Mitra::where('id_industri', $industri->id)
                 ->when($search, function ($query, $search) {
-                    return $query->where('nama_mitra', 'like', '%' . $search . '%'); // Contoh pencarian berdasarkan nama mitra
+                    return $query->where('nama_mitra', 'like', '%' . $search . '%');
                 })
-                ->with(['sekolah','bantuan', 'laporan']) // Tambahkan 'laporan'
-                ->paginate(5); // Pagination dengan 5 data per halaman
+                ->with(['sekolah', 'bantuan', 'laporan'])
+                ->paginate(5);
 
-            // Jika tidak ada data setelah pencarian
             if ($mitraList->isEmpty()) {
-                return redirect()->back()->with('alert-danger', 'Tidak ada mitra!');
+                return view('industri.monitoring_bantuan.notfound');
             }
 
             // dd($mitraList);
@@ -185,70 +183,62 @@ class IndustriController extends Controller
         // Validasi input
         $request->validate([
             'status_mitra' => 'required|in:aktif,non-aktif',
+            'progres_mitra' => 'required|in:0%,50%,100%',
         ]);
 
-        // Ambil data mitra berdasarkan id
         $mitra = Mitra::findOrFail($id);
 
-        // Update status mitra
         $mitra->status_mitra = $request->input('status_mitra');
+        $mitra->progres_bermitra = $request->input('progres_mitra');
+
         $mitra->save();
 
-        // Redirect kembali ke halaman monitoring bantuan dengan pesan sukses
-        return redirect()->route('industries.assistance-monitoring')->with('success', 'Status mitra berhasil diperbarui.');
+        return redirect()->route('industries.assistance-monitoring')->with('success', 'Status dan progres mitra berhasil diperbarui.');
     }
+
 
     public function updateLaporan(Request $request, $id)
     {
-        // Validasi input
         $request->validate([
             'status_laporan' => 'required|in:dikirim,diterima,direvisi',
             'keterangan_laporan' => 'nullable|string',
         ]);
 
-        // Temukan laporan berdasarkan ID
         $laporan = Laporan::findOrFail($id);
 
-        // Update data laporan
         $laporan->status_laporan = $request->input('status_laporan');
         $laporan->keterangan_laporan = $request->input('keterangan_laporan');
         $laporan->save();
 
-        // Redirect dengan pesan sukses
         return redirect()->back()->with('success', 'Laporan berhasil diperbarui');
     }
 
 
     public function downloadLaporan($id)
-{
-    // Cari laporan berdasarkan ID
-    $laporan = Laporan::find($id);
+    {
+        $laporan = Laporan::find($id);
 
-    // Jika laporan dan bukti laporan ditemukan
-    if ($laporan && $laporan->bukti_laporan) {
-        // Path file dari storage public disk
-        $filePath = 'laporan/' . $laporan->bukti_laporan;
+        if ($laporan && $laporan->bukti_laporan) {
+            $filePath = 'laporan/' . $laporan->bukti_laporan;
 
-        // Cek apakah file ada di storage
-        if (Storage::disk('public')->exists($filePath)) {
-            // Menggunakan response()->streamDownload() jika metode download tidak tersedia
-            return response()->streamDownload(function() use ($filePath) {
-                echo Storage::disk('public')->get($filePath);
-            }, basename($filePath));
+            if (Storage::disk('public')->exists($filePath)) {
+                return response()->streamDownload(function () use ($filePath) {
+                    echo Storage::disk('public')->get($filePath);
+                }, basename($filePath));
+            }
         }
+
+        $defaultFile = 'template/template_laporan.pdf';
+
+        if (Storage::disk('public')->exists($defaultFile)) {
+            return response()->streamDownload(function () use ($defaultFile) {
+                echo Storage::disk('public')->get($defaultFile);
+            }, basename($defaultFile));
+        }
+
+        return redirect()->back()->with('alert-danger', 'File tidak ditemukan!');
     }
 
-    $defaultFile = 'template/template_laporan.pdf';
-
-    if (Storage::disk('public')->exists($defaultFile)) {
-        return response()->streamDownload(function() use ($defaultFile) {
-            echo Storage::disk('public')->get($defaultFile);
-        }, basename($defaultFile));
-    }
-
-    return redirect()->back()->with('alert-danger', 'File tidak ditemukan!');
-}
-    
 
 
     public function listSekolah(Request $request)
@@ -274,13 +264,17 @@ class IndustriController extends Controller
                     ->paginate(5);
             } else {
                 $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))
-                    ->orderBy('id', 'asc')
+                    ->orderBy('id', 'desc')
                     ->paginate(5);
             }
 
-            $bantuan = Bantuan::all(); // Mengambil semua bantuan
+            // Ambil data mitra berdasarkan id_sekolah
+            $mitraSekolahIds = Mitra::pluck('id_sekolah')->toArray();
 
-            return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan'));
+            // Ambil semua bantuan
+            $bantuan = Bantuan::all();
+
+            return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan', 'mitraSekolahIds'));
         }
 
         return redirect()->route('industries.profile.show')->with('alert', 'Lengkapi Profile terlebih dahulu !!');
@@ -289,7 +283,6 @@ class IndustriController extends Controller
 
     public function giveHelp(Request $request)
     {
-        // Validasi input
         $request->validate([
             'nama_mitra' => 'required|string|max:255',
             'periode' => 'required|string|in:1 Tahun,2 Tahun,3 Tahun',
@@ -298,13 +291,11 @@ class IndustriController extends Controller
             'id_bantuan' => 'required|exists:bantuan,id',
         ]);
 
-        // Menyimpan data ke tabel mitra
         $mitra = new Mitra();
         $mitra->nama_mitra = $request->nama_mitra;
         $mitra->tanggal_bermitra = now();
         $mitra->periode_bermitra = $request->periode;
 
-        // Hitung durasi bermitra berdasarkan periode
         $durasi = 0;
         switch ($mitra->periode_bermitra) {
             case '1 Tahun':

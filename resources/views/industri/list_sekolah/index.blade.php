@@ -18,10 +18,10 @@
             @endif
 
             @if (session('alert-danger'))
-                                <div class="alert alert-danger">
-                                    {{ session('alert-danger') }}
-                                </div>
-                                @endif
+                <div class="alert alert-danger">
+                    {{ session('alert-danger') }}
+                </div>
+            @endif
 
 
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -55,40 +55,52 @@
                             @endif
 
                             @if ($sekolahs->isEmpty())
-                            <li class="list-group-item text-center">Data yang dicari tidak ada!</li>
-                        @else
-                            @foreach ($sekolahs as $sekolah)
-                                @php
-                                    $user = $users->firstWhere('id', $sekolah->id_user);
-                                @endphp
+                                <li class="list-group-item text-center">Data yang dicari tidak ada!</li>
+                            @else
+                                @foreach ($sekolahs as $sekolah)
+                                    @php
+                                        $user = $users->firstWhere('id', $sekolah->id_user);
+                                        $sedangBermitra = in_array($sekolah->id, $mitraSekolahIds);
+                                    @endphp
 
-                                
-                        
 
-                                <li class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
-                                    <div class="d-flex align-items-center mb-2 mb-sm-0">
-                                        <img src="{{ $user['gambar'] ? asset('../storage/photo-user/' . $user['gambar']) : asset('gambar/user.png') }}"
-                                            alt="Logo Sekolah" class="img-thumbnail rounded-circle"
-                                            style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
-                                        <div>
-                                            <span class="school-name"
-                                                style="font-size: 1.25rem; font-weight: bold; color: #555;">{{ $user->name }}</span><br>
-                                            <small class="text-muted">{{ $sekolah->alamat }}</small>
+
+
+                                    <li
+                                        class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
+                                        <div class="d-flex align-items-center mb-2 mb-sm-0">
+                                            <img src="{{ $user['gambar'] ? asset('../storage/photo-user/' . $user['gambar']) : asset('gambar/user.png') }}"
+                                                alt="Logo Sekolah" class="img-thumbnail rounded-circle"
+                                                style="width: 50px; height: 50px; object-fit: cover; margin-right: 15px;">
+                                            <div>
+                                                <span class="school-name"
+                                                    style="font-size: 1.25rem; font-weight: bold; color: #555;">
+                                                    {{ $user->name }}
+                                                </span>
+                                                @if ($sedangBermitra)
+                                                    <span class="status-active"
+                                                        style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: green;">
+                                                        Sedang Bermitra
+                                                    </span>
+                                                @endif
+                                                <br>
+                                                <small class="text-muted">{{ $sekolah->alamat }}</small>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="text-end">
-                                        <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal{{ $sekolah->npsn }}">
-                                            <span class="d-none d-sm-inline">Lihat Detail</span>
-                                            <i class="fa-solid fa-eye d-sm-none"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
-                                            data-bs-target="#bantuanModal{{ $sekolah->id }}">
-                                            <span class="d-none d-sm-inline">Beri Bantuan</span>
-                                            <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
-                                        </button>
-                                    </div>
-                                </li>
+                                        <div class="text-end">
+                                            <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
+                                                data-bs-target="#detailModal{{ $sekolah->npsn }}">
+                                                <span class="d-none d-sm-inline">Lihat Detail</span>
+                                                <i class="fa-solid fa-eye d-sm-none"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
+                                                data-bs-target="#bantuanModal{{ $sekolah->id }}">
+                                                <span class="d-none d-sm-inline">Beri Bantuan</span>
+                                                <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
+                                            </button>
+                                        </div>
+                                    </li>
 
 
                                     <!-- Modal Detail for each school -->
@@ -182,7 +194,8 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="bantuanLabel{{ $sekolah->id }}">Bantuan</h5>
+                                                    <h5 class="modal-title" id="bantuanLabel{{ $sekolah->id }}">Bantuan
+                                                    </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
                                                 </div>
