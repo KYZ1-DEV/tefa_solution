@@ -248,6 +248,31 @@
     <script src="{{ asset('panel/smooth-scroll.js') }}"></script>
     <script>
       var scroll = new SmoothScroll('a[href*="#"]');
+
+      document.addEventListener('DOMContentLoaded', function() {
+            // Mengambil elemen dengan class 'alert-success'
+            var successAlerts = document.getElementsByClassName('alert-success');
+
+            // Pastikan ada elemen dengan class 'alert-success'
+            if (successAlerts.length > 0) {
+                // Ambil elemen pertama jika ada lebih dari satu
+                var successAlert = successAlerts[0];
+
+                setTimeout(function() {
+                    successAlert.classList.add('show');
+                }, 100);
+
+                setTimeout(function() {
+                    successAlert.classList.remove('show');
+                    successAlert.classList.add('fade-out');
+
+                    setTimeout(function() {
+                        successAlert.classList.add('hide');
+                        successAlert.style.display = 'none';
+                    }, 500);
+                }, 1500);
+            }
+        });
     </script>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

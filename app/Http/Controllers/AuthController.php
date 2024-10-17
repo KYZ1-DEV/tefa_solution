@@ -12,6 +12,22 @@ class AuthController extends Controller
         return view(view: 'auth.login');
     }
 
+    public function auth() {
+        if (Auth::check()) {
+            $user = Auth::user();
+            // Redirect sesuai dengan role user
+            if ($user && $user->role === 'industri') {
+                return redirect('/industries');
+            } else if ($user && $user->role === 'sekolah') {
+                return redirect('/schools');
+            } else {
+                $url = "/" . $user->role;
+                return redirect($url);
+            }
+        }
+        return redirect('/home')->with('success','Log out Berhasil');;
+    }
+
     public function login(Request $request) {
 
             $request->validate([
