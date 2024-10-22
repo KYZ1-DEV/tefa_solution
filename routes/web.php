@@ -11,7 +11,12 @@ Route::middleware(['guest'])->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login'])->name('auth.login');
     Route::get('/register', [AuthController::class, 'registrasi'])->name('register.show');
-    Route::post('/register', [AuthController::class, 'register'])->name('auth.register');
+
+    Route::get('/register/schools', [AuthController::class, 'registrasiSekolah'])->name('register.schools.show');
+    Route::get('/register/industries', [AuthController::class, 'registrasiIndustri'])->name('register.industries.show');
+
+    Route::post('/schools/register', [AuthController::class, 'schoolRegister'])->name('auth.schools.register');
+    Route::post('/industries/register', [AuthController::class, 'industriRegister'])->name('auth.industries.register');
 });
 
 
@@ -58,7 +63,9 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/industries/{id}', [AdminController::class, 'updateIndustri'])->name('admin.industries.update');
         Route::delete('/industries/{id}', [AdminController::class, 'destroyIndustri'])->name('admin.industries.destroy');
         Route::get('/industries/{id}', [AdminController::class, 'showIndustri'])->name('admin.industries.show');
-
+        
+        Route::patch('/industries/verified/{id}', [AdminController::class, 'verified'])->name('admin.industries.verified');
+        Route::patch('/industries/unverified/{id}', [AdminController::class, 'unverified'])->name('admin.industries.unverified');
 
         // Partner Management
         Route::get('/partners', [AdminController::class, 'dataMitra'])->name('admin.partners.index');

@@ -1,149 +1,82 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Daftar Web</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="short icon" href="{{ asset('logoC.png') }}">
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link rel="stylesheet" href="{{ asset('auth/style.css') }}" />
-  </head>
-  <body class="img js-fullheight" style="background-image: url({{ asset('auth/bg2.jpg') }});overflow: hidden;">
-    <section class="ftco-section" style="margin-top: -70px !important; ">
-      <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-md-6 text-center mb-1">
-            <h2 class="heading-section">SIGN UP</h2>
-          </div>
+    <title>Daftar Webite</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('auth/css/style.css') }}">
+</head>
+<body  style="background-image: linear-gradient( #560ae35e, #4b1cb7);">
+
+    <!-- Navbar with logo -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" >
+        <div class="container-fluid">
+            <a class="navbar-brand" style="padding-left: 40px;" href="/home"> 
+                <img src="{{ asset('panel/img/Chlorine Digital Media.png') }}" alt="Logo" width="80" height="80" class="d-inline-block align-text-top">
+            </a>
+            <h4>Chlorine Agency</h4>
         </div>
+    </nav>
+
+    <div class="container mt-1">
         <div class="row justify-content-center">
-          <div class="col-md-6 col-lg-4">
-            <div class="login-wrap p-0">
-              <h3 class="mb-2 text-center">Create new account</h3>
-                @error('password')
-                <li class="text-center" style="color: red;">{{ $message}}</li>
-                @enderror
-              <form action="{{ route('auth.register') }}"  method="POST" novalidate autocomplete="off" class="signin-form">
-                @csrf
-                <div class="form-group">
-                  <input
-                    type="text"
-                    name="name"
-                    class="form-control @error('name') is-invalid @enderror"
-                    placeholder="Name"
-                    value="{{ old('name') }}"
-                    required
-                  />
-                  @error('name')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="form-group">
-                  <input
-                    type="email"
-                    name="email"
-                    class="form-control  @error('email') is-invalid @enderror"
-                    placeholder="Email"
-                    value="{{ old('email') }}"
-                    required
-                  />
-                  @error('email')
-                        <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
-                <div class="form-group">
-                  <input
-                    id="password-field"
-                    type="password"
-                    name="password"
-                    class="form-control @error('password') is-invalid @enderror"
-                    placeholder="Password"
-                    required
-                  />
-                  <span
-                    toggle="#password-field"
-                    class="fa fa-fw fa-eye-slash field-icon toggle-password"
-                  ></span>
-                </div>
-                <div class="form-group">
-
-                    <input
-                      id="password-confirm-field"
-                      type="password"
-                      name="password_confirmation"
-                      class="form-control @error('password') is-invalid @enderror"
-                      placeholder="Confirm Password"
-                      required
-                    />
-                    <span toggle="#password-confirm-field" class="fa fa-fw fa-eye-slash field-icon toggle-password1" style="top:58%!important;"></span>
-                  </div>
-                <div class="form-group">
-                  <label for="role"> Select Role</label>
-                  <select class="form-control @error('role') is-invalid @enderror" name="role" id="role">
-
-                    <option value="" style="color: black">
-                      Pilih Role
-                    </option>
-                    <option value="sekolah" style="color: black">
-                      Sekolah
-                    </option>
-                    <option value="industri" style="color: black">
-                      Industri
-                    </option>
-                  </select>
-                  @error('role')
-                  <div class="invalid-feedback">{{ $message }}</div>
-              @enderror
-
-                </div>
-
-
-                <div class="form-group">
-                  <button
-                    type="submit"
-                    style="background-color: rgb(163, 62, 225);"
-                    class="form-control btn submit"
-                    >
-                    Sign up
-                  </button>
-                </div>
-                <div class="form-group d-md-flex"></div>
-              </form>
-                <div class="text-center" style="margin-top: -10px !important;">
-                    Have a account?
-                    <a
-                href="{{ route('login') }}"
-                class="w-100"
-                style="color: rgb(187, 129, 224);"
-
-                >Sign in</a
-                >
+            <h2 class="text-center mb-4 text-black">Pendaftaran CSR Website</h2>
+            <div class="col-lg-5 col-md-6 col-sm-12 mb-4 d-flex align-items-stretch">
+                <div class="card shadow flex-fill">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="text-center">
+                            <img src="{{ asset('panel/img/graduation.png') }}" alt="Akun Perorangan" class="rounded-circle profile-img">
+                            <h5 class="card-title mt-3">Akun Sekolah</h5>
+                            <p class="card-text">
+                                Jenis layanan yang dapat diakses adalah sebagai berikut
+                                <ul type="none">
+                                    
+                                    <li>Akses profile</li>
+                                    <li>Akses Monitoring bantuan</li>
+                                    <li>Akses laporan</li>
+                                </ul>
+                            </p>
+                        </div>
+                        <a href="{{ route('register.schools.show') }}" class="btn register-btn mt-auto">Register</a>
+                    </div>
                 </div>
             </div>
-          </div>
+            <div class="col-lg-5 col-md-6 col-sm-12 mb-4 d-flex align-items-stretch">
+                <div class="card shadow flex-fill">
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <div class="text-center">
+                            <img src="{{ asset('panel/img/vaccine.png') }}" alt="Akun Badan Usaha" class="profile-img">
+                            <h5 class="card-title mt-3">Akun Industri</h5>
+                            <p class="card-text">
+                                Jenis layanan yang dapat diakses adalah sebagai berikut
+                                <ul type="none" >
+                                    <li>Akses profile</li>
+                                    <li>Akses monitoring bantuan</li>
+                                    <li>Akses list sekolah</li>
+                                    <li>Akses memberi bantuan</li>
+                                    
+                                </ul>
+                            </p>
+                        </div>
+                        <a href="{{ route('register.industries.show') }}" class="btn register-btn mt-auto">Register</a>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </section>
-    <script src="{{ asset('auth/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('auth/js/popper.js') }}"></script>
-    <script src="{{ asset('auth/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('auth/js/main.js') }}"></script>
-    <script
-      defer
-      src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015"
-      integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ=="
-      data-cf-beacon='{"rayId":"8c4d64bec8b3ce11","serverTiming":{"name":{"cfExtPri":true,"cfL4":true}},"version":"2024.8.0","token":"cd0b4b3a733644fc843ef0b185f98241"}'
-      crossorigin="anonymous"
-    ></script>
-  </body>
+    </div>
+
+    <footer class="bg-light text-center text-lg-start">
+        <div class="container p-4">
+            <div class="text-center p-3">
+                © 2024 Copyright:
+                <a class="text-dark" href="https://www.instagram.com/tefa_solution/">Tefa_Solution</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

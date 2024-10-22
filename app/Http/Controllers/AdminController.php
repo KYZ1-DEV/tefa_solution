@@ -412,6 +412,26 @@ class AdminController extends Controller
 
         return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil dihapus.');
     }
+
+    public function verified($id)
+    {
+        $industri = Industri::findOrFail($id);
+        $industri->verified = 'verified';
+        $industri->save();
+        return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil di verifikasi.');
+    }
+
+    public function unverified($id)
+    {
+        $industri = Industri::findOrFail($id);
+        $industri->verified = 'unverified';
+        $industri->save();
+        return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil di unverifikasi.');
+    }
+
+
+
+
     public function showIndustri($id)
 {
     $industri = Industri::findOrFail($id);

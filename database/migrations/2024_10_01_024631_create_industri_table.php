@@ -30,6 +30,7 @@ return new class extends Migration
                 'Retail',
                 'Pariwisata'
             ])->default('Teknologi Informasi');
+            $table->enum('verified', ['unverified', 'verified'])->default('unverified');
             $table->string('no_tlpn_industri');
             $table->foreignId('id_user')->constrained('users')->onDelete('cascade');
             $table->timestamps();

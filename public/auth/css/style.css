@@ -1,0 +1,161 @@
+/* Global settings */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+/* Container styling */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Card styling */
+.card {
+  border: none;
+  border-radius: 15px;
+  background-color: #fff;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Image styling (inside card) */
+.profile-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 20px auto; /* Ensures image is centered inside the card */
+}
+
+/* Title styling */
+.card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Text and list styling */
+.card-text {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.card-text ul {
+  padding-left: 0;
+}
+
+.card-text ul li {
+  list-style: none;
+  margin: 5px;
+}
+
+/* Button styling */
+.register-btn {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(to right, #602fb5,#6A0DAD)!important;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 30px;
+  transition: background 0.3s ease;
+}
+
+.register-btn:hover {
+  color: #fff;
+  background: linear-gradient(to right, #6A0DAD,#602fb5)!important;
+}
+
+/* Flexbox to ensure buttons are aligned at the bottom */
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.register-btn {
+  margin-top: auto; /* Pushes the button to the bottom of the card */
+}
+
+/* Media query for small devices */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  .card {
+    margin-bottom: 30px;
+  }
+
+  .card-title {
+    font-size: 1.25rem;
+  }
+
+  .profile-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .register-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Media query for very small devices */
+@media (max-width: 576px) {
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  .card-title {
+    font-size: 1.1rem;
+  }
+
+  .profile-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .register-btn {
+    padding: 6px 18px;
+    font-size: 0.85rem;
+  }
+}
+/* Global settings */
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+/* Navbar logo styling */
+.navbar-brand img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Footer styling */
+footer {
+  background-color: #f8f9fa;
+  padding: 20px 0;
+}
+
+footer a {
+  text-decoration: none;
+  font-weight: bold;
+  color: #333;
+}
+
+footer a:hover {
+  color: #007bff;
+}
