@@ -43,9 +43,8 @@
                             <th class="text-truncate" style="max-width: 120px; font-size: 12px;">NPWP</th>
                             <th class="text-truncate" style="max-width: 60px; font-size: 12px;">SKDP</th>
                             <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Email</th>
-                            <th class="text-truncate" style="max-width: 100px; font-size: 12px;">Alamat</th>
                             <th class="text-truncate" style="max-width: 120px; font-size: 12px;">Bidang Industri</th>
-                            <th class="text-truncate" style="max-width: 100px; font-size: 12px;">Nomor Telepon</th>
+                            <th class="text-truncate" style="max-width: 100px; font-size: 12px;">Verified</th>
                             <th class="text-center" style="font-size: 12px;">Aksi</th>
                         </tr>
                     </thead>
@@ -56,11 +55,26 @@
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_industri->npwp }}</td>
                             <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_industri->skdp }}</td>
                             <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_industri->email }}</td>
-                            <td class="text-truncate" style="max-width: 100px; font-size: 12px;">{{ $data_industri->alamat }}</td>
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_industri->bidang_industri }}</td>
-                            <td class="text-truncate" style="max-width: 100px; font-size: 12px;">{{ $data_industri->no_tlpn_industri }}</td>
+                            <td class="text-truncate text-center" style="max-width: 100px; font-size: 13px; color:{{ $data_industri->verified == 'verified' ? 'green' : 'rgb(233, 182, 73)' }};">{{ $data_industri->verified }}</td>
                             <td class="text-center">
                                 <!-- Tombol Lihat Detail -->
+                                @if ($data_industri->verified === 'verified')
+                                    <form onsubmit="return confirmUnverified(event)" action="{{ route('admin.industries.unverified', $data_industri->id) }}" class="d-inline" method="POST">
+                                        @csrf
+                                        @method('PATCH')
+                                        <button type="submit" class="btn btn-gradient btn-sm">unverified</button>
+                                    </form>
+                                    {{-- <a href="{{ route('admin.industries.unverified', $data_industri->id) }}" class="btn btn-gradient btn-sm">Unverified</a> --}}
+                                @else
+                                <form onsubmit="return confirmVerified(event)" action="{{ route('admin.industries.verified', $data_industri->id) }}" class="d-inline" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <button type="submit" class="btn btn-gradient btn-sm">verified</button>
+                                </form>
+                                    {{-- <a href="{{ route('admin.industries.verified', $data_industri->id) }}" class="btn btn-gradient btn-sm">Verified</a> --}}
+                                @endif
+
                                 <a href="{{ route('admin.industries.show', $data_industri->id) }}" class="btn btn-gradient btn-sm">Lihat Detail</a>
                                 <a href="{{ route('admin.industries.edit', $data_industri->id) }}" class="btn btn-gradient btn-sm">Edit</a>
                                 <form onsubmit="return confirmHapus(event)" action="{{ route('admin.industries.destroy', $data_industri->id) }}" class="d-inline" method="POST">
@@ -72,7 +86,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="8" class="text-center" style="font-size: 12px;">Data tidak ada!</td>
+                            <td colspan="8" class="text-center" style="font-size: 12px; color: #bcb30d;">Data tidak ada!</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -96,6 +110,39 @@
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Hapus',
+            cancelButtonText: 'Batal'
+        }).then((willDelete) => {
+            if (willDelete.isConfirmed) {
+                event.target.submit();
+            }
+        });
+    }
+    function confirmUnverified(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'Yakin ingin unverifikasi Industri ini?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#bcb30d',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Unverified',
+            cancelButtonText: 'Batal'
+        }).then((willDelete) => {
+            if (willDelete.isConfirmed) {
+                event.target.submit();
+            }
+        });
+    }
+
+    function confirmVerified(event) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'Yakin ingin Verifikasi Industri ini?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#35cc35',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Verifikasi',
             cancelButtonText: 'Batal'
         }).then((willDelete) => {
             if (willDelete.isConfirmed) {

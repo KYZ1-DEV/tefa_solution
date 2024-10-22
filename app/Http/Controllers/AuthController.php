@@ -67,14 +67,14 @@ class AuthController extends Controller
 
 
 
-    public function register(Request  $request){
+    public function schoolRegister(Request $request){
 
         $request->validate([
             'name' => 'required|min:5',
-            'email' => 'required|unique:users|email',
+            'email' => 'required|unique:users|email|same:email_confirmation',
+            'email_confirmation' => 'required',
             'password' => 'required|min:6|same:password_confirmation',
             'password_confirmation' => 'required',
-            'role' => 'required'
         ],
         [
             'name.required' => 'Name wajib diisi',
@@ -85,24 +85,65 @@ class AuthController extends Controller
             'password.min' => 'Password minimal 6 karakter',
             'password.same' => 'Konfirmasi password tidak cocok',
             'password_confirmation.required' => 'Konfirmasi password wajib diisi',
-            'role.required' => 'Pilih role',
+            'email.same' => 'Konfirmasi email tidak cocok',
+            'email_confirmation.required' => 'Konfirmasi email wajib diisi',
         ]);
 
         $infoRegister = [
         'name' => $request->name,
         'email' => $request->email,
         'password' => $request->password,
-        'role' => $request->role
+        'role' => 'sekolah'
+        ];
+
+        User::create($infoRegister);
+
+        return redirect()->route(route: 'login')->with('success','Registrasi Berhasil');
+    }
+
+    public function industriRegister(Request  $request){
+
+        $request->validate([
+            'name' => 'required|min:5',
+            'email' => 'required|unique:users|email|same:email_confirmation',
+            'email_confirmation' => 'required',
+            'password' => 'required|min:6|same:password_confirmation',
+            'password_confirmation' => 'required',
+        ],
+        [
+            'name.required' => 'Name wajib diisi',
+            'name.min' => 'Name minimal 5 karakter',
+            'email.required' => 'Email wajib diisi',
+            'email.unique' => 'Email telah terdaftar',
+            'password.required' => 'Password wajib diisi',
+            'password.min' => 'Password minimal 6 karakter',
+            'password.same' => 'Konfirmasi password tidak cocok',
+            'password_confirmation.required' => 'Konfirmasi password wajib diisi',
+            'email.same' => 'Konfirmasi email tidak cocok',
+            'email_confirmation.required' => 'Konfirmasi email wajib diisi',
+        ]);
+
+        $infoRegister = [
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => $request->password,
+        'role' => 'industri'
         ];
 
         User::create($infoRegister);
 
 
         return redirect()->route(route: 'login')->with('success','Registrasi Berhasil');
-}
-
+    }
+    
     public function registrasi() {
         return view('auth.registrasi');
+    }
+    public function registrasiSekolah() {
+        return view('auth.sekolahRegister');
+    }
+    public function registrasiIndustri() {
+        return view('auth.industriRegister');
     }
 
     public function logout() {

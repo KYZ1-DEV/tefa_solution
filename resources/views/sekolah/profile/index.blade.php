@@ -102,10 +102,10 @@
                                                 <label for="jenjang">Jenjang :</label>
                                                 <select id="jenjang" name="jenjang" class="form-control" required>
                                                     <option value="" disabled {{ !isset($sekolah->jenjang) ? 'selected' : '' }}>Pilih Jenjang</option>
-                                                    <option value="SD" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SD' ? 'selected' : '' }}>SD</option>
-                                                    <option value="SMP" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMP' ? 'selected' : '' }}>SMP</option>
-                                                    <option value="SMA" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMA' ? 'selected' : '' }}>SMA</option>
                                                     <option value="SMK" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMK' ? 'selected' : '' }}>SMK</option>
+                                                    <option value="SMA" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMA' ? 'selected' : '' }}>SMA</option>
+                                                    <option value="SMP" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                                    <option value="SD" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SD' ? 'selected' : '' }}>SD</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
