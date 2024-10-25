@@ -63,9 +63,6 @@
                                         $sedangBermitra = in_array($sekolah->id, $mitraSekolahIds);
                                     @endphp
 
-
-
-
                                     <li
                                         class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
                                         <div class="d-flex align-items-center mb-2 mb-sm-0">
@@ -85,7 +82,6 @@
                                                 @endif
                                                 <br>
                                                 <small class="text-muted">{{ $sekolah->alamat }}</small>
-
                                             </div>
                                         </div>
                                         <div class="text-end">
@@ -94,11 +90,13 @@
                                                 <span class="d-none d-sm-inline">Lihat Detail</span>
                                                 <i class="fa-solid fa-eye d-sm-none"></i>
                                             </button>
-                                            <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
-                                                data-bs-target="#bantuanModal{{ $sekolah->id }}">
-                                                <span class="d-none d-sm-inline">Beri Bantuan</span>
-                                                <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
-                                            </button>
+                                            @unless ($sedangBermitra)
+                                                <button type="button" class="btn btn-gradient mb-2" data-bs-toggle="modal"
+                                                    data-bs-target="#bantuanModal{{ $sekolah->id }}">
+                                                    <span class="d-none d-sm-inline">Beri Bantuan</span>
+                                                    <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
+                                                </button>
+                                            @endunless
                                         </div>
                                     </li>
 
