@@ -159,11 +159,13 @@ class IndustriController extends Controller
 
 
             $mitraList = Mitra::where('id_industri', $industri->id)
-                ->when($search, function ($query, $search) {
-                    return $query->where('nama_mitra', 'like', '%' . $search . '%');
-                })
-                ->with(['sekolah', 'bantuan', 'laporan'])
-                ->paginate(5);
+            ->when($search, function ($query, $search) {
+                return $query->where('nama_mitra', 'like', '%' . $search . '%');
+            })
+            ->with(['sekolah', 'bantuan', 'laporan' => function ($query) {
+                $query->orderBy('created_at', 'desc'); // Urutkan laporan berdasarkan waktu pembuatan
+            }])
+            ->paginate(5);
 
             if ($mitraList->isEmpty()) {
                 return view('industri.monitoring_bantuan.notfound');
@@ -219,7 +221,7 @@ class IndustriController extends Controller
         $laporan = Laporan::find($id);
 
         if ($laporan && $laporan->bukti_laporan) {
-            $filePath = 'laporan/' . $laporan->bukti_laporan;
+            $filePath = 'laporan/'.$laporan->progres_laporan.'/'. $laporan->bukti_laporan;
 
             if (Storage::disk('public')->exists($filePath)) {
                 return response()->streamDownload(function () use ($filePath) {

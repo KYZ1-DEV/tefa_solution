@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="short icon" href="{{ asset('logoC.png') }}">
-    <title>Register Akun Industri</title>
+    <title>Register Akun Sekolah</title>
     <link rel="stylesheet" href="{{ asset('auth/css/bootstrap.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- CSS langsung di-embed -->
@@ -110,6 +110,25 @@
     </header>
 
     <div class="container-fluid">
+
+    @if (Session::get('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            <ul>
+                <li>{{ Session::get('error') }}</li>
+            </ul>
+        </div>
+    @endif
+
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $item)
+                    <li>{{ $item }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card mb-4">
@@ -126,7 +145,7 @@
                                         <label for="name" class="col-form-label">Nama Lengkap:</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="text" name="name" class="form-control" id="name" placeholder="Nama Lengkap" required>
+                                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="name" placeholder="Nama Lengkap" required>
                                     </div>
                                 </div>
 
@@ -135,13 +154,13 @@
                                         <label for="inputEmail" class="col-form-label">Email:</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="email" name="email" class="form-control" id="inputEmail" placeholder="email@example.com" required>
+                                        <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="inputEmail" placeholder="email@example.com" required>
                                     </div>
                                     <div class="col-sm-1 d-flex align-items-center">
                                         <label for="inputEmailConfirmation" class="col-form-label">Konfirmasi Email:</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="email" name="email_confirmation" class="form-control" id="inputEmailConfirmation" placeholder="email@example.com" required>
+                                        <input type="email" name="email_confirmation" value="{{ old('email_confirmation') }}" class="form-control" id="inputEmailConfirmation" placeholder="email@example.com" required>
                                     </div>
                                 </div>
 

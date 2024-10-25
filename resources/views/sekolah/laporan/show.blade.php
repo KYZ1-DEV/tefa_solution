@@ -16,6 +16,7 @@
             <div class="card-header text-white" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc);">
                 <h5 class="m-0">Informasi Laporan</h5>
             </div>
+            {{-- @dd($laporan) --}}
             <div class="card-body">
                 <table class="table">
                     <tbody>
@@ -23,6 +24,11 @@
                             <th style="width: 200px;">Nama Laporan</th>
                             <th style="width: 10px;">:</th>
                             <td class="text-info">{{ $laporan->nama_laporan }}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 200px;">Jenis Bantuan</th>
+                            <th style="width: 10px;">:</th>
+                            <td>{{ $laporan->bantuan ? $laporan->bantuan->jenis_bantuan : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <th style="width: 200px;">Progres</th>
@@ -55,15 +61,21 @@
                             <td class="text-muted">{{ $laporan->deskripsi_laporan ?? 'Tidak ada deskripsi' }}</td>
                         </tr>
                         <tr>
+                            
                             <th style="width: 200px;">Bukti Laporan</th>
                             <th style="width: 10px;">:</th>
                             <td>
                                 @if ($laporan->bukti_laporan)
-                                    <a href="{{ asset('storage/laporan/' . $laporan->bukti_laporan) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Lihat Bukti</a>
+                                    <a href="{{ asset('storage/laporan/'.$laporan->progres_laporan.'/'. $laporan->bukti_laporan) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Lihat Bukti</a>
                                 @else
                                     <span class="text-danger">Tidak ada bukti</span>
                                 @endif
                             </td>
+                        </tr>
+                        <tr>
+                            <th style="width: 200px;">Keterangan</th>
+                            <th style="width: 10px;">:</th>
+                            <td class="text-muted">{{ $laporan->keterangan_laporan ?? 'Tidak ada keterangan' }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -71,7 +83,7 @@
         </div>
 
         <div class="mt-3">
-            <a href="{{ route('schools.laporan.show') }}" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Kembali</a>
+            <a href="{{ route('information_progress') }}" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Kembali</a>
         </div>
     </div>
 @endsection

@@ -21,11 +21,17 @@ class Laporan extends Model
         'status_laporan',
         'keterangan_laporan',
         'id_sekolah',
+        'id_bantuan'
     ];
 
     public function sekolah()
     {
         return $this->belongsTo(Sekolah::class, 'id_sekolah');
+    }
+    
+    public function bantuan()
+    {
+        return $this->belongsTo(Bantuan::class, 'id_bantuan');
     }
 
 }

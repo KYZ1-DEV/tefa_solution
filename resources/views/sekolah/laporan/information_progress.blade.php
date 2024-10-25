@@ -35,6 +35,7 @@
                 <thead>
                     <tr>
                         <th>Nama Laporan</th>
+                        <th>Jenis Bantuan</th>
                         <th>Progres</th>
                         <th>Tanggal</th>
                         <th>Status</th>
@@ -42,11 +43,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {{-- @dd($laporan) --}}
                     @foreach ($laporan as $item)
                         <tr>
                             <td>{{ $item->nama_laporan }}</td>
+                            <td>{{ $item->bantuan ? $item->bantuan->jenis_bantuan : 'N/A' }}</td>
                             <td>{{ $item->progres_laporan }}</td>
                             <td>{{ $item->tanggal_laporan }}</td>
+                            {{-- <td>{{ $item->id }}</td>  --}}
                             <td>
                                 @if ($item->status_laporan == 'dikirim')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Menunggu Konfirmasi</span>
@@ -58,10 +62,13 @@
                             </td>
                             <td>
                                 <a href="{{ route('laporan.show', $item->id) }}" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Detail</a>
-                            </td>                              
+                                @if ($item->status_laporan == 'direvisi')
+                                    <a href="{{ route('schools.laporan.edit', $item->id) }}" class="btn" style="background: linear-gradient(135deg, #f0ad4e, #ec971f); color: white;">Revisi</a>
+                                @endif
+                            </td>                                                      
                         </tr>
                     @endforeach
-                </tbody>
+                </tbody>                
             </table>
         @endif
     </div>
