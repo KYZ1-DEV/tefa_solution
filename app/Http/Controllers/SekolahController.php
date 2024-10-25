@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Mitra;
+use App\Models\Bantuan;
 use App\Models\Laporan;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
@@ -137,10 +139,27 @@ class SekolahController extends Controller
     }
 
     // Tampilkan halaman monitoring bantuan Sekolah
-    public function monitoringBantuan()
-    {
-        return view("sekolah.monitoring_bantuan.index");
-    }
+    public function monitoringBantuan(Request $request)
+     {
+        $auth = Auth::user();
+        $sekolah = Sekolah::where('id_user',$auth->id)->first();
+        if(is_null($sekolah)){
+            return redirect()->route('schools.profile.show')->with('error','Lengkapi data Sekolah terlebih dahulu !!!');
+        }
+        // dd($sekolah);
+         // Ambil query pencarian dari input
+      // Menampilkan 5 item per halaman
+        // $mitras = Mitra::with('industri', 'bantuan')->where('status_mitra', 'aktif', 'id_sekolah', $sekolah->id)->get();
+        // $mitras = Mitra::where('status_mitra', 'aktif', 'id_sekolah', $sekolah->id)->with('industri', 'bantuan')->get();
+        $mitras = Mitra::where('status_mitra', 'aktif')
+               ->where('id_sekolah', $sekolah->id)
+               ->with('industri', 'bantuan')
+               ->get();
+        
+
+         // Tampilkan ke view bersama data pencarian
+         return view('sekolah.monitoring_bantuan.index', compact('mitras'));
+     }
 
     // Tampilkan laporan progress Sekolah
     public function progress()
