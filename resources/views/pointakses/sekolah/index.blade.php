@@ -6,25 +6,19 @@
     {{ route('schools.profile.show') }}
 @endsection
 @section('main')
-                    <!-- Begin Page Content -->
-                <div class="container-fluid">
-                                @if (Session::get('success'))
-                            <div class="alert alert-success alert-dismissible fade show">
-                                <ul>
-                                    <li>{{ Session::get('success') }}</li>
-                                </ul>
-                            </div>
-                        @endif
-                        @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $item )
-                                    <li>{{ $item }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+        @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
 
+        @if(session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard Sekolah</h1>

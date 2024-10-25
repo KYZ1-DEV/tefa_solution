@@ -110,6 +110,26 @@
     </header>
 
     <div class="container-fluid">
+
+
+    @if (Session::get('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            <ul>
+                <li>{{ Session::get('error') }}</li>
+            </ul>
+        </div>
+    @endif
+
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $item)
+                <li>{{ $item }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="card mb-4">
@@ -126,7 +146,7 @@
                                         <label for="name" class="col-form-label">Nama Lengkap:</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="text" name="name" class="form-control" id="name" placeholder="Nama Lengkap" required>
+                                        <input type="text" name="name" value="{{ old('name') }}" class="form-control" id="name" placeholder="Nama Lengkap" required>
                                     </div>
                                 </div>
 
@@ -135,13 +155,13 @@
                                         <label for="inputEmail" class="col-form-label">Email:</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="email" name="email" class="form-control" id="inputEmail" placeholder="email@example.com" required>
+                                        <input type="email" name="email" value="{{ old('email') }}" class="form-control" id="inputEmail" placeholder="email@example.com" required>
                                     </div>
                                     <div class="col-sm-1 d-flex align-items-center">
                                         <label for="inputEmailConfirmation" class="col-form-label">Konfirmasi Email:</label>
                                     </div>
                                     <div class="col-sm-5">
-                                        <input type="email" name="email_confirmation" class="form-control" id="inputEmailConfirmation" placeholder="email@example.com" required>
+                                        <input type="email" name="email_confirmation" value="{{ old('email_confirmation') }}" class="form-control" id="inputEmailConfirmation" placeholder="email@example.com" required>
                                     </div>
                                 </div>
 
@@ -160,7 +180,6 @@
                                     </div>
                                 </div>
 
-                               
 
                                 <div class="form-group row mb-0">
                                     <div class="col-sm-12">

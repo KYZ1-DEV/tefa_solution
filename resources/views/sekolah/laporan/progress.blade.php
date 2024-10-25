@@ -31,19 +31,30 @@
             <div class="card-body"> 
                 <form action="{{ route('upload.laporan') }}" method="POST" enctype="multipart/form-data">
                     @csrf
+
+                    <div class="mb-4">
+                        <label for="id_bantuan" class="form-label">Pilih Bantuan:</label>
+                        <select class="form-control" id="id_bantuan" name="id_bantuan" required>
+                            <option value="">-- Pilih Bantuan --</option>
+                            @if($mitra->isNotEmpty())
+                                @foreach($mitra as $item)
+                                    <option value="{{ $item->bantuan->id }}">{{ $item->industri->nama_industri." X ".$item->bantuan->jenis_bantuan }}</option>
+                                @endforeach
+                            @else
+                                <option disabled>Tidak ada bantuan yang tersedia.</option>
+                            @endif
+                        </select>
+                    </div>     
+                    
                     <div class="mb-4">
                         <label for="nama_laporan" class="form-label">Nama Laporan:</label>
                         <input type="text" class="form-control" id="nama_laporan" name="nama_laporan" required>
                     </div>
                 
-                    <div class="mb-4">
-                        <label for="progres_laporan" class="form-label">Progres Laporan:</label>
-                        <select class="form-control" id="progres_laporan" name="progres_laporan" required>
-                            <option value="0%">0%</option>
-                            <option value="50%">50%</option>
-                            <option value="100%">100%</option>
-                        </select>
-                    </div>
+                    <div class="form-group">
+                        <label for="progres_laporan">Progres</label>
+                        <input type="text" class="form-control" id="progres_laporan" name="progres_laporan" value="{{ $defaultProgress }}" readonly>
+                    </div>                
                 
                     <div class="mb-4">
                         <label for="bukti_laporan" class="form-label">Bukti Laporan PDF:</label>
