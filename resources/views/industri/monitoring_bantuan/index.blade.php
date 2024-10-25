@@ -60,13 +60,28 @@
                                             style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
                                                  color: {{ $mitra->status_mitra == 'aktif' ? 'green' : 'red' }};
                                                  background-color: transparent;">
-                                            {{ ucfirst($mitra->status_mitra) }} <!-- Status mitra -->
-                                        </span><br>
+                                            {{ ucfirst($mitra->status_mitra) }}
+                                        </span>
+                                        <br>
 
                                         <span class="jenis-Bantuan" style="color: #333;">
                                             Jenis Bantuan:
                                             {{ $mitra->bantuan ? $mitra->bantuan->jenis_bantuan : 'Tidak ada bantuan' }}
                                         </span>
+                                        @if(isset($mitra->laporan) && $mitra->laporan->status_laporan !== 'revisi')
+                                        <span class="status-active"
+                                            style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
+                                                   color: {{ $mitra->laporan->status_laporan == 'diterima' ? 'green' : 'yellow' }};
+                                                   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
+                                            Laporan {{ ucfirst($mitra->laporan->status_laporan) }}
+                                        </span>
+                                    @elseif(!isset($mitra->laporan))
+                                        <span class="status-active"
+                                            style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: red;
+                                                   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
+                                            Laporan Belum Ada
+                                        </span>
+                                    @endif
                                     </div>
                                 </div>
 
@@ -160,7 +175,8 @@
                                                 </div>
                                             </div>
                                             <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Status Mitra</strong></label>
+                                                <label class="col-sm-4 col-form-label"><strong>Status
+                                                        Mitra</strong></label>
                                                 <div class="col-sm-8">
                                                     <select name="status_mitra" id="status_mitra" class="form-control">
                                                         <option value="aktif"
@@ -230,11 +246,18 @@
                                                         {{ $mitra->laporan->deskripsi_laporan ?? 'Belum ada deskripsi' }}
                                                     </p>
                                                 </div>
+                                                <div class="d-flex mb-1">
+                                                    <label class="form-label w-50"><strong>Status
+                                                            Laporan</strong></label>
+                                                    <p class="mb-0">
+                                                        {{ $mitra->laporan->status_laporan ?? 'Belum ada deskripsi' }}
+                                                    </p>
+                                                </div>
                                             @else
                                                 <li class="list-group-item text-center">Belum Ada Laporan!</li>
                                             @endif
 
-
+                                            <hr>
                                             @if (isset($mitra->laporan))
                                                 <!-- Form Status dan Keterangan Laporan -->
                                                 <form action="{{ route('laporan.update', $mitra->laporan->id) }}"
@@ -253,9 +276,9 @@
                                                             <option value="diterima"
                                                                 {{ $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>
                                                                 Diterima</option>
-                                                            <option value="direvisi"
-                                                                {{ $mitra->laporan->status_laporan == 'direvisi' ? 'selected' : '' }}>
-                                                                Direvisi</option>
+                                                            <option value="revisi"
+                                                                {{ $mitra->laporan->status_laporan == 'revisi' ? 'selected' : '' }}>
+                                                                Revisi</option>
                                                         </select>
                                                     </div>
 

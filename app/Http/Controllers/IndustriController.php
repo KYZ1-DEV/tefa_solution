@@ -133,6 +133,10 @@ class IndustriController extends Controller
     {
         $request->validate([
             'newPassword' => 'required|min:6|confirmed',
+        ],[
+            'newPassword.required' => 'Silahkan masukan password baru',
+            'newPassword.min' => 'Minimal password 6 karakter',
+            'newPassword.confirmed' => 'Konfirmasi password tidak sesuai atau belum diisi!',
         ]);
 
         $user = User::find($request->id);
@@ -186,6 +190,9 @@ class IndustriController extends Controller
         $request->validate([
             'status_mitra' => 'required|in:aktif,non-aktif',
             'progres_mitra' => 'required|in:0%,50%,100%',
+        ],[
+            'status_mitra.required' => 'Silahkan berikan perubahan!',
+            'progres_mitra.required' => 'Silahkan Berikan Perubahan',
         ]);
 
         $mitra = Mitra::findOrFail($id);
@@ -202,8 +209,10 @@ class IndustriController extends Controller
     public function updateLaporan(Request $request, $id)
     {
         $request->validate([
-            'status_laporan' => 'required|in:dikirim,diterima,direvisi',
+            'status_laporan' => 'required|in:dikirim,diterima,direvisi,revisi',
             'keterangan_laporan' => 'nullable|string',
+        ],[
+            'status_laporan.required' => 'Berikan keterangan status!',
         ]);
 
         $laporan = Laporan::findOrFail($id);
@@ -241,8 +250,6 @@ class IndustriController extends Controller
         return redirect()->back()->with('alert-danger', 'File tidak ditemukan!');
     }
 
-
-
     public function listSekolah(Request $request)
     {
         $user = Auth::user();
@@ -250,7 +257,6 @@ class IndustriController extends Controller
 
         if ($industri) {
             $search = $request->input('search');
-
             $usersQuery = User::where('role', 'sekolah');
 
             if ($search) {
@@ -258,22 +264,12 @@ class IndustriController extends Controller
             }
 
             $users = $usersQuery->orderBy('id', 'desc')->get();
-            $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'));
+            $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))
+                ->orderBy('id', $search ? 'asc' : 'desc')
+                ->paginate(5);
 
-            if ($search) {
-                $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))
-                    ->orderBy('id', 'asc')
-                    ->paginate(5);
-            } else {
-                $sekolahs = Sekolah::whereIn('id_user', $users->pluck('id'))
-                    ->orderBy('id', 'desc')
-                    ->paginate(5);
-            }
+            $mitraSekolahIds = Mitra::where('status_mitra', 'aktif')->pluck('id_sekolah')->toArray();
 
-            // Ambil data mitra berdasarkan id_sekolah
-            $mitraSekolahIds = Mitra::pluck('id_sekolah')->toArray();
-
-            // Ambil semua bantuan
             $bantuan = Bantuan::all();
 
             return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan', 'mitraSekolahIds'));
@@ -291,6 +287,10 @@ class IndustriController extends Controller
             'id_sekolah' => 'required|exists:sekolah,id',
             'id_user' => 'required|exists:users,id',
             'id_bantuan' => 'required|exists:bantuan,id',
+        ],[
+            'nama_mitra.required' => 'Silahkan masukan nama mitra!',
+            'nama_mitra.max' => 'Nama mitra terlalu panjang!',
+            'periode.required' => 'Silahkan pilih periode!',
         ]);
 
         $mitra = new Mitra();
@@ -364,6 +364,10 @@ class IndustriController extends Controller
         $request->validate([
             'jenisBantuan' => 'required|string|max:255',
             'deskripsiBantuan' => 'required|string',
+        ],[
+            'jenisBantuan.required' => 'Silahkan Masukan jenis bantuan!',
+            'jenisBantuan.max' => 'Jenis Bantuan terlalu panjang',
+            'deskripsiBantuan.required' => 'Silahkan masukan desripsi bantuan!',
         ]);
 
         $industri = industri::where('id_user', Auth::user()->id)->first();
@@ -386,6 +390,9 @@ class IndustriController extends Controller
         $request->validate([
             'editJenisBantuan' => 'required|string|max:255',
             'editDeskripsiBantuan' => 'required|string',
+        ],[
+            'editJenisBantuan.required' => 'Silahkan Lakukan  perubahan!',
+            'editDeskripsiBantuan.required' => 'Silahkan Lakukan Perubahan',
         ]);
 
 
