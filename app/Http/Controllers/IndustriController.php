@@ -228,26 +228,35 @@ class IndustriController extends Controller
     public function downloadLaporan($id)
     {
         $laporan = Laporan::find($id);
-
+    
         if ($laporan && $laporan->bukti_laporan) {
-            $filePath = 'laporan/'.$laporan->progres_laporan.'/'. $laporan->bukti_laporan;
-
+            $filePath = 'laporan/' . $laporan->progres_laporan . '/' . $laporan->bukti_laporan;
+            $absolutePath = storage_path('app/public/' . $filePath);
+    
             if (Storage::disk('public')->exists($filePath)) {
-                return response()->streamDownload(function () use ($filePath) {
-                    echo Storage::disk('public')->get($filePath);
-                }, basename($filePath));
+                return response()->streamDownload(function () use ($absolutePath) {
+                    echo file_get_contents($absolutePath);
+                }, basename($filePath), [
+                    'Content-Type' => mime_content_type($absolutePath),
+                    'Content-Disposition' => 'attachment; filename="' . basename($filePath) . '"'
+                ]);
             }
         }
-
+    
+        // Jika file laporan tidak ditemukan, gunakan file template sebagai cadangan
         $defaultFile = 'template/template_laporan.pdf';
-
+        $defaultFilePath = storage_path('app/public/' . $defaultFile);
+    
         if (Storage::disk('public')->exists($defaultFile)) {
-            return response()->streamDownload(function () use ($defaultFile) {
-                echo Storage::disk('public')->get($defaultFile);
-            }, basename($defaultFile));
+            return response()->streamDownload(function () use ($defaultFilePath) {
+                echo file_get_contents($defaultFilePath);
+            }, basename($defaultFile), [
+                'Content-Type' => mime_content_type($defaultFilePath),
+                'Content-Disposition' => 'attachment; filename="' . basename($defaultFile) . '"'
+            ]);
         }
-
-        return redirect()->back()->with('alert-danger', 'File tidak ditemukan!');
+    
+        return redirect()->back()->with('error', 'File tidak ditemukan!');
     }
 
     public function listSekolah(Request $request)
@@ -332,7 +341,7 @@ class IndustriController extends Controller
 
         $mitra->save();
 
-        return redirect()->route('industries.assistance-monitoring')->with('success', 'Sekolah berhasil diberi bantuan.');
+        return redirect()->route('industries.assistance-monitoring')->with('success', 'Sekolah berhasil diberi bantuan, harap mengaktifkan terlebih dahulu status mitra !');
     }
 
 

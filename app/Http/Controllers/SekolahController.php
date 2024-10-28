@@ -204,11 +204,7 @@ class SekolahController extends Controller
         if(is_null($sekolah)){
             return redirect()->route('schools.profile.show')->with('error','Lengkapi data Sekolah terlebih dahulu !!!');
         }
-        // dd($sekolah);
-         // Ambil query pencarian dari input
-      // Menampilkan 5 item per halaman
-        // $mitras = Mitra::with('industri', 'bantuan')->where('status_mitra', 'aktif', 'id_sekolah', $sekolah->id)->get();
-        // $mitras = Mitra::where('status_mitra', 'aktif', 'id_sekolah', $sekolah->id)->with('industri', 'bantuan')->get();
+
         $mitras = Mitra::where('status_mitra', 'aktif')
                ->where('id_sekolah', $sekolah->id)
                ->with('industri', 'bantuan')
@@ -243,26 +239,10 @@ class SekolahController extends Controller
             ->with('bantuan')
             ->get();
 
-        // Periksa apakah sekolah telah menerima bantuan dari industri
-        // $bantuanDiterima = false;
-        // foreach ($mitra as $item) {
-        //     // Periksa apakah status bantuan sama dengan 'diterima'
-        //     if ($item->bantuan && $item->bantuan->status_bantuan === 'diterima') {
-        //         $bantuanDiterima = true;
-        //         break;
-        //     }
-        // }
-        // if (!$bantuanDiterima) {
-        //     return redirect()->back()->with('error', 'Anda harus mendapatkan bantuan dari industri sebelum mengakses halaman progres.');
-        // }
-
         $laporanTerakhir = Laporan::where('id_sekolah', $sekolah->id)
             ->orderBy('created_at', 'desc')
             ->first();
-        // Jika tidak ada laporan yang dikirim, tetap izinkan akses tetapi tampilkan pesan
-        // if (!$laporanTerakhir) {
-        //     return redirect()->back()->with('info', 'Anda belum mengirimkan laporan apapun. Silakan kirim laporan untuk memulai proses.');
-        // }
+
         if ($laporanTerakhir && $laporanTerakhir->status_laporan !== 'diterima') {
             return redirect()->route('information_progress')->with('error', 'Anda hanya bisa mengakses halaman progres jika laporan terakhir Anda sudah diterima.');
         }
@@ -285,7 +265,7 @@ class SekolahController extends Controller
     }
 
     // Tampilkan laporan information progress Sekolah
-    public function information_progress()
+    public function informationProgress()
     {
         $user = Auth::user();
         if (!$user) {
@@ -297,11 +277,6 @@ class SekolahController extends Controller
             return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
         }
 
-        // Cek apakah sudah ada laporan yang dikirim oleh sekolah
-        // $laporanExists = Laporan::where('id_sekolah', $sekolah->id)->exists(); // Memeriksa apakah ada laporan
-        // if (!$laporanExists) {
-        //     return redirect()->back()->with('error', 'Anda harus mengirimkan laporan terlebih dahulu sebelum mengakses halaman ini.');
-        // }
 
         $laporan = Laporan::with(['bantuan'])->where('id_sekolah', $sekolah->id)->get();
         return view('sekolah.laporan.information_progress', compact('laporan'));
@@ -330,7 +305,7 @@ class SekolahController extends Controller
         // Simpan file PDF
         if ($request->hasFile('bukti_laporan')) {
             $pdfName = 'bukti_laporan_' . $request->progres_laporan . time() . '.' . $request->file('bukti_laporan')->extension();
-            $pdfPath = $request->file('bukti_laporan')->storeAs('laporan/' . $request->progres_laporan . '/', $pdfName, 'public');
+            $request->file('bukti_laporan')->storeAs('laporan/' . $request->progres_laporan . '/', $pdfName, 'public');
         }
 
         // Ambil laporan terakhir
@@ -349,7 +324,8 @@ class SekolahController extends Controller
                 }
             }
         }
-        $laporan = Laporan::with(['bantuan'])->where('id_sekolah', $sekolah->id)->get();
+
+        // $laporan = Laporan::with(['bantuan'])->where('id_sekolah', $sekolah->id)->get();
 
         // Simpan laporan baru
         Laporan::create([
@@ -373,7 +349,7 @@ class SekolahController extends Controller
         return view('sekolah.laporan.show', compact('laporan'));
     }
 
-    public function edit_laporan($id)
+    public function editLaporan($id)
     {
         $user = Auth::user();
         if (!$user) {
@@ -400,8 +376,19 @@ class SekolahController extends Controller
         return view('sekolah.laporan.edit', compact('laporan','defaultTanggal'));
     }
 
-    public function update_laporan(Request $request, $id)
+    public function updateLaporan(Request $request, $id)
     {
+        // Validasi input
+        $request->validate([
+            'nama_laporan' => 'required|string|max:255',
+            'deskripsi_laporan' => 'required|string',
+            'bukti_laporan' => 'nullable|file|mimes:pdf|max:2048',
+            'tanggal_laporan' => 'required|date',
+        ], [
+            'nama_laporan.required' => 'Nama laporan harus diisi !!',
+            'deskripsi_laporan.required' => 'Deskripsi laporan harus diisi !!',
+        ]);
+
         // Pastikan user terautentikasi
         $user = Auth::user();
         if (!$user) {
@@ -424,16 +411,7 @@ class SekolahController extends Controller
             return redirect()->route('information_progress')->with('error', 'Laporan tidak ditemukan atau tidak dapat diedit.');
         }
 
-        // Validasi input
-        $request->validate([
-            'nama_laporan' => 'required|string|max:255',
-            'deskripsi_laporan' => 'required|string',
-            'bukti_laporan' => 'nullable|file|mimes:pdf|max:2048',
-            'tanggal_laporan' => 'required|date',
-        ], [
-            'nama_laporan.required' => 'Nama laporan harus diisi !!',
-            'deskripsi_laporan.required' => 'Deskripsi laporan harus diisi !!',
-        ]);
+        
 
         // Update field laporan
         $laporan->nama_laporan = $request->input('nama_laporan');
@@ -449,9 +427,13 @@ class SekolahController extends Controller
             }
 
             // Simpan file yang baru
-            $file = $request->file('bukti_laporan');
-            $path = $file->store('storage/laporan/'.$laporan->progres_laporan. '/');
-            $laporan->bukti_laporan = $path;
+            // Simpan file PDF
+        if ($request->hasFile('bukti_laporan')) {
+            $pdfName = 'bukti_laporan_' . $request->progres_laporan . time() . '.' . $request->file('bukti_laporan')->extension();
+             $request->file('bukti_laporan')->storeAs('laporan/' . $request->progres_laporan . '/', $pdfName, 'public');
+        }
+
+            $laporan->bukti_laporan = $pdfName;
         }
 
         $laporan->status_laporan = 'direvisi'; 

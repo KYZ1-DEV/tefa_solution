@@ -105,12 +105,12 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/password', [SekolahController::class, 'updatePassword'])->name('schools.password.update');
         Route::get('/assistance-monitoring', [SekolahController::class, 'monitoringBantuan'])->name('schools.assistance-monitoring');
         Route::get('/progress', [SekolahController::class, 'progress'])->name('progress');
-        Route::get('/information_progress', [SekolahController::class, 'information_progress'])->name('information_progress');
+        Route::get('/information_progress', [SekolahController::class, 'informationProgress'])->name('information_progress');
         Route::post('/laporan', [SekolahController::class, 'storeLaporan'])->name('upload.laporan');
         Route::get('/laporan', [SekolahController::class, 'showInformationProgress'])->name('schools.laporan.show');
         Route::get('/laporan/{id}', [SekolahController::class, 'show'])->name('laporan.show');
-        Route::get('/laporan/{id}/edit', [SekolahController::class, 'edit_laporan'])->name('schools.laporan.edit');
-        Route::put('/laporan/{id}', [SekolahController::class, 'update_laporan'])->name('schools.laporan.update');
+        Route::get('/laporan/{id}/edit', [SekolahController::class, 'editLaporan'])->name('schools.laporan.edit');
+        Route::put('/laporan/{id}', [SekolahController::class, 'updateLaporan'])->name('schools.laporan.update');
         Route::get('/downloadLaporan/{id}', [SekolahController::class, 'downloadLaporanSekolah'])->name('download.Laporan.Sekolah');
         Route::get('/downloadTemplateLaporan', [SekolahController::class, 'downloadTemplateLaporan'])->name('download.template.Laporan');
         

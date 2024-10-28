@@ -78,7 +78,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th style="width: 200px;">Keterangan</th>
+                            <th style="width: 200px;">Keterangan Industri</th>
                             <th style="width: 10px;">:</th>
                             <td class="text-muted">{{ $laporan->keterangan_laporan ?? 'Tidak ada keterangan' }}</td>
                         </tr>
