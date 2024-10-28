@@ -47,11 +47,15 @@
                             <input type="file" class="form-control" id="bukti_laporan" name="bukti_laporan">
                         </div>
                         @if ($laporan->bukti_laporan)
-                            <a href="{{ asset('storage/laporan/'.$laporan->bukti_laporan.'') }}" target="_blank" class="btn btn-link mt-2">Lihat Bukti Lama</a>
+                            <a href="{{ route('download.Laporan.Sekolah', $laporan->id ?? 0) }}"
+                                class="btn btn-outline-primary" download>
+                                <i class="fa fa-download"></i> Unduh
+                            </a>
+                            {{-- <a href="{{ asset('storage/laporan/'.$laporan->bukti_laporan.'') }}" target="_blank" class="btn btn-link mt-2">Lihat Bukti Lama</a> --}}
                         @endif
                     </div>
 
-                    @if ($laporan->status_laporan == 'direvisi')
+                    @if ($laporan->status_laporan == 'revisi')
                         <button type="submit" class="btn mt-3" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Simpan Perubahan</button>
                     @endif
                 </form>

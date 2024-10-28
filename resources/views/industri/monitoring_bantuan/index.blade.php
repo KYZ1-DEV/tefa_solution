@@ -96,7 +96,7 @@
                                         <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
                                             data-bs-target="#laporan{{ $mitra->id }}">
                                             <span class="d-none d-sm-inline">Detail Laporan</span>
-                                            <i class="fa-solid fa-hand-holding-heart d-sm-none"></i>
+                                            <i class="fa-solid fa-circle-info d-sm-none"></i>
                                         </button>
                                     @endif
                                 </div>

@@ -78,7 +78,7 @@
                         </div>
                     </div>
                 @empty
-                    <h1>Tidak ada bantuan</h1>
+                    <h3 class="text-center">Tidak ada bantuan</h3>
                 @endforelse
             </div>
 

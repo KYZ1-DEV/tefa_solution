@@ -129,7 +129,7 @@ class AdminController extends Controller
     // User Management
     public function user()
     {
-        $users = User::all();
+        $users = User::orderBy('created_at', 'desc')->get();
         return view('admin.kelola_user.index', compact('users'));
     }
 
@@ -143,7 +143,7 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:6',
             'role' => 'required',
         ], [
             'name.required' => 'Nama harus diisi!!',
@@ -153,7 +153,6 @@ class AdminController extends Controller
             'email.unique' => 'Email sudah terdaftar!',
             'password.required' => 'Password harus diisi!',
             'password.min' => 'Password minimal 6 karakter!',
-            'password.confirmed' => 'Konfirmasi password tidak cocok!',
             'role.required' => 'Role harus diisi!',
         ]);
 
@@ -181,7 +180,7 @@ class AdminController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
-            'password' => 'nullable|min:6|confirmed', // Password tidak harus diisi, tapi jika diisi harus valid
+            'password' => 'nullable|min:6',
             'role' => 'required',
         ], [
             'name.required' => 'Nama harus diisi!!',
@@ -190,7 +189,6 @@ class AdminController extends Controller
             'email.email' => 'Format email tidak valid!',
             'email.unique' => 'Email sudah terdaftar!',
             'password.min' => 'Password minimal 6 karakter!',
-            'password.confirmed' => 'Konfirmasi password tidak cocok!',
             'role.required' => 'Role harus diisi!',
         ]);
 
@@ -220,7 +218,7 @@ class AdminController extends Controller
     // School Management// Menampilkan data sekolah
     public function dataSekolah()
     {
-        $sekolah = Sekolah::all();
+        $sekolah = Sekolah::orderBy('created_at', 'desc')->get();
         return view('admin.data_sekolah.index', compact('sekolah'));
     }
 
@@ -334,7 +332,7 @@ class AdminController extends Controller
     // Industry Management
     public function dataIndustri()
     {
-        $industri = Industri::all();
+        $industri = Industri::orderBy('created_at', 'desc')->get();
         return view('admin.data_industri.index', compact('industri'));
     }
 
@@ -380,7 +378,7 @@ class AdminController extends Controller
 
         $request->validate([
             'nama_industri' => 'required|string|max:50',
-            'npwp' => 'required|integer|max:15',
+            'npwp' => 'required|integer',
             'skdp' => 'required',
             'email' => 'required',
             'alamat' => 'required',
@@ -390,7 +388,6 @@ class AdminController extends Controller
         ], [
             'nama_industri.max' => 'maxsimal kata yang boleh di masukan tidak lebih dari 50',
             'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
-            'npwp.max' => 'maximal nomer npwp adalah 15 digit',
             'no_tlpn_industri' => 'maxsimal nomer telepon adalah 13 digit',
             'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
         ]);
@@ -499,7 +496,6 @@ class AdminController extends Controller
         $request->validate(
             [
                 'nama_mitra' => 'required|string|max:50',
-
 
             ],
             [

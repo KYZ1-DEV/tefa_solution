@@ -51,10 +51,18 @@
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Progres</h6>
             <a class="collapse-item" href="{{ route('progress') }}">Kirim Laporan</a>
-            <a class="collapse-item" href="{{ route('information_progress') }}">Keterangan</a>
+            <a class="collapse-item" href="{{ route('information_progress') }}">Keterangan Laporan</a>
             <div class="collapse-divider"></div>
         </div>
     </div>
+</li>
+
+<hr class="sidebar-divider d-none d-md-block">
+<li class="nav-item">
+<a class="btn-sidebar nav-link" href="{{ route('download.template.Laporan') }}" download>
+        <i class="fas fa-fw fa-download"></i>
+        <span>Download Template</span>
+    </a>
 </li>
 
 <!-- Divider -->
