@@ -111,7 +111,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/laporan/{id}', [SekolahController::class, 'show'])->name('laporan.show');
         Route::get('/laporan/{id}/edit', [SekolahController::class, 'edit_laporan'])->name('schools.laporan.edit');
         Route::put('/laporan/{id}', [SekolahController::class, 'update_laporan'])->name('schools.laporan.update');
-    
+        Route::get('/downloadLaporan/{id}', [SekolahController::class, 'downloadLaporanSekolah'])->name('download.Laporan.Sekolah');
+        Route::get('/downloadTemplateLaporan', [SekolahController::class, 'downloadTemplateLaporan'])->name('download.template.Laporan');
+        
         // Route::post('/laporan/{id}/update-status', [IndustriController::class, 'updateLaporanStatus'])->name('laporan.update.status');
     });
 });

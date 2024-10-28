@@ -270,7 +270,7 @@ class IndustriController extends Controller
 
             $mitraSekolahIds = Mitra::where('status_mitra', 'aktif')->pluck('id_sekolah')->toArray();
 
-            $bantuan = Bantuan::all();
+            $bantuan = Bantuan::where('id_industri',$industri->id)->get();
 
             return view("industri.list_sekolah.index", compact('users', 'sekolahs', 'bantuan', 'mitraSekolahIds'));
         }
@@ -310,6 +310,7 @@ class IndustriController extends Controller
                 $durasi = 3;
                 break;
         }
+
         $mitra->durasi_bermitra = now()->addYears($durasi);
         $mitra->progres_bermitra = '0%';
         $mitra->status_mitra = 'non-aktif';
@@ -331,7 +332,7 @@ class IndustriController extends Controller
 
         $mitra->save();
 
-        return redirect()->back()->with('success', 'Data bantuan berhasil disimpan.');
+        return redirect()->route('industries.assistance-monitoring')->with('success', 'Sekolah berhasil diberi bantuan.');
     }
 
 
@@ -344,13 +345,11 @@ class IndustriController extends Controller
 
 
         if ($industri) {
-
             $search = $request->input('search');
-
             if ($search) {
                 $bantuan = Bantuan::where('jenis_bantuan', 'like', '%' . $search . '%')->get();
             } else {
-                $bantuan = Bantuan::all();
+                $bantuan = Bantuan::where('id_industri',$industri->id)->get();
             }
             return view('industri.bantuan.index', compact('bantuan'));
         }

@@ -9,6 +9,24 @@
 
 <!-- Begin Page Content -->
 <div class="container">
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $item )
+                <li>{{ $item }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+@if (Session::get('success'))
+    <div class="alert alert-success alert-dismissible fade show">
+        <ul>
+            <li>{{ Session::get('success') }}</li>
+        </ul>
+    </div>
+@endif
+
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
@@ -28,12 +46,12 @@
                 @csrf
                 <div class="form-group">
                     <label for="name">Nama</label>
-                    <input type="text" name="name" class="form-control" required>
+                    <input type="text" name="name" value="{{ old('name') }}" class="form-control" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" class="form-control" required>
+                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
                 </div>
 
                 <div class="form-group">
@@ -51,7 +69,7 @@
 
                 <div class="form-group">
                     <label for="role">Role</label>
-                    <select name="role" class="form-control" required>
+                    <select name="role"  class="form-control" required>
                         <option value="admin">Admin</option>
                         <option value="industri">Industri</option>
                         <option value="sekolah">Sekolah</option>

@@ -7,8 +7,6 @@ use App\Models\Mitra;
 use App\Models\Bantuan;
 use App\Models\Laporan;
 use App\Models\Sekolah;
-use App\Models\Bantuan;
-use App\Models\Mitra;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -115,6 +113,61 @@ class SekolahController extends Controller
         return redirect()->route('schools.profile.show')->with('success', 'Edit Profile Berhasil');
     }
 
+    public function downloadLaporanSekolah($id)
+    {
+        $laporan = Laporan::find($id);
+    
+        if ($laporan && $laporan->bukti_laporan) {
+            // Path file berdasarkan data dari database
+            $filePath = 'laporan/' . $laporan->progres_laporan . '/' . $laporan->bukti_laporan;
+            $absolutePath = storage_path('app/public/' . $filePath);
+    
+            if (Storage::disk('public')->exists($filePath)) {
+                return response()->streamDownload(function () use ($absolutePath) {
+                    echo file_get_contents($absolutePath);
+                }, basename($filePath), [
+                    'Content-Type' => mime_content_type($absolutePath),
+                    'Content-Disposition' => 'attachment; filename="' . basename($filePath) . '"'
+                ]);
+            }
+        }
+    
+        // Jika file laporan tidak ditemukan, gunakan file template sebagai cadangan
+        $defaultFile = 'template/template_laporan.pdf';
+        $defaultFilePath = storage_path('app/public/' . $defaultFile);
+    
+        if (Storage::disk('public')->exists($defaultFile)) {
+            return response()->streamDownload(function () use ($defaultFilePath) {
+                echo file_get_contents($defaultFilePath);
+            }, basename($defaultFile), [
+                'Content-Type' => mime_content_type($defaultFilePath),
+                'Content-Disposition' => 'attachment; filename="' . basename($defaultFile) . '"'
+            ]);
+        }
+    
+        return redirect()->back()->with('error', 'File tidak ditemukan!');
+    }
+
+    public function downloadTemplateLaporan()
+    {
+        $defaultFile = 'template/template_laporan.pdf';
+    
+        // Path absolut file dalam storage
+        $filePath = storage_path('app/public/' . $defaultFile);
+    
+        // Periksa apakah file ada
+        if (file_exists($filePath)) {
+            return response()->streamDownload(function () use ($filePath) {
+                echo file_get_contents($filePath);
+            }, basename($defaultFile), [
+                'Content-Type' => mime_content_type($filePath),
+                'Content-Disposition' => 'attachment; filename="' . basename($defaultFile) . '"'
+            ]);
+        }
+    
+        return redirect()->back()->with('error', 'File tidak ditemukan!');
+    }
+
     // Tampilkan halaman ubah password Sekolah
     public function password()
     {
@@ -181,7 +234,7 @@ class SekolahController extends Controller
 
         $checkMitra = Mitra::where('id_sekolah', $sekolah->id)->first();
         if (!$checkMitra) {
-            return redirect()->route('schools.assistance-monitoring')->with('info', 'Belum ada bantuan dari industri !');
+            return redirect()->route('schools.assistance-monitoring')->with('error', 'Belum ada bantuan dari industri !');
         }
 
         // Ambil semua bantuan yang sesuai dengan sekolah ini
@@ -334,7 +387,7 @@ class SekolahController extends Controller
 
         $laporan = Laporan::where('id', $id)
             ->where('id_sekolah', $sekolah->id)
-            ->where('status_laporan', 'direvisi') // Pastikan hanya laporan dengan status "direvisi" yang bisa diedit
+            ->where('status_laporan', 'revisi') // Pastikan hanya laporan dengan status "direvisi" yang bisa diedit
             ->first();
 
         if (!$laporan) {
@@ -364,7 +417,7 @@ class SekolahController extends Controller
         // Ambil laporan berdasarkan ID dan validasi status
         $laporan = Laporan::where('id', $id)
             ->where('id_sekolah', $sekolah->id)
-            ->where('status_laporan', 'direvisi') // Hanya memperbarui laporan dengan status "direvisi"
+            ->where('status_laporan', 'revisi') // Hanya memperbarui laporan dengan status "direvisi"
             ->first();
 
         if (!$laporan) {
@@ -397,9 +450,11 @@ class SekolahController extends Controller
 
             // Simpan file yang baru
             $file = $request->file('bukti_laporan');
-            $path = $file->store('public/laporan/' .$laporan->progres_laporan. '/');
+            $path = $file->store('storage/laporan/'.$laporan->progres_laporan. '/');
             $laporan->bukti_laporan = $path;
         }
+
+        $laporan->status_laporan = 'direvisi'; 
 
         // Simpan perubahan ke database
         $laporan->save();

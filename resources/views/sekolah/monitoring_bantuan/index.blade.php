@@ -2,6 +2,9 @@
 @section('navItem')
     <x-sekolah></x-sekolah>
 @endsection
+@section('profile')
+    {{ route('schools.profile.show') }}
+@endsection
 
 @section('main')
     <!-- Begin Page Content -->
@@ -18,14 +21,22 @@
             </div>
         @endif
 
+
+    @if (Session::get('error'))
+        <div class="alert alert-danger alert-dismissible fade show">
+            <ul>
+                <li>{{ Session::get('error') }}</li>
+            </ul>
+        </div>
+    @endif
+
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Monitoring Mitra dan Bantuan</h1>
         </div>
 
-        <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-lg-12">
                     <!-- Tabel Mitra -->
                     <table class="table table-bordered table-striped">
                         <thead class="thead" style="background-image: linear-gradient(180deg, #9e30c6 10%, #602fb5 100%);">
@@ -205,6 +216,6 @@
 
                 
             </script>
-        </div>
+        
     </div>
 @endsection

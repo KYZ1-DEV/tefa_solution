@@ -88,18 +88,7 @@
                   </button>
                 </div>
                 <div class="form-group d-md-flex">
-                  <div class="w-50">
-                    <label class="checkbox-wrap" 
-                    style="color: rgb(187, 129, 224);"
-                      
-                    >Remember Me
-                      <input type="checkbox" />
-                      <span class="checkmark"></span>
-                    </label>
-                  </div>
-                  <div class="w-50 text-md-right">
-                    <a href="#" style="color: #fff">Forgot Password</a>
-                  </div>
+                  
                 </div>
               </form>
               <p class="w-100 text-center">&mdash; Sign Up &mdash;</p>

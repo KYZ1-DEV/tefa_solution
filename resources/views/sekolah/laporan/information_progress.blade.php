@@ -57,12 +57,14 @@
                                 @elseif ($item->status_laporan == 'diterima')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Diterima</span>
                                 @elseif ($item->status_laporan == 'direvisi')
+                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Direvisi</span>
+                                @elseif ($item->status_laporan == 'revisi')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Revisi</span>
                                 @endif
                             </td>
                             <td>
                                 <a href="{{ route('laporan.show', $item->id) }}" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Detail</a>
-                                @if ($item->status_laporan == 'direvisi')
+                                @if ($item->status_laporan == 'revisi')
                                     <a href="{{ route('schools.laporan.edit', $item->id) }}" class="btn" style="background: linear-gradient(135deg, #f0ad4e, #ec971f); color: white;">Revisi</a>
                                 @endif
                             </td>                                                      

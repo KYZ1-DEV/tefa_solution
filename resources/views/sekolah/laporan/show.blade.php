@@ -51,6 +51,8 @@
                                 @elseif ($laporan->status_laporan == 'diterima')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Diterima</span>
                                 @elseif ($laporan->status_laporan == 'direvisi')
+                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">DI Revisi</span>
+                                @elseif ($laporan->status_laporan == 'revisi')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Revisi</span>
                                 @endif
                             </td>
@@ -66,7 +68,10 @@
                             <th style="width: 10px;">:</th>
                             <td>
                                 @if ($laporan->bukti_laporan)
-                                    <a href="{{ asset('storage/laporan/'.$laporan->progres_laporan.'/'. $laporan->bukti_laporan) }}" target="_blank" class="btn" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Lihat Bukti</a>
+                                    <a href="{{ route('download.Laporan.Sekolah', $laporan->id ?? 0) }}"
+                                        class="btn btn-outline-primary" download>
+                                        <i class="fa fa-download"></i> Unduh
+                                    </a>
                                 @else
                                     <span class="text-danger">Tidak ada bukti</span>
                                 @endif

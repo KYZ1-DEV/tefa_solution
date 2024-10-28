@@ -23,6 +23,16 @@
                 </div>
             @endif
 
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $item )
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
 
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 

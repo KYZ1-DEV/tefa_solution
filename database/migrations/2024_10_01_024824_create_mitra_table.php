@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('status_mitra',['non-aktif','aktif'])->default('non-aktif');
             $table->foreignId('id_sekolah')->constrained('sekolah')->onDelete('cascade');
             $table->foreignId('id_industri')->constrained('industri')->onDelete('cascade');
-            $table->foreignId('id_bantuan')->nullable()->constrained('bantuan')->onDelete('set null');
+            $table->foreignId('id_bantuan')->nullable()->constrained('bantuan')->onDelete('cascade');
             $table->timestamps();
         });
     }

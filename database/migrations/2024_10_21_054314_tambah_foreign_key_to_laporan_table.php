@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('laporan', function (Blueprint $table) {
             // Menambahkan foreign key ke tabel 'bantuan'
-            $table->foreignId('id_bantuan')->nullable()->after('id_sekolah')->constrained('bantuan')->onDelete('set null');
+            $table->foreignId('id_bantuan')->nullable()->after('id_sekolah')->constrained('bantuan')->onDelete('cascade');
         });
     }
 
