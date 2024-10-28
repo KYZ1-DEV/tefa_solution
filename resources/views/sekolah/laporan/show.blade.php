@@ -69,7 +69,7 @@
                             <td>
                                 @if ($laporan->bukti_laporan)
                                     <a href="{{ route('download.Laporan.Sekolah', $laporan->id ?? 0) }}"
-                                        class="btn btn-outline-primary" download>
+                                        class="btn btn-outline-primary mt-1" download>
                                         <i class="fa fa-download"></i> Unduh
                                     </a>
                                 @else
@@ -78,7 +78,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th style="width: 200px;">Keterangan</th>
+                            <th style="width: 200px;">Keterangan Industri</th>
                             <th style="width: 10px;">:</th>
                             <td class="text-muted">{{ $laporan->keterangan_laporan ?? 'Tidak ada keterangan' }}</td>
                         </tr>

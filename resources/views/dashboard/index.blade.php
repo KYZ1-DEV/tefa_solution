@@ -235,7 +235,7 @@
                         successAlert.classList.add('hide');
                         successAlert.style.display = 'none';
                     }, 500);
-                }, 3500);
+                }, 4500);
             }
         });
 

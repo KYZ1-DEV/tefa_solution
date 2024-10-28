@@ -79,7 +79,7 @@
                                         <span class="status-active"
                                             style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: red;
                                                    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
-                                            Laporan Belum Ada
+                                            Belum Ada Laporan
                                         </span>
                                     @endif
                                     </div>
