@@ -43,7 +43,7 @@
 
                     <div class="form-group">
                         <label for="bukti_laporan" class="form-label">Bukti Laporan</label>
-                        <div class="input-group">
+                        <div class="input-group mb-1">
                             <input type="file" class="form-control" id="bukti_laporan" name="bukti_laporan">
                         </div>
                         @if ($laporan->bukti_laporan)

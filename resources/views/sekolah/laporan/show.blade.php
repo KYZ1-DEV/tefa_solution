@@ -69,7 +69,7 @@
                             <td>
                                 @if ($laporan->bukti_laporan)
                                     <a href="{{ route('download.Laporan.Sekolah', $laporan->id ?? 0) }}"
-                                        class="btn btn-outline-primary" download>
+                                        class="btn btn-outline-primary mt-1" download>
                                         <i class="fa fa-download"></i> Unduh
                                     </a>
                                 @else
