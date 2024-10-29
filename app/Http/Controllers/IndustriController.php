@@ -188,7 +188,7 @@ class IndustriController extends Controller
     {
         // Validasi input
         $request->validate([
-            'status_mitra' => 'required|in:aktif,non-aktif',
+            'status_mitra' => 'required|in:aktif,non-aktif,selesai',
         ],[
             'status_mitra.required' => 'Silahkan berikan perubahan!',
         ]);
@@ -224,6 +224,9 @@ class IndustriController extends Controller
             ->first();
 
             $mitra->progres_bermitra = $laporan->progres_laporan;
+            if ($mitra->progres_bermitra == '100%') {
+                $mitra->status_mitra = 'selesai';
+            }
             $mitra->save();
         }
 
@@ -241,11 +244,11 @@ class IndustriController extends Controller
     public function downloadLaporan($id)
     {
         $laporan = Laporan::find($id);
-    
+
         if ($laporan && $laporan->bukti_laporan) {
             $filePath = 'laporan/' . $laporan->progres_laporan . '/' . $laporan->bukti_laporan;
             $absolutePath = storage_path('app/public/' . $filePath);
-    
+
             if (Storage::disk('public')->exists($filePath)) {
                 return response()->streamDownload(function () use ($absolutePath) {
                     echo file_get_contents($absolutePath);
@@ -255,11 +258,11 @@ class IndustriController extends Controller
                 ]);
             }
         }
-    
+
         // Jika file laporan tidak ditemukan, gunakan file template sebagai cadangan
         $defaultFile = 'template/template_laporan.pdf';
         $defaultFilePath = storage_path('app/public/' . $defaultFile);
-    
+
         if (Storage::disk('public')->exists($defaultFile)) {
             return response()->streamDownload(function () use ($defaultFilePath) {
                 echo file_get_contents($defaultFilePath);
@@ -268,7 +271,7 @@ class IndustriController extends Controller
                 'Content-Disposition' => 'attachment; filename="' . basename($defaultFile) . '"'
             ]);
         }
-    
+
         return redirect()->back()->with('error', 'File tidak ditemukan!');
     }
 
