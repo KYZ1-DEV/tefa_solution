@@ -51,7 +51,7 @@
                                 @elseif ($laporan->status_laporan == 'diterima')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Diterima</span>
                                 @elseif ($laporan->status_laporan == 'direvisi')
-                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">DI Revisi</span>
+                                    <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Direvisi</span>
                                 @elseif ($laporan->status_laporan == 'revisi')
                                     <span class="badge" style="background: linear-gradient(135deg, #6a1b9a, #ab47bc); color: white;">Revisi</span>
                                 @endif

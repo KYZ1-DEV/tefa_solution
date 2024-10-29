@@ -244,7 +244,7 @@ class SekolahController extends Controller
             ->first();
 
         if ($laporanTerakhir && $laporanTerakhir->status_laporan !== 'diterima') {
-            return redirect()->route('information_progress')->with('error', 'Anda hanya bisa mengakses halaman progres jika laporan terakhir Anda sudah diterima.');
+            return redirect()->route('information_progress')->with('error', 'Anda hanya bisa mengakses halaman kirim laporan jika laporan terakhir Anda sudah diterima.');
         }
         
         $defaultProgress = '0%';

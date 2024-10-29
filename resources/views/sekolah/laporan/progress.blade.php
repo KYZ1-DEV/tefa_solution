@@ -59,7 +59,7 @@
                     <div class="mb-4">
                         <label for="bukti_laporan" class="form-label">Bukti Laporan PDF:</label>
                         <div class="input-group">
-                            <input type="file" class="form-control" id="bukti_laporan" name="bukti_laporan" required>
+                            <input type="file" class="form-control" id="bukti_laporan"  accept="application/pdf" name="bukti_laporan" required>
                             <label class="input-group-text" for="bukti_laporan">Browse</label>
                         </div>
                     </div>

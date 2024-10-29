@@ -43,10 +43,11 @@
 
                     <div class="form-group">
                         <label for="bukti_laporan" class="form-label">Bukti Laporan</label>
-                        <div class="input-group mb-1">
-                            <input type="file" class="form-control" id="bukti_laporan" name="bukti_laporan">
+                        <div class="input-group mb-3">
+                            <input type="file" class="form-control" id="bukti_laporan"  accept="application/pdf" name="bukti_laporan">
                         </div>
                         @if ($laporan->bukti_laporan)
+                        Lihat Laporan lama :
                             <a href="{{ route('download.Laporan.Sekolah', $laporan->id ?? 0) }}"
                                 class="btn btn-outline-primary" download>
                                 <i class="fa fa-download"></i> Unduh
