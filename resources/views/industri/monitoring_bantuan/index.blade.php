@@ -58,7 +58,7 @@
 
                                         <span class="status-active"
                                             style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
-                                                 color: {{ $mitra->status_mitra == 'aktif' ? 'green' : 'red' }};
+                                                 color: {{ $mitra->status_mitra !== 'non-aktif' ? 'green' : 'red' }};
                                                  background-color: transparent;">
                                             {{ ucfirst($mitra->status_mitra) }}
                                         </span>
@@ -68,17 +68,23 @@
                                             Jenis Bantuan:
                                             {{ $mitra->bantuan ? $mitra->bantuan->jenis_bantuan : 'Tidak ada bantuan' }}
                                         </span>
-                                        @if(isset($mitra->laporan) && $mitra->laporan->status_laporan !== 'revisi')
+                                        @if($mitra->progres_bermitra == '100%')
+                                        <span class="status-complete"
+                                              style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
+                                                     color: green; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
+                                            Mitra Sudah Selesai
+                                        </span>
+                                    @elseif(isset($mitra->laporan) && $mitra->laporan->status_laporan !== 'revisi')
                                         <span class="status-active"
-                                            style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
-                                                   color: {{ $mitra->laporan->status_laporan == 'diterima' ? 'green' : 'yellow' }};
-                                                   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
+                                              style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
+                                                     color: {{ $mitra->laporan->status_laporan == 'diterima' ? 'green' : 'yellow' }};
+                                                     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
                                             Laporan {{ ucfirst($mitra->laporan->status_laporan) }}
                                         </span>
                                     @elseif(!isset($mitra->laporan))
                                         <span class="status-active"
-                                            style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: red;
-                                                   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
+                                              style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: red;
+                                                     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
                                             Belum Ada Laporan
                                         </span>
                                     @endif
@@ -155,34 +161,46 @@
                                                 <label class="col-sm-4 col-form-label"><strong>Progres
                                                         Bermitra</strong></label>
                                                 <div class="col-sm-8">
-                                                    <Label>: {{ $mitra->progres_bermitra }}</Label>
+                                                    <div class="form-control-plaintext">:
+                                                        {{ $mitra->progres_bermitra }}</div>
                                                 </div>
                                             </div>
-
+                                            @if ($mitra->progres_bermitra !== '100%')
                                                 <form action="{{ route('mitra.update', $mitra->id) }}" method="POST">
                                                     @csrf
                                                     @method('PUT')
-                                                        <div class="mb-3 row">
-                                                            <label class="col-sm-4 col-form-label"><strong>Status
-                                                                    Mitra</strong></label>
-                                                            <div class="col-sm-8">
-                                                                <select name="status_mitra" id="status_mitra" class="form-control">
-                                                                    <option value="aktif"
-                                                                        {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
-                                                                        Aktif</option>
-                                                                    <option value="non-aktif"
-                                                                        {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
-                                                                        Non-Aktif</option>
-                                                                </select>
-                                                            </div>
+                                                    <div class="mb-3 row">
+                                                        <label class="col-sm-4 col-form-label"><strong>Status
+                                                                Mitra</strong></label>
+                                                        <div class="col-sm-8">
+                                                            <select name="status_mitra" id="status_mitra"
+                                                                class="form-control">
+                                                                <option value="aktif"
+                                                                    {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
+                                                                    Aktif</option>
+                                                                <option value="non-aktif"
+                                                                    {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
+                                                                    Non-Aktif</option>
+                                                            </select>
                                                         </div>
+                                                    </div>
 
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-danger"
                                                             data-bs-dismiss="modal">Close</button>
                                                         <button type="submit" class="btn btn-primary">Simpan</button>
                                                     </div>
-                                            </form>
+                                                </form>
+                                            @else
+                                                <div class="mb-3 row">
+                                                    <label class="col-sm-4 col-form-label"><strong>Status
+                                                            Bermitra</strong></label>
+                                                    <div class="col-sm-8">
+                                                        <div class="form-control-plaintext">:
+                                                            {{ $mitra->status_mitra }}</div>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
