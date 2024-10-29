@@ -176,6 +176,58 @@
         </div>
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mengambil elemen dengan class 'alert-success'
+            var successAlerts = document.getElementsByClassName('alert-success');
+
+            // Pastikan ada elemen dengan class 'alert-success'
+            if (successAlerts.length > 0) {
+                // Ambil elemen pertama jika ada lebih dari satu
+                var successAlert = successAlerts[0];
+
+                setTimeout(function() {
+                    successAlert.classList.add('show');
+                }, 100);
+
+                setTimeout(function() {
+                    successAlert.classList.remove('show');
+                    successAlert.classList.add('fade-out');
+
+                    setTimeout(function() {
+                        successAlert.classList.add('hide');
+                        successAlert.style.display = 'none';
+                    }, 500);
+                }, 4500);
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mengambil elemen dengan class 'alert-success'
+            var dangerAlert = document.getElementsByClassName('alert-danger');
+
+            // Pastikan ada elemen dengan class 'alert-success'
+            if (dangerAlert.length > 0) {
+                // Ambil elemen pertama jika ada lebih dari satu
+                var dangerAlert = dangerAlert[0];
+
+                setTimeout(function() {
+                    dangerAlert.classList.add('show');
+                }, 100);
+
+                setTimeout(function() {
+                    dangerAlert.classList.remove('show');
+                    dangerAlert.classList.add('fade-out');
+
+                    setTimeout(function() {
+                        dangerAlert.classList.add('hide');
+                        dangerAlert.style.display = 'none';
+                    }, 500);
+                }, 7500);
+            }
+        });
+    </script>
+
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('dashboard/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('dashboard/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
