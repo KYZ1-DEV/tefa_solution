@@ -189,16 +189,13 @@ class IndustriController extends Controller
         // Validasi input
         $request->validate([
             'status_mitra' => 'required|in:aktif,non-aktif',
-            'progres_mitra' => 'required|in:0%,50%,100%',
         ],[
             'status_mitra.required' => 'Silahkan berikan perubahan!',
-            'progres_mitra.required' => 'Silahkan Berikan Perubahan',
         ]);
 
         $mitra = Mitra::findOrFail($id);
 
         $mitra->status_mitra = $request->input('status_mitra');
-        $mitra->progres_bermitra = $request->input('progres_mitra');
 
         $mitra->save();
 
@@ -216,6 +213,22 @@ class IndustriController extends Controller
         ]);
 
         $laporan = Laporan::findOrFail($id);
+
+        $mitra = Mitra::where('id_sekolah', $laporan->id_sekolah)
+            ->where('id_bantuan', $laporan->id_bantuan)
+            ->first();
+
+        if($request->status_laporan === 'diterima'){
+            $mitra = Mitra::where('id_sekolah', $laporan->id_sekolah)
+            ->where('id_bantuan', $laporan->id_bantuan)
+            ->first();
+
+            $mitra->progres_bermitra = $laporan->progres_laporan;
+            $mitra->save();
+        }
+
+        // dd($mitra);
+
 
         $laporan->status_laporan = $request->input('status_laporan');
         $laporan->keterangan_laporan = $request->input('keterangan_laporan');

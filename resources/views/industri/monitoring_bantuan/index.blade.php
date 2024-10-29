@@ -155,44 +155,33 @@
                                                 <label class="col-sm-4 col-form-label"><strong>Progres
                                                         Bermitra</strong></label>
                                                 <div class="col-sm-8">
-                                                    {{-- <div class="form-control-plaintext">:
-                                                        {{ $mitra->progres_bermitra }}</div> --}}
-                                                    <form action="{{ route('mitra.update', $mitra->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <select name="progres_mitra" id="progres_mitra"
-                                                            class="form-control">
-                                                            <option value="0%"
-                                                                {{ $mitra->progres_bermitra == '0%' ? 'selected' : '' }}>
-                                                                0%</option>
-                                                            <option value="50%"
-                                                                {{ $mitra->progres_bermitra == '50%' ? 'selected' : '' }}>
-                                                                50%</option>
-                                                            <option value="100%"
-                                                                {{ $mitra->progres_bermitra == '100%' ? 'selected' : '' }}>
-                                                                100%</option>
-                                                        </select>
+                                                    <Label>: {{ $mitra->progres_bermitra }}</Label>
                                                 </div>
                                             </div>
-                                            <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Status
-                                                        Mitra</strong></label>
-                                                <div class="col-sm-8">
-                                                    <select name="status_mitra" id="status_mitra" class="form-control">
-                                                        <option value="aktif"
-                                                            {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
-                                                            Aktif</option>
-                                                        <option value="non-aktif"
-                                                            {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
-                                                            Non-Aktif</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger"
-                                                    data-bs-dismiss="modal">Close</button>
-                                                <button type="submit" class="btn btn-primary">Simpan</button>
-                                            </div>
+
+                                                <form action="{{ route('mitra.update', $mitra->id) }}" method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                        <div class="mb-3 row">
+                                                            <label class="col-sm-4 col-form-label"><strong>Status
+                                                                    Mitra</strong></label>
+                                                            <div class="col-sm-8">
+                                                                <select name="status_mitra" id="status_mitra" class="form-control">
+                                                                    <option value="aktif"
+                                                                        {{ $mitra->status_mitra == 'aktif' ? 'selected' : '' }}>
+                                                                        Aktif</option>
+                                                                    <option value="non-aktif"
+                                                                        {{ $mitra->status_mitra == 'non-aktif' ? 'selected' : '' }}>
+                                                                        Non-Aktif</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-danger"
+                                                            data-bs-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary">Simpan</button>
+                                                    </div>
                                             </form>
                                         </div>
                                     </div>
