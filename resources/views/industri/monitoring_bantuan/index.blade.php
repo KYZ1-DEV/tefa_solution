@@ -91,8 +91,8 @@
                                         <span class="d-none d-sm-inline">Detail Mitra</span>
                                         <i class="fa-solid fa-eye d-sm-none"></i>
                                     </button>
-
-                                    @if ($mitra->status_mitra == 'aktif')
+                                    {{-- @dd($mitra->laporan) --}}
+                                    @if ($mitra->status_mitra == 'aktif' && $mitra->laporan && $mitra->laporan->status_laporan !== 'revisi')
                                         <button type="button" class="btn btn-gradient me-2" data-bs-toggle="modal"
                                             data-bs-target="#laporan{{ $mitra->id }}">
                                             <span class="d-none d-sm-inline">Detail Laporan</span>
