@@ -200,15 +200,15 @@ class SekolahController extends Controller
     public function monitoringBantuan(Request $request)
      {
         $auth = Auth::user();
-        $sekolah = Sekolah::where('id_user',$auth->id)->first();
+        $sekolah = Sekolah::where('id_user',$auth->id)->first();    
         if(is_null($sekolah)){
             return redirect()->route('schools.profile.show')->with('error','Lengkapi data Sekolah terlebih dahulu !!!');
         }
 
-        $mitras = Mitra::where('status_mitra', 'aktif')
-               ->where('id_sekolah', $sekolah->id)
-               ->with('industri', 'bantuan')
-               ->get();
+        $mitras = Mitra::whereIn('status_mitra', ['aktif', 'selesai'])
+        ->where('id_sekolah', $sekolah->id)
+        ->with('industri', 'bantuan')
+        ->get();
         
 
          // Tampilkan ke view bersama data pencarian
@@ -229,8 +229,9 @@ class SekolahController extends Controller
         }
 
         $checkMitra = Mitra::where('id_sekolah', $sekolah->id)->first();
-        if (!$checkMitra) {
-            return redirect()->route('schools.assistance-monitoring')->with('error', 'Belum ada bantuan dari industri !');
+
+        if (!$checkMitra || in_array($checkMitra->status_mitra, ['non-aktif', 'selesai'])) {
+            return redirect()->route('schools.assistance-monitoring')->with('error', 'Belum ada bantuan dari industri!');
         }
 
         // Ambil semua bantuan yang sesuai dengan sekolah ini
