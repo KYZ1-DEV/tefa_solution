@@ -209,7 +209,7 @@
 
                             <div class="modal fade" id="laporan{{ $mitra->id }}" tabindex="-1"
                                 aria-labelledby="exampleModalLabel{{ $mitra->id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-scrollable">
+                                <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel{{ $mitra->id }}">Laporan
@@ -264,45 +264,36 @@
                                                 <li class="list-group-item text-center">Belum Ada Laporan!</li>
                                             @endif
 
-                                            <hr>
-                                            @if (isset($mitra->laporan))
-                                                <!-- Form Status dan Keterangan Laporan -->
-                                                <form action="{{ route('laporan.update', $mitra->laporan->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <!-- Status Laporan -->
-                                                    <div class="mb-1">
-                                                        <label for="statusLaporan" class="form-label"><strong>Status
-                                                                Laporan</strong></label>
-                                                        <select name="status_laporan" id="statusLaporan"
-                                                            class="form-control">
-                                                            <option value="dikirim"
-                                                                {{ $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>
-                                                                Dikirim</option>
-                                                            <option value="diterima"
-                                                                {{ $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>
-                                                                Diterima</option>
-                                                            <option value="revisi"
-                                                                {{ $mitra->laporan->status_laporan == 'revisi' ? 'selected' : '' }}>
-                                                                Revisi</option>
-                                                        </select>
-                                                    </div>
 
-                                                    <!-- Keterangan Laporan -->
-                                                    <div class="mb-3">
-                                                        <label for="keterangan_laporan"
-                                                            class="form-label"><strong>Keterangan Laporan</strong></label>
-                                                        <textarea name="keterangan_laporan" id="keterangan_laporan" class="form-control" cols="30" rows="5">{{ $mitra->laporan->keterangan_laporan }}</textarea>
-                                                    </div>
+                                            @if (isset($mitra->laporan) && $mitra->laporan->status_laporan !== 'diterima')
+    <!-- Form Status dan Keterangan Laporan -->
+    <hr>
+    <form action="{{ route('laporan.update', $mitra->laporan->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <!-- Status Laporan -->
+        <div class="mb-1">
+            <label for="statusLaporan" class="form-label"><strong>Status Laporan</strong></label>
+            <select name="status_laporan" id="statusLaporan" class="form-control">
+                <option value="dikirim" {{ $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                <option value="diterima" {{ $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>Diterima</option>
+                <option value="revisi" {{ $mitra->laporan->status_laporan == 'revisi' ? 'selected' : '' }}>Revisi</option>
+            </select>
+        </div>
 
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-danger"
-                                                            data-bs-dismiss="modal">Tutup</button>
-                                                        <button type="submit" class="btn btn-primary">Simpan</button>
-                                                    </div>
-                                                </form>
-                                            @endif
+        <!-- Keterangan Laporan -->
+        <div class="mb-3">
+            <label for="keterangan_laporan" class="form-label"><strong>Keterangan Laporan</strong></label>
+            <textarea name="keterangan_laporan" id="keterangan_laporan" class="form-control" cols="30" rows="5">{{ $mitra->laporan->keterangan_laporan }}</textarea>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tutup</button>
+            <button type="submit" class="btn btn-primary">Simpan</button>
+        </div>
+    </form>
+@endif
+
 
                                         </div>
                                     </div>
