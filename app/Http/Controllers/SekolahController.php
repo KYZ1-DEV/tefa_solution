@@ -228,12 +228,11 @@ class SekolahController extends Controller
             return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
         }
 
-        $checkMitra = Mitra::where('id_sekolah', $sekolah->id)->first();
+        $checkMitra = Mitra::where('id_sekolah', $sekolah->id)->get();
 
-        if (!$checkMitra || in_array($checkMitra->status_mitra, ['non-aktif', 'selesai'])) {
+        if ($checkMitra->isEmpty() || !$checkMitra->contains('status_mitra', 'aktif')) {
             return redirect()->route('schools.assistance-monitoring')->with('error', 'Belum ada bantuan dari industri!');
         }
-
         // Ambil semua bantuan yang sesuai dengan sekolah ini
         $mitra = Mitra::where('id_sekolah', $sekolah->id)
             ->where('status_mitra', 'aktif')
