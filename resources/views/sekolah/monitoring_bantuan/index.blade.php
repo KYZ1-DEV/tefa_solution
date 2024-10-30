@@ -38,6 +38,7 @@
                             <th style="color: white;">No</th>
                             <th style="color: white;">Nama Mitra</th>
                             <th style="color: white;">Nama Industri</th>
+                            <th style="color: white;">Status Mitra</th>
                             <th style="color: white;">Aksi</th>
                         </tr>
                     </thead>
@@ -47,6 +48,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $mitra->nama_mitra ?? 'Nama Mitra Tidak Tersedia' }}</td>
                                 <td>{{ $mitra->industri->nama_industri ?? 'Industri Tidak Tersedia' }}</td>
+                                
+                                <td style="color: green; font-size: 16px;">{{ $mitra->status_mitra}}</td>
                                 <td>
                                     <button class="btn btn-gradient beri-mitra-btn" data-bs-toggle="modal"
                                             data-bs-target="#modalDetailMitra"
