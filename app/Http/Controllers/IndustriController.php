@@ -175,7 +175,7 @@ class IndustriController extends Controller
                 return view('industri.monitoring_bantuan.notfound');
             }
 
-            dd($mitraList);
+            // dd($mitraList);
             return view('industri.monitoring_bantuan.index', compact('mitraList', 'search'));
         }
 
