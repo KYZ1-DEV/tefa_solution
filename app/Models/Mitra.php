@@ -16,7 +16,7 @@ class Mitra extends Model
     protected $table = 'mitra';
 
     protected $fillable = [
-        'nama_mitra',
+        'program_kemitraan',
         'tanggal_bermitra',
         'periode_bermitra',
         'durasi_bermitra',
@@ -24,7 +24,7 @@ class Mitra extends Model
         'status_mitra',
         'id_sekolah',
         'id_industri',
-        'id_bantuan',
+        'id_bantuan'
     ];
 
     public function sekolah()
@@ -44,7 +44,7 @@ class Mitra extends Model
     
     public function laporan()
     {
-        return $this->hasOne(Laporan::class, 'id_bantuan', 'id_bantuan');
+        return $this->hasOne(Laporan::class, 'id_mitra', 'id');
     }
 
 

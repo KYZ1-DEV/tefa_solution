@@ -39,7 +39,7 @@
                 <table class="table table-sm table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead class="thead-light">
                         <tr>
-                            <th class="text-truncate" style="max-width: 70px; font-size: 12px;">Nama Mitra</th>
+                            <th class="text-truncate" style="max-width: 70px; font-size: 12px;">Program Kemitraan</th>
                             <th class="text-truncate" style="max-width: 120px; font-size: 12px;">Tanggal Bermitra</th>
                             <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Periode Bermitra</th>
                             <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Durasi Bermitra</th>
@@ -51,7 +51,7 @@
                     <tbody>
                         @forelse ($mitra as $data_mitra)
                         <tr>
-                            <td class="text-truncate" style="max-width: 70px; font-size: 12px;">{{ $data_mitra->nama_mitra }}</td>
+                            <td class="text-truncate" style="max-width: 70px; font-size: 12px;">{{ $data_mitra->program_kemitraan }}</td>
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_mitra->tanggal_bermitra }}</td>
                             <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_mitra->periode_bermitra }}</td>
                             <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_mitra->durasi_bermitra }}</td>

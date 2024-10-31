@@ -41,8 +41,8 @@
 
                 <!-- Input Nama Mitra -->
                 <div class="form-group">
-                    <label for="nama_mitra">Nama Mitra</label>
-                    <input type="text" name="nama_mitra" class="form-control" value="{{ $mitra->nama_mitra }}" required>
+                    <label for="program_kemitraan">Program Kemitraan</label>
+                    <input type="text" name="program_kemitraan" class="form-control" value="{{ $mitra->program_kemitraan }}" required>
                 </div>
 
                 <!-- Input Tanggal Bermitra -->

@@ -41,7 +41,7 @@
                         <tr>
                             <th class="text-truncate" style="max-width: 70px; font-size: 12px;">Nama Industri</th>
                             <th class="text-truncate" style="max-width: 120px; font-size: 12px;">NPWP</th>
-                            <th class="text-truncate" style="max-width: 60px; font-size: 12px;">SKDP</th>
+                            <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Akta_Pendirian</th>
                             <th class="text-truncate" style="max-width: 60px; font-size: 12px;">Email</th>
                             <th class="text-truncate" style="max-width: 120px; font-size: 12px;">Bidang Industri</th>
                             <th class="text-truncate" style="max-width: 100px; font-size: 12px;">Verified</th>
@@ -53,7 +53,7 @@
                         <tr>
                             <td class="text-truncate" style="max-width: 70px; font-size: 12px;">{{ $data_industri->nama_industri }}</td>
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_industri->npwp }}</td>
-                            <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_industri->skdp }}</td>
+                            <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_industri->akta_pendirian }}</td>
                             <td class="text-truncate" style="max-width: 60px; font-size: 12px;">{{ $data_industri->email }}</td>
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data_industri->bidang_industri }}</td>
                             <td class="text-truncate text-center" style="max-width: 100px; font-size: 13px; color:{{ $data_industri->verified == 'verified' ? 'green' : 'rgb(233, 182, 73)' }};">{{ $data_industri->verified }}</td>
@@ -65,14 +65,12 @@
                                         @method('PATCH')
                                         <button type="submit" class="btn btn-gradient btn-sm">unverified</button>
                                     </form>
-                                    {{-- <a href="{{ route('admin.industries.unverified', $data_industri->id) }}" class="btn btn-gradient btn-sm">Unverified</a> --}}
                                 @else
                                 <form onsubmit="return confirmVerified(event)" action="{{ route('admin.industries.verified', $data_industri->id) }}" class="d-inline" method="POST">
                                     @csrf
                                     @method('PATCH')
                                     <button type="submit" class="btn btn-gradient btn-sm">verified</button>
                                 </form>
-                                    {{-- <a href="{{ route('admin.industries.verified', $data_industri->id) }}" class="btn btn-gradient btn-sm">Verified</a> --}}
                                 @endif
 
                                 <a href="{{ route('admin.industries.show', $data_industri->id) }}" class="btn btn-gradient btn-sm">Lihat Detail</a>

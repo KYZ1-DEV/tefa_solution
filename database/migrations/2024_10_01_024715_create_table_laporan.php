@@ -20,7 +20,6 @@ return new class extends Migration
             $table->text('deskripsi_laporan')->nullable();
             $table->enum('status_laporan',['dikirim','diterima','direvisi','revisi'])->default('dikirim');
             $table->text('keterangan_laporan')->nullable();
-            $table->foreignId('id_sekolah')->constrained('sekolah')->onDelete('cascade');
             $table->timestamps();
         });
     }

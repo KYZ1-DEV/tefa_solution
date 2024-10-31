@@ -1,7 +1,7 @@
 <?php
 namespace App\Models;
 
-use App\Models\Sekolah;
+use App\Models\Mitra;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,18 +20,12 @@ class Laporan extends Model
         'deskripsi_laporan',
         'status_laporan',
         'keterangan_laporan',
-        'id_sekolah',
-        'id_bantuan'
+        'id_mitra'
     ];
 
-    public function sekolah()
+    public function mitra()
     {
-        return $this->belongsTo(Sekolah::class, 'id_sekolah');
-    }
-    
-    public function bantuan()
-    {
-        return $this->belongsTo(Bantuan::class, 'id_bantuan');
+        return $this->belongsTo(Mitra::class, 'id_mitra');
     }
 
 }

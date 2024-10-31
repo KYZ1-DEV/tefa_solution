@@ -147,9 +147,9 @@
                                                     value="{{ Auth::user()->email }}" readonly>
                                             </div>
                                             <div class="form-group">
-                                                <label for="skdp">SKDP :</label>
-                                                <input type="text" id="skdp" name="skdp" class="form-control"
-                                                    value="{{ isset($industri->skdp) ? $industri->skdp : '' }}" required>
+                                                <label for="akta_pendirian">Akta Pendirian :</label>
+                                                <input type="text" id="akta_pendirian" name="akta_pendirian" class="form-control"
+                                                    value="{{ isset($industri->akta_pendirian) ? $industri->akta_pendirian : '' }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="alamat">Alamat :</label>

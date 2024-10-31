@@ -57,13 +57,6 @@
     </div>
 </li>
 
-<hr class="sidebar-divider d-none d-md-block">
-<li class="nav-item">
-<a class="btn-sidebar nav-link" href="{{ route('download.template.Laporan') }}" download>
-        <i class="fas fa-fw fa-download"></i>
-        <span>Download Template</span>
-    </a>
-</li>
 
 <!-- Divider -->
 <hr class="sidebar-divider d-none d-md-block">

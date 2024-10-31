@@ -24,35 +24,40 @@ class AdminController extends Controller
 
     public function uploadTemplate(Request $request)
     {
-        // Validasi file PDF
+        // Validasi file PDF dan persentase
         $request->validate([
             'template' => 'required|mimes:pdf', // file harus PDF
+            'percentage' => 'required|in:0,50,100', // persentase harus 0, 50, atau 100
         ], [
             'template.required' => 'File template harus di tambahkan!',
             'template.mimes' => 'File harus berupa PDF!',
+            'percentage.required' => 'Pilih persentase laporan!',
+            'percentage.in' => 'Persentase tidak valid!',
         ]);
-
+    
         // Mendapatkan file dari request
         $file = $request->file('template');
-
-        // Nama file yang akan disimpan, dengan ekstensi yang benar
-        $fileName = 'template_laporan.' . $file->getClientOriginalExtension(); // Menambahkan titik sebelum ekstensi
-
-        // Path tempat menyimpan file
-        $path = 'template/' . $fileName;
-
+        $percentage = $request->input('percentage');
+    
+        // Tentukan nama file dan path penyimpanan berdasarkan persentase
+        $fileName = "template_laporan_{$percentage}.pdf";
+        $path = "template/$fileName";
+    
         // Hapus template lama jika ada
         if (Storage::disk('public')->exists($path)) {
             Storage::disk('public')->delete($path); // Hapus file lama
-        }
-
-        // Simpan file baru ke storage/app/public/template
         Storage::disk('public')->put($path, file_get_contents($file));
 
+            return back()->with('success', "File laporan {$percentage}% berhasil di Update!");
+        }
+    
+        // Simpan file baru ke storage/app/public/template
+        Storage::disk('public')->put($path, file_get_contents($file));
+    
         // Jika sukses, kembalikan respon atau redirect ke halaman lain
-        return back()->with('success', 'File berhasil diunggah!');
+        return back()->with('success', "File laporan {$percentage}% berhasil diunggah!");
     }
-
+    
     // Profile Management
     public function profile()
     {
@@ -120,7 +125,7 @@ class AdminController extends Controller
         $user = User::find($request->id);
 
         if ($user) {
-            $user->password = Hash::make($request->newPassword);
+            $user->password = Hash::make(value: $request->newPassword);
             $user->save();
             return redirect()->back()->with('success', 'Password berhasil diperbarui!');
         }
@@ -348,7 +353,7 @@ class AdminController extends Controller
         $request->validate([
             'nama_industri' => 'required|unique:industri|string|max:50',
             'npwp' => 'required|integer|max:15',
-            'skdp' => 'required',
+            'akta_pendirian' => 'required',
             'email' => 'required|email|unique:industri',
             'alamat' => 'required',
             'bidang_industri' => 'required',
@@ -379,7 +384,7 @@ class AdminController extends Controller
         $request->validate([
             'nama_industri' => 'required|string|max:50',
             'npwp' => 'required|integer',
-            'skdp' => 'required',
+            'akta_pendirian' => 'required',
             'email' => 'required',
             'alamat' => 'required',
             'bidang_industri' => 'required',
@@ -438,11 +443,9 @@ class AdminController extends Controller
         $bantuan = Bantuan::all();
 
 
-        // Pass mitra data to the view
         return view('admin.data_mitra.index', compact('mitra', 'sekolah', 'industri', 'bantuan'));
     }
 
-    // Show form to create a new mitra
     public function createMitra()
     {
         $sekolah = Sekolah::all();

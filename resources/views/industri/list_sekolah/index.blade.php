@@ -74,7 +74,7 @@
                                     @endphp
 
                                     <li
-                                        class="list-group-item d-flex flex-column flex-sm-row align-items-center justify-content-between sekolah-item">
+                                        class="list-group-item d-flex flex-column flex-sm-row align-items-center mb-3 justify-content-between sekolah-item">
                                         <div class="d-flex align-items-center mb-2 mb-sm-0">
                                             <img src="{{ $user['gambar'] ? asset('../storage/photo-user/' . $user['gambar']) : asset('gambar/user.png') }}"
                                                 alt="Logo Sekolah" class="img-thumbnail rounded-circle"
@@ -218,10 +218,10 @@
                                                             value="{{ Auth::user()->id }}">
 
                                                         <div class="mb-3">
-                                                            <label for="nama_mitra" class="form-label">Nama Mitra</label>
-                                                            <input type="text" name="nama_mitra"
-                                                                placeholder="Nama Mitra" class="form-control"
-                                                                id="nama_mitra" required>
+                                                            <label for="program_kemitraan" class="form-label">Program Kemitraan</label>
+                                                            <input type="text" name="program_kemitraan"
+                                                                placeholder="Program Kemitraan" class="form-control"
+                                                                id="program_kemitraan" required>
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="id_bantuan" class="form-label">Jenis

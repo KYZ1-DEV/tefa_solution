@@ -36,33 +36,15 @@
                             <i class="fas fa-upload fa-sm text-white-50"></i> Upload Template Laporan
                         </a>
                     </div>
+
+                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#uploadModal">
+                        Upload Template
+                    </button> --}}
                     
-                    <!-- Modal for Upload -->
-                    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-                      <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                          <form action="{{ route('admin.upload.template') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="uploadModalLabel">Upload Template Laporan</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
-                            </div>
-                            <div class="modal-body">
-                              <div class="form-group">
-                                <label for="templateFile">Pilih file PDF</label>
-                                <input type="file" class="form-control" id="templateFile" name="template" accept="application/pdf" required>
-                              </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                              <button type="submit" class="btn btn-primary">Upload</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
+                    <!-- Include Modal Template -->
+                    @include('admin.upload_template_modal')
+                    
+  
                     
 
         <!-- Content Row for Menu Cards -->

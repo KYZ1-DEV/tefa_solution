@@ -38,8 +38,8 @@
             <form action="{{ route('admin.partners.store') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="nama_mitra">Nama Mitra</label>
-                    <input type="text" name="nama_mitra" class="form-control" required>
+                    <label for="program_kemitraan">Program Kemitraan</label>
+                    <input type="text" name="program_kemitraan" class="form-control" required>
                 </div>
                 <div class="form-group">
                     <label for="tanggal_bermitra">Tanggal Bermitra</label>

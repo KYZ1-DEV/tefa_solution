@@ -30,7 +30,12 @@
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Dashboard Sekolah</h1>
+            <a id="template" href="#" data-toggle="modal" data-target="#downloadModal" style="background: linear-gradient(45deg, #7b2cbf, #3a0ca3); color:white;" class="d-none d-sm-inline-block btn btn-sm shadow-sm">
+                <i class="fas fa-upload fa-sm text-white-50"></i> Download Template Laporan
+            </a>
         </div>
+
+        @include('sekolah.download_modal')
 
         <!-- Content Row for Menu Cards -->
         <div class="row mb-2 d-flex" style="justify-content: space-evenly !important;">

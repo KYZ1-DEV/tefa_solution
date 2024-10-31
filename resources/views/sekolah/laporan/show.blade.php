@@ -28,7 +28,7 @@
                         <tr>
                             <th style="width: 200px;">Jenis Bantuan</th>
                             <th style="width: 10px;">:</th>
-                            <td>{{ $laporan->bantuan ? $laporan->bantuan->jenis_bantuan : 'N/A' }}</td>
+                            <td>{{ $laporan->mitra->bantuan ? $laporan->mitra->bantuan->jenis_bantuan : 'N/A' }}</td>
                         </tr>
                         <tr>
                             <th style="width: 200px;">Progres</th>
@@ -78,7 +78,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th style="width: 200px;">Keterangan Industri</th>
+                            <th style="width: 200px;">Keterangan Revisi Industri</th>
                             <th style="width: 10px;">:</th>
                             <td class="text-muted">{{ $laporan->keterangan_laporan ?? 'Tidak ada keterangan' }}</td>
                         </tr>
