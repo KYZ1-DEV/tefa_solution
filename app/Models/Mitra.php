@@ -41,10 +41,11 @@ class Mitra extends Model
     {
         return $this->belongsTo(Bantuan::class, 'id_bantuan');
     }
+    
     public function laporan()
-{
-    return $this->hasOne(Laporan::class, 'id_bantuan', 'id_bantuan');
-}
+    {
+        return $this->hasOne(Laporan::class, 'id_bantuan', 'id_bantuan');
+    }
 
 
 }

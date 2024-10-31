@@ -71,6 +71,26 @@
         #content::-webkit-scrollbar-thumb:hover {
             background: #aaa;
         }
+        
+           /* Responsive font size adjustment */
+    @media (max-width: 576px) { /* Bootstrap's breakpoint for small screens */
+        #welcome-message {
+            font-size: 1.5rem; /* Smaller font size for mobile */
+        }
+    }
+
+    @media (min-width: 576px) and (max-width: 768px) { /* Tablet breakpoint */
+        #welcome-message {
+            font-size: 2rem; /* Slightly larger for tablets */
+        }
+    }
+
+    @media (min-width: 768px) {
+        #welcome-message {
+            font-size: 3rem; /* Default size for larger screens */
+        }
+    }
+
     </style>
 </head>
 
