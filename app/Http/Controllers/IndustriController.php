@@ -41,7 +41,7 @@ class IndustriController extends Controller
             'alamat' => 'required|max:255',
             'bidang_industri' => 'required|max:100',
             'npwp' => 'required|digits:15',                   // NPWP tepat 15 digit
-            'skdp' => 'required',
+            'akta_pendirian' => 'required',
             'image' => 'nullable|max:1024|mimes:png,jpg',
         ], [
             'name.required' => 'Nama harus diisi !!',
@@ -52,7 +52,7 @@ class IndustriController extends Controller
             'phone.required' => 'Nomor telepon harus diisi !!',
             'phone.digits_between' => 'Nomor telepon harus 10-15 angka !!',
             'npwp.digits' => 'NPWP harus terdiri dari 15 angka !!',
-            'skdp.required' => 'SKDP harus diisi !!',
+            'akta_pendirian.required' => 'SKDP harus diisi !!',
             'image.max' => 'Foto maksimal 1MB',
             'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
         ]);
@@ -64,7 +64,7 @@ class IndustriController extends Controller
         $exists = industri::where(function ($query) use ($request, $user) {
             $query->where('email', $request->email)
                 ->orWhere('npwp', $request->npwp)
-                ->orWhere('skdp', $request->skdp);
+                ->orWhere('akta_pendirian', $request->akta_pendirian);
         })
             ->where('id_user', '!=', $user->id)
             ->exists();
@@ -81,7 +81,7 @@ class IndustriController extends Controller
             'alamat' => $request->alamat,
             'bidang_industri' => $request->bidang_industri,
             'npwp' => $request->npwp,
-            'skdp' => $request->skdp,
+            'akta_pendirian' => $request->akta_pendirian
         ];
 
         if ($request->hasFile('image')) {
@@ -159,7 +159,7 @@ class IndustriController extends Controller
 
             $mitraList = Mitra::where('id_industri', $industri->id)
             ->when($search, function ($query, $search) {
-                return $query->where('nama_mitra', 'like', '%' . $search . '%');
+                return $query->where('program_kemitraan', 'like', '%' . $search . '%');
             })
             ->with(['sekolah', 'bantuan', 'laporan' => function ($query) {
                 $query->orderBy('created_at', 'desc'); // Urutkan laporan berdasarkan waktu pembuatan
@@ -207,21 +207,25 @@ class IndustriController extends Controller
             'status_laporan.required' => 'Berikan keterangan status!',
         ]);
 
-        $laporan = Laporan::findOrFail($id);
-
-        $mitra = Mitra::where('id_sekolah', $laporan->id_sekolah)
-            ->where('id_bantuan', $laporan->id_bantuan)
+        $laporan = Laporan::with('mitra')->findOrFail($id);
+        // dd($laporan);
+        
+        $mitra = Mitra::where('id_sekolah', $laporan->mitra->id_sekolah)
+            ->where('id_bantuan', $laporan->mitra->id_bantuan)
             ->first();
 
         if($request->status_laporan === 'diterima'){
-            $mitra = Mitra::where('id_sekolah', $laporan->id_sekolah)
-            ->where('id_bantuan', $laporan->id_bantuan)
+            $mitra = Mitra::where('id_sekolah', $laporan->mitra->id_sekolah)
+            ->where('id_bantuan', $laporan->mitra->id_bantuan)
             ->first();
+
+            // dd($mitra);
 
             $mitra->progres_bermitra = $laporan->progres_laporan;
             if ($mitra->progres_bermitra == '100%') {
                 $mitra->status_mitra = 'selesai';
             }
+
             $mitra->save();
         }
 
@@ -302,14 +306,14 @@ class IndustriController extends Controller
     public function giveHelp(Request $request)
     {
         $request->validate([
-            'nama_mitra' => 'required|string|max:255',
+            'program_kemitraan' => 'required|string|max:255',
             'periode' => 'required|string|in:1 Tahun,2 Tahun,3 Tahun',
             'id_sekolah' => 'required|exists:sekolah,id',
             'id_user' => 'required|exists:users,id',
             'id_bantuan' => 'required|exists:bantuan,id',
         ],[
-            'nama_mitra.required' => 'Silahkan masukan nama mitra!',
-            'nama_mitra.max' => 'Nama mitra terlalu panjang!',
+            'program_kemitraan.required' => 'Silahkan masukan nama mitra!',
+            'program_kemitraan.max' => 'Nama mitra terlalu panjang!',
             'periode.required' => 'Silahkan pilih periode!',
         ]);
     
@@ -332,7 +336,7 @@ class IndustriController extends Controller
     
         // Jika bantuan belum pernah diberikan, lanjutkan proses pemberian bantuan
         $mitra = new Mitra();
-        $mitra->nama_mitra = $request->nama_mitra;
+        $mitra->program_kemitraan = $request->program_kemitraan;
         $mitra->tanggal_bermitra = now();
         $mitra->periode_bermitra = $request->periode;
     

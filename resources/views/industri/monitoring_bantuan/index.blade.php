@@ -52,7 +52,7 @@
                                     <div>
                                         <span class="jenis-Bantuan"
                                             style="font-size: 1.25rem; font-weight: bold; color: #555;">
-                                            {{ $mitra->sekolah->nama_sekolah . ' Mitra ' . $mitra->nama_mitra }}
+                                            {{ $mitra->sekolah->nama_sekolah . ' Mitra ' . $mitra->program_kemitraan }}
                                             <!-- Nama mitra -->
                                         </span>
 
@@ -126,9 +126,9 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="mb-3 row">
-                                                <label class="col-sm-4 col-form-label"><strong>Nama Mitra</strong></label>
+                                                <label class="col-sm-4 col-form-label"><strong>Program Kemitraan</strong></label>
                                                 <div class="col-sm-8">
-                                                    <div class="form-control-plaintext">: {{ $mitra->nama_mitra }}</div>
+                                                    <div class="form-control-plaintext">: {{ $mitra->program_kemitraan }}</div>
                                                 </div>
                                             </div>
                                             <div class="mb-3 row">
@@ -219,7 +219,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel{{ $mitra->id }}">Laporan
-                                                Mitra {{ $mitra->nama_mitra }}</h5>
+                                                Mitra {{ $mitra->program_kemitraan }}</h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                 aria-label="Close"></button>
                                         </div>
@@ -281,7 +281,8 @@
         <div class="mb-1">
             <label for="statusLaporan" class="form-label"><strong>Status Laporan</strong></label>
             <select name="status_laporan" id="statusLaporan" class="form-control">
-                <option value="dikirim" {{ $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>Dikirim</option>
+                {{-- <option value="dikirim" {{ $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>Dikirim</option> --}}
+                ap
                 <option value="diterima" {{ $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>Diterima</option>
                 <option value="revisi" {{ $mitra->laporan->status_laporan == 'revisi' ? 'selected' : '' }}>Revisi</option>
             </select>

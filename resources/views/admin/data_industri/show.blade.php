@@ -25,8 +25,8 @@
                     <td>{{ $industri->npwp }}</td>
                 </tr>
                 <tr>
-                    <th>SKDP</th>
-                    <td>{{ $industri->skdp }}</td>
+                    <th>Akta pendirian</th>
+                    <td>{{ $industri->akta_pendirian }}</td>
                 </tr>
                 <tr>
                     <th>Email</th>

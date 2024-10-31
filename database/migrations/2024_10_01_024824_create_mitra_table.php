@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('mitra', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_mitra');
+            $table->string('program_kemitraan');
             $table->date('tanggal_bermitra');
             $table->enum('periode_bermitra',['1 Tahun','2 Tahun','3 Tahun'])->default('1 Tahun');
             $table->date('durasi_bermitra')->nullable();

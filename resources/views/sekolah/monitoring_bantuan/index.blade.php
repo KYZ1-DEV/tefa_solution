@@ -46,14 +46,14 @@
                         @forelse ($mitras as $mitra)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $mitra->nama_mitra ?? 'Nama Mitra Tidak Tersedia' }}</td>
+                                <td>{{ $mitra->program_kemitraan ?? 'Nama Mitra Tidak Tersedia' }}</td>
                                 <td>{{ $mitra->industri->nama_industri ?? 'Industri Tidak Tersedia' }}</td>
                                 
                                 <td style="color: green; font-size: 16px;">{{ $mitra->status_mitra}}</td>
                                 <td>
                                     <button class="btn btn-gradient beri-mitra-btn" data-bs-toggle="modal"
                                             data-bs-target="#modalDetailMitra"
-                                            data-nama-mitra="{{ $mitra->nama_mitra }}"
+                                            data-nama-mitra="{{ $mitra->program_kemitraan }}"
                                             data-tanggal-bermitra="{{ $mitra->tanggal_bermitra }}"
                                             data-periode-bermitra="{{ $mitra->periode_bermitra }}"
                                             data-durasi-bermitra="{{ $mitra->durasi_bermitra }}"
@@ -93,7 +93,7 @@
                         <div class="row">
                             <!-- Kolom kiri untuk detail mitra -->
                             <div class="col-md-6">
-                                <p><strong>Nama Mitra:</strong> <span id="nama-mitra"></span></p>
+                                <p><strong>Nama Program Kemitraan :</strong> <span id="nama-mitra"></span></p>
                                 <p><strong>Nama Industri:</strong> <span id="nama-industri"></span></p>
                                 <p><strong>Email Industri:</strong> <span id="email-industri"></span></p>
                                 <p><strong>Alamat Industri:</strong> <span id="alamat-industri"></span></p>
@@ -170,7 +170,10 @@
                 document.getElementById('email-industri').innerHTML = emailIndustri;
                 document.getElementById('alamat-industri').innerHTML = alamatIndustri;
                 document.getElementById('bidang-industri').innerHTML = bidangIndustri;
-                document.getElementById('verified-industri').innerHTML = verifiedIndustri;
+                const verifiedElement = document.getElementById('verified-industri');
+                verifiedElement.innerHTML = verifiedIndustri.charAt(0).toUpperCase() + verifiedIndustri.slice(1); // Kapitalisasi huruf pertama
+                verifiedElement.style.color = verifiedIndustri === 'verified' ? 'green' : 'yellow';
+                // document.getElementById('verified-industri').innerHTML = verifiedIndustri;
                 document.getElementById('tpln-industri').innerHTML = tplnIndustri;
                 
                 bantuanList.innerHTML = '';

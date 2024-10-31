@@ -49,10 +49,10 @@
                     <input type="text" name="npwp" class="form-control" required>
                 </div>
 
-                <!-- Input skdp-->
+                <!-- Input akta-->
                 <div class="form-group">
-                    <label for="nama_sekolah">SKDP</label>
-                    <input type="text" name="skdp" class="form-control" required>
+                    <label for="akta_pendirian">Akta Pendirian</label>
+                    <input type="text" name="akta_pendirian" class="form-control" required>
                 </div>
 
                 <!-- Input email industri -->

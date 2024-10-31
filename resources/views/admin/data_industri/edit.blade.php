@@ -52,8 +52,8 @@
 
                 <!-- Input SKDP -->
                 <div class="form-group">
-                    <label for="nama_sekolah">SKDP</label>
-                    <input type="text" name="skdp" class="form-control" value="{{ $industri->skdp }}" required>
+                    <label for="nama_sekolah">Akta Pendirian</label>
+                    <input type="text" name="skdp" class="form-control" value="{{ $industri->akta_pendirian }}" required>
                 </div>
 
                  <!-- Input Email Sekolah -->

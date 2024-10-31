@@ -52,7 +52,7 @@
                                     @foreach ($laporan as $item)
                                         <tr>
                                             <td>{{ $item->nama_laporan }}</td>
-                                            <td>{{ $item->bantuan ? $item->bantuan->jenis_bantuan : 'N/A' }}</td>
+                                            <td>{{ $item->mitra->bantuan ? $item->mitra->bantuan->jenis_bantuan : 'N/A' }}</td>
                                             <td>{{ $item->progres_laporan }}</td>
                                             <td>{{ $item->tanggal_laporan }}</td>
                                             <td>

@@ -19,7 +19,7 @@ class IndustriFactory extends Factory
         return [
             'nama_industri' => $this->faker->company(),
             'npwp' => $this->faker->unique()->numerify('################'),
-            'skdp' => $this->faker->unique()->text(10),
+            'akta_pendirian' => $this->faker->unique()->text(10),
             'email' => $this->faker->unique()->safeEmail(),
             'alamat' => $this->faker->address(),
             'bidang_industri' => $this->faker->randomElement([

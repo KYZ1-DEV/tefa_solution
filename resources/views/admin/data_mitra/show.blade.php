@@ -17,8 +17,8 @@
         <div class="card-body">
             <table class="table table-bordered">
                 <tr>
-                    <th>Nama Mitra</th>
-                    <td>{{ $mitra->nama_mitra }}</td>
+                    <th>Program Kemitraan</th>
+                    <td>{{ $mitra->program_kemitraan }}</td>
                 </tr>
                 <tr>
                     <th>Tanggal Bermitra</th>

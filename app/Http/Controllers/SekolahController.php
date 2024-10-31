@@ -149,9 +149,22 @@ class SekolahController extends Controller
         return redirect()->back()->with('error', 'File tidak ditemukan!');
     }
 
-    public function downloadTemplateLaporan()
+    public function downloadTemplateLaporan($persentase)
     {
-        $defaultFile = 'template/template_laporan.pdf';
+        // Tentukan file template berdasarkan persentase
+        switch ($persentase) {
+            case 0:
+                $defaultFile = 'template/template_laporan_0.pdf';
+                break;
+            case 50:
+                $defaultFile = 'template/template_laporan_50.pdf';
+                break;
+            case 100:
+                $defaultFile = 'template/template_laporan_100.pdf';
+                break;
+            default:
+                return redirect()->back()->with('error', 'Persentase laporan tidak valid!');
+        }
     
         // Path absolut file dalam storage
         $filePath = storage_path('app/public/' . $defaultFile);
@@ -168,6 +181,7 @@ class SekolahController extends Controller
     
         return redirect()->back()->with('error', 'File tidak ditemukan!');
     }
+    
 
     // Tampilkan halaman ubah password Sekolah
     public function password()
@@ -234,13 +248,19 @@ class SekolahController extends Controller
         if ($checkMitra->isEmpty() || !$checkMitra->contains('status_mitra', 'aktif')) {
             return redirect()->route('schools.assistance-monitoring')->with('error', 'Belum ada bantuan dari industri!');
         }
+
         // Ambil semua bantuan yang sesuai dengan sekolah ini
         $mitra = Mitra::where('id_sekolah', $sekolah->id)
             ->where('status_mitra', 'aktif')
             ->with('bantuan')
             ->get();
 
-        $laporanTerakhir = Laporan::where('id_sekolah', $sekolah->id)
+            $mitraID = Mitra::where('id_sekolah', $sekolah->id)
+            ->where('status_mitra', 'aktif')
+            ->with('bantuan')
+            ->firstOrFail();
+
+        $laporanTerakhir = Laporan::where('id_mitra', $mitraID->id)
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -278,10 +298,14 @@ class SekolahController extends Controller
             return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
         }
 
-
-        $laporan = Laporan::with(['bantuan'])->where('id_sekolah', $sekolah->id)->get();
+        $laporan = Laporan::whereHas('mitra', function ($query) use ($sekolah) {
+            $query->where('id_sekolah', $sekolah->id);
+        })->with(['mitra.sekolah', 'mitra.bantuan'])->get();
+        
+        // dd($laporan);
         return view('sekolah.laporan.information_progress', compact('laporan'));
     }
+
 
     public function storeLaporan(Request $request)
     {
@@ -310,9 +334,14 @@ class SekolahController extends Controller
         }
 
         // Ambil laporan terakhir
-        $laporanTerakhir = Laporan::where('id_sekolah', $sekolah->id)
-            ->orderBy('created_at', 'desc')
-            ->first();
+       
+        $mitra = Mitra::where('id_bantuan', $request->id_bantuan)
+        ->where('id_sekolah', $sekolah->id)
+        ->firstOrFail();
+
+    $laporanTerakhir = Laporan::where('id_mitra', $mitra->id)
+        ->orderBy('created_at', 'desc')
+        ->first();
 
         // Tentukan progres_laporan berdasarkan laporan terakhir
         $progres_laporan = '0%';
@@ -325,20 +354,17 @@ class SekolahController extends Controller
                 }
             }
         }
-
-        // $laporan = Laporan::with(['bantuan'])->where('id_sekolah', $sekolah->id)->get();
+        
 
         // Simpan laporan baru
         Laporan::create([
             'nama_laporan' => $request->nama_laporan,
-            'jenis_bantuan' => Bantuan::findOrFail($request->id_bantuan)->jenis_bantuan,
             'progres_laporan' => $progres_laporan,
             'bukti_laporan' => $pdfName,
             'tanggal_laporan' => now(),
             'deskripsi_laporan' => $request->deskripsi_laporan,
             'status_laporan' => 'dikirim',
-            'id_sekolah' => $sekolah->id,
-            'id_bantuan' => $request->id_bantuan,
+            'id_mitra' => $mitra->id
         ]);
 
         return redirect()->route('information_progress')->with('success', 'Laporan berhasil dikirim');
@@ -350,11 +376,13 @@ class SekolahController extends Controller
         return view('sekolah.laporan.show', compact('laporan'));
     }
 
+    
+
     public function editLaporan($id)
     {
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login'); // Redirect to login if not authenticated
+            return redirect()->route('login'); 
         }
 
         $sekolah = Sekolah::where('id_user', $user->id)->first();
@@ -362,9 +390,11 @@ class SekolahController extends Controller
             return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
         }
 
-        $laporan = Laporan::where('id', $id)
-            ->where('id_sekolah', $sekolah->id)
-            ->where('status_laporan', 'revisi') // Pastikan hanya laporan dengan status "direvisi" yang bisa diedit
+            $laporan = Laporan::where('id', $id)
+            ->where('status_laporan', 'revisi')
+            ->whereHas('mitra', function ($query) use ($sekolah) {
+                $query->where('id_sekolah', $sekolah->id);
+            })
             ->first();
 
         if (!$laporan) {
@@ -404,9 +434,11 @@ class SekolahController extends Controller
 
         // Ambil laporan berdasarkan ID dan validasi status
         $laporan = Laporan::where('id', $id)
-            ->where('id_sekolah', $sekolah->id)
-            ->where('status_laporan', 'revisi') // Hanya memperbarui laporan dengan status "direvisi"
-            ->first();
+        ->where('status_laporan', 'revisi')
+        ->whereHas('mitra', function ($query) use ($sekolah) {
+            $query->where('id_sekolah', $sekolah->id);
+        })
+        ->first();
 
         if (!$laporan) {
             return redirect()->route('information_progress')->with('error', 'Laporan tidak ditemukan atau tidak dapat diedit.');

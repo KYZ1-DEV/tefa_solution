@@ -12,8 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('laporan', function (Blueprint $table) {
-            // Menambahkan foreign key ke tabel 'bantuan'
-            $table->foreignId('id_bantuan')->nullable()->after('id_sekolah')->constrained('bantuan')->onDelete('cascade');
+            $table->foreignId('id_mitra')->after('keterangan_laporan')->constrained('mitra')->onDelete('cascade');
         });
     }
 
@@ -23,9 +22,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('laporan', function (Blueprint $table) {
-            // Menghapus foreign key dan kolom id_bantuan
-            $table->dropForeign(['id_bantuan']);
-            $table->dropColumn('id_bantuan');
+            $table->dropForeign(['id_mitra']);
+            $table->dropColumn('id_mitra');
         });
     }
 };

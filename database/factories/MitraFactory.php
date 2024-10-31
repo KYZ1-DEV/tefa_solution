@@ -17,7 +17,7 @@ class MitraFactory extends Factory
     public function definition(): array
     {
         return [
-            'nama_mitra' => $this->faker->company(),
+            'program_kemitraan' => $this->faker->company(),
             'tanggal_bermitra' => $this->faker->date(),
             'periode_bermitra' => $this->faker->randomElement(['1 Tahun','2 Tahun','3 Tahun']),
             'progres_bermitra' => $this->faker->randomElement(['0%','50%','100%']),

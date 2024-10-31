@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('nama_industri');
             $table->string('npwp')->unique();
-            $table->string('skdp')->unique();
+            $table->string('akta_pendirian')->unique();
             $table->string('email')->unique();
             $table->text('alamat');
             $table->enum('bidang_industri', [
