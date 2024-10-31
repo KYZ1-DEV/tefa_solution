@@ -79,13 +79,19 @@
                                               style="padding: 3px 5px; border-radius: 5px; margin-left: 10px;
                                                      color: {{ $mitra->laporan->status_laporan == 'diterima' ? 'green' : 'yellow' }};
                                                      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
-                                            Laporan {{ ucfirst($mitra->laporan->status_laporan) }}
+                                            Laporan {{ $mitra->laporan->progres_laporan.' ' }} {{ ucfirst($mitra->laporan->status_laporan) }}
                                         </span>
                                     @elseif(!isset($mitra->laporan))
                                         <span class="status-active"
                                               style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: red;
                                                      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
                                             Belum Ada Laporan
+                                        </span>
+                                    @elseif(isset($mitra->laporan) && $mitra->laporan->status_laporan == 'revisi')
+                                        <span class="status-active"
+                                              style="padding: 3px 5px; border-radius: 5px; margin-left: 10px; color: rgb(168, 135, 14);
+                                                     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); background-color: transparent;">
+                                             Laporan Sedang Direvisi
                                         </span>
                                     @endif
                                     </div>

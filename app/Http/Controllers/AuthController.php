@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Sekolah;
+use App\Models\Industri;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,8 +56,24 @@ class AuthController extends Controller
             if (Auth::user()->role === 'admin') {
                 return redirect()->route('admin.dashboard')->with('success','Halo Admin, Anda Berhasil Login');
             }elseif (Auth::user()->role === 'industri') {
+                $industri = Industri::where('id_user', Auth::user()->id)->first();
+                if(is_null($industri)){
+                    return redirect()->route('industries.index')
+                    ->with([
+                        'info' => 'Selamat datang di halaman industri!, Tolong lengkapi Profile Terlebih dahulu !',
+                        'success' => 'Berhasil Login'
+                    ]);
+                }
                 return redirect()->route(route: 'industries.index')->with('success','Berhasil Login');
             }elseif (Auth::user()->role === 'sekolah') {
+                $sekolah = Sekolah::where('id_user', Auth::user()->id)->first();
+                if(is_null($sekolah)){
+                    return redirect()->route('schools.index')
+                    ->with([
+                        'info' => 'Selamat datang di halaman Sekolah!, Tolong lengkapi Profile Terlebih dahulu !',
+                        'success' => 'Berhasil Login'
+                    ]);
+                }
                 return redirect()->route(route: 'schools.index')->with('success','Berhasil Login');
             }
 

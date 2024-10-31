@@ -126,7 +126,7 @@
 
         <!-- Welcome Message -->
         <div class="text-center mb-4">
-            <h1 id="welcome-message" class="display-4 text-gray-800"></h1>
+            <h1 id="welcome-message" class="display-4 text-gray-800 welcome-text"></h1>
         </div>
 
 

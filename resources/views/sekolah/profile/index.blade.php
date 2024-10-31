@@ -75,7 +75,7 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="npsn">Nomor Pokok Sekolah Nasional (NPSN) :</label>
-                                                <input type="text" id="npsn" name="npsn" class="form-control" value="{{ isset($sekolah->npsn) ? $sekolah->npsn : '' }}" placeholder="Masukan NPSN" required>
+                                                <input type="tel" id="npsn" name="npsn" class="form-control" value="{{ isset($sekolah->npsn) ? $sekolah->npsn : '' }}" placeholder="Masukan NPSN" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Nama Sekolah :</label>

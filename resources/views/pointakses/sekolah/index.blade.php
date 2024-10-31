@@ -14,6 +14,14 @@
             </div>
         @endif
 
+        @if (Session::get('info'))
+            <div class="alert alert-danger alert-dismissible fade fade-in">
+                <ul>
+                    <li>{{ Session::get('info') }}</li>
+                </ul>
+            </div>
+        @endif
+
         @if(session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
@@ -83,8 +91,9 @@
 
         <!-- Welcome Message -->
         <div class="text-center mb-4">
-            <h1 id="welcome-message" class="display-4 text-gray-800"></h1>
+            <h1 id="welcome-message" class="display-4 text-gray-800 welcome-text"></h1>
         </div>
+        
     </div>
     <!-- /.container-fluid -->
 

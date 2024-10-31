@@ -37,12 +37,12 @@ class IndustriController extends Controller
         $request->validate([
             'name' => 'required|max:255',
             'email' => 'required|email|max:255',
-            'phone' => 'required|max:15',
+            'phone' => 'required|digits_between:10,15',       // Panjang antara 10 hingga 15 digit
             'alamat' => 'required|max:255',
             'bidang_industri' => 'required|max:100',
-            'npwp' => 'required|max:15',
-            'skdp' => 'required|max:50',
-            'image' => 'nullable|max:1045|mimes:png,jpg',
+            'npwp' => 'required|digits:15',                   // NPWP tepat 15 digit
+            'skdp' => 'required',
+            'image' => 'nullable|max:1024|mimes:png,jpg',
         ], [
             'name.required' => 'Nama harus diisi !!',
             'name.max' => 'Nama terlalu panjang !!',
@@ -50,18 +50,13 @@ class IndustriController extends Controller
             'email.email' => 'Format email tidak valid !!',
             'email.max' => 'Email terlalu panjang !!',
             'phone.required' => 'Nomor telepon harus diisi !!',
-            'phone.max' => 'Nomor telepon terlalu panjang !!',
-            'alamat.required' => 'Alamat harus diisi !!',
-            'alamat.max' => 'Alamat terlalu panjang !!',
-            'bidang_industri.required' => 'Bidang industri harus diisi !!',
-            'bidang_industri.max' => 'Bidang industri terlalu panjang !!',
-            'npwp.required' => 'NPWP harus diisi !!',
-            'npwp.max' => 'NPWP terlalu panjang !!',
+            'phone.digits_between' => 'Nomor telepon harus 10-15 angka !!',
+            'npwp.digits' => 'NPWP harus terdiri dari 15 angka !!',
             'skdp.required' => 'SKDP harus diisi !!',
-            'skdp.max' => 'SKDP terlalu panjang !!',
             'image.max' => 'Foto maksimal 1MB',
             'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
         ]);
+
 
         $auth = Auth::user();
         $user = User::find($auth->id);
@@ -317,48 +312,50 @@ class IndustriController extends Controller
             'nama_mitra.max' => 'Nama mitra terlalu panjang!',
             'periode.required' => 'Silahkan pilih periode!',
         ]);
-
+    
+        // Dapatkan industri berdasarkan id_user
+        $industri = Industri::where('id_user', $request->id_user)->first();
+        if (!$industri) {
+            return redirect()->back()->withErrors('Industri dengan id_user ini tidak ditemukan.');
+        }
+    
+        // Cek apakah bantuan yang sama sudah pernah diberikan oleh industri ini ke sekolah ini
+        $existingMitra = Mitra::where('id_sekolah', $request->id_sekolah)
+                              ->where('id_industri', $industri->id)
+                              ->where('id_bantuan', $request->id_bantuan)
+                              ->whereIn('status_mitra', ['selesai', 'non-aktif'])
+                              ->first();
+    
+        if ($existingMitra) {
+            return redirect()->back()->withErrors('Bantuan ini sudah pernah diberikan oleh industri tersebut kepada sekolah ini.');
+        }
+    
+        // Jika bantuan belum pernah diberikan, lanjutkan proses pemberian bantuan
         $mitra = new Mitra();
         $mitra->nama_mitra = $request->nama_mitra;
         $mitra->tanggal_bermitra = now();
         $mitra->periode_bermitra = $request->periode;
-
-        $durasi = 0;
-        switch ($mitra->periode_bermitra) {
-            case '1 Tahun':
-                $durasi = 1;
-                break;
-            case '2 Tahun':
-                $durasi = 2;
-                break;
-            case '3 Tahun':
-                $durasi = 3;
-                break;
-        }
-
+    
+        // Tentukan durasi
+        $durasi = match ($mitra->periode_bermitra) {
+            '1 Tahun' => 1,
+            '2 Tahun' => 2,
+            '3 Tahun' => 3,
+            default => 0,
+        };
+        
         $mitra->durasi_bermitra = now()->addYears($durasi);
         $mitra->progres_bermitra = '0%';
         $mitra->status_mitra = 'non-aktif';
         $mitra->id_sekolah = $request->id_sekolah;
-
-        $industri = Industri::where('id_user', $request->id_user)->first();
-
-        if (!$industri) {
-            return redirect()->back()->withErrors('Industri dengan id_user ini tidak ditemukan.');
-        }
-
-        $bantuan = Bantuan::find($request->id_bantuan);
-        if (!$bantuan) {
-            return redirect()->back()->withErrors('Bantuan tidak ada !');
-        }
-
         $mitra->id_industri = $industri->id;
-        $mitra->id_bantuan = $bantuan->id;
-
+        $mitra->id_bantuan = $request->id_bantuan;
+    
         $mitra->save();
-
-        return redirect()->route('industries.assistance-monitoring')->with('success', 'Sekolah berhasil diberi bantuan, harap mengaktifkan terlebih dahulu status mitra !');
+    
+        return redirect()->route('industries.assistance-monitoring')->with('success', 'Sekolah berhasil diberi bantuan, harap mengaktifkan terlebih dahulu status mitra!');
     }
+    
 
 
 

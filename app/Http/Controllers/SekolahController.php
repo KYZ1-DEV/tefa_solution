@@ -54,6 +54,7 @@ class SekolahController extends Controller
             'email.required' => 'Email harus diisi !!',
             'email.email' => 'Format email tidak valid !!',
             'phone.required' => 'Nomor telepon harus diisi !!',
+            'phone.max' => 'Nomor telepon harus diisi !!',
             'alamat.required' => 'Alamat harus diisi !!',
             'status.required' => 'Status harus diisi !!',
             'jenjang.required' => 'Jenjang harus diisi !!',

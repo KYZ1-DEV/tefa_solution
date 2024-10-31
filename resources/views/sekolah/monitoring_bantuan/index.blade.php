@@ -74,7 +74,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center">Tidak ada mitra yang tersedia.</td>
+                                <td colspan="5" class="text-center">Tidak ada mitra yang tersedia.</td>
                             </tr>
                         @endforelse
                     </tbody>
