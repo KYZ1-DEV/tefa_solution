@@ -23,6 +23,16 @@
         </div>
         @endif
 
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $item )
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
 
         <div class="d-flex justify-content-end">
             <form action="{{ url()->current() }}" method="GET" class="form-inline">

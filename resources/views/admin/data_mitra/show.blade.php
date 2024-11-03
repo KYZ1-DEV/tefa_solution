@@ -40,6 +40,18 @@
                     <th>Status Mitra</th>
                     <td>{{ $mitra->status_mitra }}</td>
                 </tr>
+                <tr>
+                    <th>Bantuan</th>
+                    <td>{{ $mitra->bantuan->jenis_bantuan ?? 'Tidak Ada' }}</td>
+                </tr>
+                <tr>
+                    <th>Sekolah</th>
+                    <td>{{ $mitra->sekolah->nama_sekolah ?? 'Tidak Ada' }}</td>
+                </tr>
+                <tr>
+                    <th>Industri</th>
+                    <td>{{ $mitra->industri->nama_industri ?? 'Tidak Ada' }}</td>
+                </tr>
             </table>
         </div>
     </div>

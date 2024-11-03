@@ -13,9 +13,18 @@
             <h6 class="m-0 font-weight-bold text-primary">Edit Sekolah</h6>
             <br>
             <a href="{{ route('admin.schools.index') }}" class="btn btn-gradient">Kembali</a>
+            @if ($errors->any())
+                <div class="alert alert-danger m-4">
+                    <ul>
+                        @foreach ($errors->all() as $item )
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.schools.update', $sekolah->id) }}" method="POST">
+            <form action="{{ route('admin.schools.update', $sekolah->id) }}" novalidate method="POST">
                 @csrf
                 @method('PUT')
 
@@ -28,7 +37,7 @@
                 <!-- Input Nama Sekolah -->
                 <div class="form-group">
                     <label for="nama_sekolah">Nama Sekolah</label>
-                    <input type="text" name="nama_sekolah" class="form-control" value="{{ $sekolah->nama_sekolah }}" required>
+                    <input type="text" name="nama_sekolah" class="form-control" style="text-transform: uppercase;" value="{{ $sekolah->nama_sekolah }}" required>
                 </div>
 
                 <!-- Input Status Sekolah -->

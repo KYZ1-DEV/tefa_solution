@@ -22,6 +22,16 @@
             </div>
         @endif
 
+        @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $item )
+                    <li>{{ $item }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
@@ -282,7 +292,7 @@
             <label for="statusLaporan" class="form-label"><strong>Status Laporan</strong></label>
             <select name="status_laporan" id="statusLaporan" class="form-control">
                 {{-- <option value="dikirim" {{ $mitra->laporan->status_laporan == 'dikirim' ? 'selected' : '' }}>Dikirim</option> --}}
-                ap
+                <option value="">-- Pilih Status --</option>
                 <option value="diterima" {{ $mitra->laporan->status_laporan == 'diterima' ? 'selected' : '' }}>Diterima</option>
                 <option value="revisi" {{ $mitra->laporan->status_laporan == 'revisi' ? 'selected' : '' }}>Revisi</option>
             </select>

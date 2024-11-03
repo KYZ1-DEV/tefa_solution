@@ -14,7 +14,7 @@
             <br>
             <a href="{{ route('admin.partners.index') }}" class="btn btn-gradient">Kembali</a>
             @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mt-4">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -35,7 +35,7 @@
         @endif
         </div>
         <div class="card-body">
-            <form action="{{ route('admin.partners.store') }}" method="POST">
+            <form action="{{ route('admin.partners.store') }}" novalidate method="POST">
                 @csrf
                 <div class="form-group">
                     <label for="program_kemitraan">Program Kemitraan</label>
@@ -57,21 +57,7 @@
                     <label for="durasi_bermitra">Durasi Bermitra (otomatis)</label>
                     <input type="text" name="durasi_bermitra" class="form-control" id="durasi_bermitra" readonly>
                 </div>
-                <div class="form-group">
-                    <label for="progres_bermitra">Progres Bermitra</label>
-                    <select name="progres_bermitra" class="form-control" required>
-                        <option value="0%">0%</option>
-                        <option value="50%">50%</option>
-                        <option value="100%">100%</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="status_mitra">Status Mitra</label>
-                    <select name="status_mitra" class="form-control" required>
-                        <option value="non-aktif">Non-Aktif</option>
-                        <option value="aktif">Aktif</option>
-                    </select>
-                </div>
+                
                 <div class="form-group">
                     <label for="id_sekolah">Sekolah</label>
                     <select name="id_sekolah" class="form-control" required>
@@ -80,23 +66,19 @@
                         @endforeach
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label for="id_industri">Industri</label>
-                    <select name="id_industri" class="form-control" required>
-                        @foreach ($industri as $industry)
-                            <option value="{{ $industry->id }}">{{ $industry->nama_industri }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="id_bantuan">Bantuan (Optional)</label>
+                    <label for="id_bantuan">Bantuan Dan Nama Industrinya (Optional)</label>
                     <select name="id_bantuan" class="form-control">
                         <option value="">Tidak Ada</option>
-                        @foreach ($bantuan as $aid)
-                            <option value="{{ $aid->id }}">{{ $aid->jenis_bantuan }}</option>
+                        @foreach ($bantuan as $b)
+                            <option value="{{ $b->id }}">
+                                {{ $b->jenis_bantuan . ' X ' . ($b->industri ? $b->industri->nama_industri : 'Industri Tidak Ada') }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
+                
 
 
                 <button type="submit" class="btn btn-gradient">Simpan</button>

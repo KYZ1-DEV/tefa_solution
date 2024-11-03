@@ -14,6 +14,15 @@
         <div class="card-header py-3">
             <br>
             <a href="{{ route('admin.users.index') }}" class="btn btn-gradient">Kembali</a>
+            @if ($errors->any())
+            <div class="alert alert-danger m-4">
+                <ul>
+                    @foreach ($errors->all() as $item )
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ul>
+            </div>
+         @endif  
         </div>
         <div class="card-body">
             <h3>Tambah User</h3>

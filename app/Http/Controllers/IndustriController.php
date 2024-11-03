@@ -35,28 +35,42 @@ class IndustriController extends Controller
     {
         // Validasi input
         $request->validate([
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|digits_between:10,15',       // Panjang antara 10 hingga 15 digit
+            'nama_industri' => 'required|max:255',
+            'email' => 'required|unique:industri,email|email|max:255',
+            'phone' => 'required|digits_between:10,15',
             'alamat' => 'required|max:255',
             'bidang_industri' => 'required|max:100',
-            'npwp' => 'required|digits:15',                   // NPWP tepat 15 digit
-            'akta_pendirian' => 'required',
-            'image' => 'nullable|max:1024|mimes:png,jpg',
+            'npwp' => 'required|unique:industri,npwp|digits:15',
+            'akta_pendirian' => 'required|unique:industri,akta_pendirian',
+            'image' => 'nullable|max:2024|mimes:png,jpg',
         ], [
-            'name.required' => 'Nama harus diisi !!',
-            'name.max' => 'Nama terlalu panjang !!',
-            'email.required' => 'Email harus diisi !!',
-            'email.email' => 'Format email tidak valid !!',
-            'email.max' => 'Email terlalu panjang !!',
-            'phone.required' => 'Nomor telepon harus diisi !!',
-            'phone.digits_between' => 'Nomor telepon harus 10-15 angka !!',
-            'npwp.digits' => 'NPWP harus terdiri dari 15 angka !!',
-            'akta_pendirian.required' => 'SKDP harus diisi !!',
-            'image.max' => 'Foto maksimal 1MB',
-            'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
+            'nama_industri.required' => 'Nama industri harus diisi.',
+            'nama_industri.max' => 'Nama industri tidak boleh lebih dari 255 karakter.',
+            
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            
+            'phone.required' => 'Nomor telepon harus diisi.',
+            'phone.digits_between' => 'Nomor telepon harus antara 10 hingga 15 digit.',
+            
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            
+            'bidang_industri.required' => 'Bidang industri harus diisi.',
+            'bidang_industri.max' => 'Bidang industri tidak boleh lebih dari 100 karakter.',
+            
+            'npwp.required' => 'NPWP harus diisi.',
+            'npwp.unique' => 'NPWP ini sudah terdaftar. Gunakan NPWP lain.',
+            'npwp.digits' => 'NPWP harus terdiri dari 15 digit.',
+            
+            'akta_pendirian.required' => 'Akta pendirian harus diisi.',
+            'akta_pendirian.unique' => 'Akta pendirian ini sudah terdaftar. Gunakan akta lain.',
+            
+            'image.max' => 'Ukuran file gambar tidak boleh lebih dari 2 MB.',
+            'image.mimes' => 'Gambar harus berformat png atau jpg.',
         ]);
-
 
         $auth = Auth::user();
         $user = User::find($auth->id);

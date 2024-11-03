@@ -34,19 +34,10 @@ Kelola Data
 </div>
 <hr class="sidebar-divider d-none d-md-block">
 <li class="nav-item">
-<a class="btn-sidebar nav-link collapsed {{ request()->is('admin/users') ? 'aktif' : '' }}" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-    aria-expanded="true" aria-controls="collapseUtilities">
+<a class="btn-sidebar nav-link collapsed {{ Request::segment(2) == 'users' ? 'aktif' : '' }}" href="{{ route('admin.users.index') }}" >
     <i class="fas fa-fw fa-user"></i>
-    <span>Kelola User</span>
+    <span>Data User</span>
 </a>
-<div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-    data-parent="#accordionSidebar">
-    <div class="bg-white py-2 collapse-inner rounded">
-        <h6 class="collapse-header">CRUD</h6>
-        <a class="collapse-item" href="{{ route('admin.users.index') }}">User</a>
-        <div class="collapse-divider"></div>
-    </div>
-</div>
 </li>
 
 
@@ -55,16 +46,16 @@ Kelola Data
 
 <hr class="sidebar-divider d-none d-md-block">
 <li class="nav-item">
-    <a class="btn-sidebar nav-link {{ request()->is('admin/schools') ? 'aktif' : '' }}" href="{{ route('admin.schools.index') }}" >
+    <a class="btn-sidebar nav-link {{ Request::segment(2) == 'schools' ? 'aktif' : '' }}" href="{{ route('admin.schools.index') }}" >
         <i class="fas fa-fw fa-school"></i>
         <span>Data Sekolah</span>
 
     </a>
-    <a class="btn-sidebar nav-link {{ request()->is('admin/industries') ? 'aktif' : '' }}" href="{{ route('admin.industries.index') }}" >
+    <a class="btn-sidebar nav-link {{ Request::segment(2) == 'industries' ? 'aktif' : '' }}" href="{{ route('admin.industries.index') }}" >
         <i class="fas fa-fw fa-building"></i>
         <span>Data Industri</span>
     </a>
-    <a class="btn-sidebar nav-link {{ request()->is('admin/partners') ? 'aktif' : '' }}" href="{{ route('admin.partners.index') }}" >
+    <a class="btn-sidebar nav-link {{ Request::segment(2) == 'partners' ? 'aktif' : '' }}" href="{{ route('admin.partners.index') }}" >
         <i class="fas fa-fw fa-users"></i>
         <span>Data Mitra</span>
     </a>
