@@ -17,8 +17,6 @@
             </div>
         @endif
 
-        
-
         @if (session('alert-danger'))
             <div class="alert alert-danger">
                 {{ session('alert-danger') }}
@@ -31,14 +29,14 @@
         @endif
 
         @if ($errors->any())
-    <div class="alert alert-danger">
-        <ul>
-            @foreach ($errors->all() as $item )
-                <li>{{ $item }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $item )
+                        <li>{{ $item }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -81,20 +79,20 @@
                                             <div class="form-group">
                                                 <label for="name">Nama Industi :</label>
                                                 <input type="text" id="name" name="name" class="form-control"
-                                                    value="{{ Auth::user()->name }}" required>
+                                                    value="{{ old('name', Auth::user()->name) }}" required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="phone">Nomor Telepon :</label>
                                                 <input type="tel" id="phone" name="phone" class="form-control"
-                                                    value="{{ isset($industri->no_tlpn_industri) ? $industri->no_tlpn_industri : '' }}"
+                                                    value="{{ old('phone', $industri->no_tlpn_industri ?? '') }}"
                                                     required>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="npwp">NPWP :</label>
                                                 <input type="text" id="npwp" name="npwp" class="form-control"
-                                                    value="{{ isset($industri->npwp) ? $industri->npwp : '' }}" required>
+                                                    value="{{ old('npwp', $industri->npwp ?? '') }}" required>
                                             </div>
 
                                             <div class="form-group">
@@ -102,37 +100,37 @@
                                                 <select id="bidang_industri" name="bidang_industri" class="form-control"
                                                     required>
                                                     <option value="" disabled
-                                                        {{ !isset($industri->bidang_industri) ? 'selected' : '' }}>Pilih
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == '' ? 'selected' : '' }}>Pilih
                                                         Bidang Industri</option>
                                                     <option value="Teknologi Informasi"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Teknologi Informasi' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Teknologi Informasi' ? 'selected' : '' }}>
                                                         Teknologi Informasi</option>
                                                     <option value="Manufaktur"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Manufaktur' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Manufaktur' ? 'selected' : '' }}>
                                                         Manufaktur</option>
                                                     <option value="Kesehatan"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Kesehatan' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Kesehatan' ? 'selected' : '' }}>
                                                         Kesehatan</option>
                                                     <option value="Pendidikan"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Pendidikan' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Pendidikan' ? 'selected' : '' }}>
                                                         Pendidikan</option>
                                                     <option value="Keuangan"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Keuangan' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Keuangan' ? 'selected' : '' }}>
                                                         Keuangan</option>
                                                     <option value="Pertanian"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Pertanian' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Pertanian' ? 'selected' : '' }}>
                                                         Pertanian</option>
                                                     <option value="Energi"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Energi' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Energi' ? 'selected' : '' }}>
                                                         Energi</option>
                                                     <option value="Transportasi"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Transportasi' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Transportasi' ? 'selected' : '' }}>
                                                         Transportasi</option>
                                                     <option value="Retail"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Retail' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Retail' ? 'selected' : '' }}>
                                                         Retail</option>
                                                     <option value="Pariwisata"
-                                                        {{ isset($industri->bidang_industri) && $industri->bidang_industri == 'Pariwisata' ? 'selected' : '' }}>
+                                                        {{ old('bidang_industri', $industri->bidang_industri ?? '') == 'Pariwisata' ? 'selected' : '' }}>
                                                         Pariwisata</option>
                                                 </select>
                                             </div>
@@ -144,18 +142,17 @@
                                             <div class="form-group">
                                                 <label for="email">Email :</label>
                                                 <input type="email" id="email" name="email" class="form-control"
-                                                    value="{{ Auth::user()->email }}" readonly>
+                                                    value="{{ old('email', Auth::user()->email) }}" readonly>
                                             </div>
                                             <div class="form-group">
                                                 <label for="akta_pendirian">Akta Pendirian :</label>
                                                 <input type="text" id="akta_pendirian" name="akta_pendirian" class="form-control"
-                                                    value="{{ isset($industri->akta_pendirian) ? $industri->akta_pendirian : '' }}" required>
+                                                    value="{{ old('akta_pendirian', $industri->akta_pendirian ?? '') }}" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="alamat">Alamat :</label>
-
                                                 <textarea type="text" id="alamat" name="alamat" class="form-control" placeholder="Masukan Alamat" required
-                                                    cols="1" rows="4">{{ isset($industri->alamat) ? $industri->alamat : '' }}</textarea>
+                                                    cols="1" rows="4">{{ old('alamat', $industri->alamat ?? '') }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -200,51 +197,6 @@
             transform: translateY(-2px);
             color: white;
         }
-
-        .btn-search {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            color: white;
-            background: linear-gradient(45deg, #7b2cbf, #3a0ca3);
-            justify-content: center;
-            align-items: center;
-        }
-
-
-        @media (max-width: 768px) {
-            .scroll-container {
-                overflow-y: auto;
-                height: 600px;
-            }
-        }
-
-
-        @media (min-width: 769px) {
-            .scroll-container {
-                overflow-y: auto;
-                height: 370px;
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .fade-in.show {
-            opacity: 1;
-        }
-
-        .fade-out {
-            opacity: 1;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .fade-out.hide {
-            opacity: 0;
-        }
     </style>
 
     <script>
@@ -254,35 +206,16 @@
 
             uploadBtn.addEventListener('change', function(event) {
                 const file = event.target.files[0];
+                const reader = new FileReader();
+
+                reader.onload = function(e) {
+                    profilePic.src = e.target.result;
+                };
+
                 if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        profilePic.src = e.target.result;
-                    };
                     reader.readAsDataURL(file);
                 }
             });
-        });
-        document.addEventListener('DOMContentLoaded', function() {
-            var successAlert = document.getElementById('success-alert');
-
-            if (successAlert) {
-                // Memunculkan alert dengan transisi
-                setTimeout(function() {
-                    successAlert.classList.add('show');
-                }, 100);
-
-                // Menghilangkan alert setelah 1.5 detik dengan efek fade-out
-                setTimeout(function() {
-                    successAlert.classList.remove('show');
-                    successAlert.classList.add('fade-out');
-
-                    // Menghilangkan alert dari DOM setelah transisi selesai
-                    setTimeout(function() {
-                        successAlert.style.display = 'none';
-                    }, 500);
-                }, 1500);
-            }
         });
     </script>
 @endsection

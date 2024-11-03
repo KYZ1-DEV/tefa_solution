@@ -108,7 +108,7 @@ class AuthController extends Controller
         ]);
 
         $infoRegister = [
-        'name' => $request->name,
+        'name' => strtoupper( $request->name),
         'email' => $request->email,
         'password' => $request->password,
         'role' => 'sekolah'

@@ -24,6 +24,14 @@
             </div>
         @endif
 
+        @if (Session::get('alert'))
+            <div class="alert alert-danger alert-dismissible fade show">
+                <ul>
+                    <li>{{ Session::get('alert') }}</li>
+                </ul>
+            </div>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
@@ -61,7 +69,7 @@
 
                             <!-- Profile Edit Form (Right) -->
                             <div class="col-md-9">
-                                <form action="{{ route('schools.profile.update') }}" novalidate method="POST"
+                                <form action="{{ route('schools.profile.update') }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -75,20 +83,26 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="npsn">Nomor Pokok Sekolah Nasional (NPSN) :</label>
-                                                <input type="tel" id="npsn" name="npsn" class="form-control" value="{{ isset($sekolah->npsn) ? $sekolah->npsn : '' }}" placeholder="Masukan NPSN" required>
+                                                <input type="tel" id="npsn" name="npsn" class="form-control" 
+                                                       value="{{ old('npsn', $sekolah->npsn ?? '') }}" 
+                                                       placeholder="Masukan NPSN" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="name">Nama Sekolah :</label>
-                                                <input type="text" id="name" name="name" class="form-control" value="{{ Auth::user()->name }}" style="text-transform: uppercase;" placeholder="Masukan Nama Sekolah" required>
+                                                <input type="text" id="name" name="name" class="form-control" 
+                                                       value="{{ old('name', Auth::user()->name) }}" 
+                                                       style="text-transform: uppercase;" placeholder="Masukan Nama Sekolah" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="email">Email :</label>
-                                                <input type="email" id="email" name="email" class="form-control" value="{{ Auth::user()->email }}" readonly>
+                                                <input type="email" id="email" name="email" class="form-control" 
+                                                       value="{{ Auth::user()->email }}" readonly>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="phone">Nomor Telepon</label>
-                                                <input type="tel" id="phone" name="phone" placeholder="Nomor Telepon" class="form-control" value="{{ isset($sekolah->no_tlpn_sekolah) ? $sekolah->no_tlpn_sekolah : '' }}" required>
+                                                <input type="tel" id="phone" name="phone" placeholder="Nomor Telepon" 
+                                                       class="form-control" value="{{ old('phone', $sekolah->no_tlpn_sekolah ?? '') }}" required>
                                             </div>
 
                                         </div>
@@ -96,29 +110,32 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="kepsek">Kepala Sekolah :</label>
-                                                <input type="text" id="kepsek" name="kepsek" class="form-control" value="{{ isset($sekolah->kepsek) ? $sekolah->kepsek : '' }}" placeholder="Masukan Nama Kepala Sekolah" required>
+                                                <input type="text" id="kepsek" name="kepsek" class="form-control" 
+                                                       value="{{ old('kepsek', $sekolah->kepsek ?? '') }}" 
+                                                       placeholder="Masukan Nama Kepala Sekolah" required>
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenjang">Jenjang :</label>
                                                 <select id="jenjang" name="jenjang" class="form-control" required>
                                                     <option value="" disabled {{ !isset($sekolah->jenjang) ? 'selected' : '' }}>Pilih Jenjang</option>
-                                                    <option value="SMK" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMK' ? 'selected' : '' }}>SMK</option>
-                                                    <option value="SMA" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMA' ? 'selected' : '' }}>SMA</option>
-                                                    <option value="SMP" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SMP' ? 'selected' : '' }}>SMP</option>
-                                                    <option value="SD" {{ isset($sekolah->jenjang) && $sekolah->jenjang == 'SD' ? 'selected' : '' }}>SD</option>
+                                                    <option value="SMK" {{ old('jenjang', $sekolah->jenjang ?? '') == 'SMK' ? 'selected' : '' }}>SMK</option>
+                                                    <option value="SMA" {{ old('jenjang', $sekolah->jenjang ?? '') == 'SMA' ? 'selected' : '' }}>SMA</option>
+                                                    <option value="SMP" {{ old('jenjang', $sekolah->jenjang ?? '') == 'SMP' ? 'selected' : '' }}>SMP</option>
+                                                    <option value="SD" {{ old('jenjang', $sekolah->jenjang ?? '') == 'SD' ? 'selected' : '' }}>SD</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="status">Status :</label>
                                                 <select id="status" name="status" class="form-control" required>
                                                     <option value="" disabled {{ !isset($sekolah->status) ? 'selected' : '' }}>Pilih Status</option>
-                                                    <option value="Negeri" {{ isset($sekolah->status) && $sekolah->status == 'Negeri' ? 'selected' : '' }}>Negeri</option>
-                                                    <option value="Swasta" {{ isset($sekolah->status) && $sekolah->status == 'Swasta' ? 'selected' : '' }}>Swasta</option>
+                                                    <option value="Negeri" {{ old('status', $sekolah->status ?? '') == 'Negeri' ? 'selected' : '' }}>Negeri</option>
+                                                    <option value="Swasta" {{ old('status', $sekolah->status ?? '') == 'Swasta' ? 'selected' : '' }}>Swasta</option>
                                                 </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="alamat">Alamat :</label>
-                                                <textarea id="alamat" name="alamat" class="form-control" placeholder="Masukan Alamat Sekolah" required>{{ isset($sekolah->alamat) ? $sekolah->alamat : '' }}</textarea>
+                                                <textarea id="alamat" name="alamat" class="form-control" 
+                                                          placeholder="Masukan Alamat Sekolah" required>{{ old('alamat', $sekolah->alamat ?? '') }}</textarea>
                                             </div>
                                             
                                         </div>
@@ -169,4 +186,3 @@
         });
     </script>
 @endsection
-

@@ -572,19 +572,15 @@ class AdminController extends Controller
 
     public function dataMitra()
     {
-        $mitra = Mitra::all();
-        $sekolah = Sekolah::all();
-        $industri = Industri::all();
-        $bantuan = Bantuan::all();
-        return view('admin.data_mitra.index', compact('mitra', 'sekolah', 'industri', 'bantuan'));
+        $mitra = Mitra::orderBy('created_at', 'desc')->get();
+        return view('admin.data_mitra.index', compact('mitra'));
     }
 
     public function createMitra()
     {
         $sekolah = Sekolah::all();
-        $industri = Industri::all();
         $bantuan = Bantuan::with('industri')->get();
-        return view('admin.data_mitra.tambah', compact('sekolah', 'industri', 'bantuan'));
+        return view('admin.data_mitra.tambah', compact('sekolah', 'bantuan'));
     }
 
     public function storeMitra(Request $request)
@@ -625,7 +621,8 @@ class AdminController extends Controller
 
         $durasiBermitra = $tanggalBermitra->format('Y-m-d');
 
-        $industri = Bantuan::where('id_industri', $request->id_bantuan)->first();
+        $industri = Bantuan::where('id', $request->id_bantuan)->first();
+        // dd($industri);
 
         Mitra::create([
             'program_kemitraan' => $request->input('program_kemitraan'),
@@ -651,7 +648,7 @@ class AdminController extends Controller
         $request->validate([
             'program_kemitraan' => 'required|string|max:255',
             'tanggal_bermitra' => 'required|date',
-            'periode_bermitra' => 'required|in:1 tahun,2 tahun,3 tahun',
+            'periode_bermitra' => 'required|in:1,2,3',
             'durasi_bermitra' => 'nullable|date',
             'progres_bermitra' => 'required|in:0%,50%,100%',
             'status_mitra' => 'required|in:aktif,non-aktif',
