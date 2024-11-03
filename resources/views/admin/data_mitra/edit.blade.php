@@ -55,9 +55,9 @@
                 <div class="form-group">
                     <label for="periode_bermitra">Periode Bermitra</label>
                     <select name="periode_bermitra" class="form-control" required>
-                        <option value="1 tahun" {{ $mitra->periode_bermitra == '1 Tahun' ? 'selected' : '' }}>1 tahun</option>
-                        <option value="2 tahun" {{ $mitra->periode_bermitra == '2 Tahun' ? 'selected' : '' }}>2 tahun</option>
-                        <option value="3 tahun" {{ $mitra->periode_bermitra == '3 Tahun' ? 'selected' : '' }}>3 tahun</option>
+                        <option value="1" {{ $mitra->periode_bermitra == '1 Tahun' ? 'selected' : '' }}>1 tahun</option>
+                        <option value="2" {{ $mitra->periode_bermitra == '2 Tahun' ? 'selected' : '' }}>2 tahun</option>
+                        <option value="3" {{ $mitra->periode_bermitra == '3 Tahun' ? 'selected' : '' }}>3 tahun</option>
                     </select>
                 </div>
 

@@ -39,7 +39,7 @@ class SekolahController extends Controller
             'jenjang' => 'required|max:10',
             'kepsek' => 'required|max:255',
             'alamat' => 'required|max:255',
-            'email' => 'required|unique:sekolah,email|email|max:255',
+            'email' => 'required|email|max:255',
             'phone' => [
                 'required',
                 'regex:/^(\(\d{3,5}\)\s?\d{5,10}|\d{10,15})$/'
@@ -67,7 +67,6 @@ class SekolahController extends Controller
             'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
             
             'email.required' => 'Email harus diisi.',
-            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
             'email.email' => 'Format email tidak valid.',
             'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
             
@@ -112,13 +111,29 @@ class SekolahController extends Controller
             $user->update();
         }
     
-        $sekolah = Sekolah::where('id_user', $user->id)->first();
-        $checkNpsn = Sekolah::where('npsn', $request->npsn)->first();
     
-        if ($checkNpsn && (!$sekolah || $checkNpsn->npsn !== $sekolah->npsn)) {
-            return redirect()->route('schools.profile.show')->with('error', 'Gagal Edit Profile, Nomor pokok sekolah(NPSN) sudah ada!!');
+        $checkSekolah = Sekolah::where('id_user', '!=', $user->id)
+        ->where(function ($query) use ($request) {
+            $query->where('email', $request->email)
+                ->orWhere('npsn', $request->npsn);
+        })->first();
+
+    if ($checkSekolah) {
+        $alert = [];
+
+        if ($checkSekolah->email == $request->email) {
+            $alert[] = 'Email sudah digunakan. ';
         }
-    
+        if ($checkSekolah->npsn == $request->npsn) {
+            $alert[] = 'Npsn sudah digunakan.';
+        }
+       
+
+        $alertMessage = implode(' ', $alert);
+
+        return redirect()->back()->with('alert', $alertMessage);
+    }
+
         Sekolah::updateOrCreate(['id_user' => $user->id], $dataSekolah);
         $user->name = strtoupper($request->name);
         $user->save();
@@ -246,7 +261,7 @@ class SekolahController extends Controller
 
         $sekolah = Sekolah::where('id_user', Auth::id())->first();
         if (!$sekolah) {
-            return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
+            return redirect()->route('schools.profile.show')->with('error', 'Lengkapi data Sekolah terlebih dahulu !!!');
         }
 
         $checkMitra = Mitra::where('id_sekolah', $sekolah->id)->get();
@@ -332,7 +347,7 @@ class SekolahController extends Controller
 
         $sekolah = Sekolah::where('id_user', Auth::id())->first();
         if (!$sekolah) {
-            return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
+            return redirect()->route('schools.profile.show')->with('error', 'Lengkapi data Sekolah terlebih dahulu !!!');
         }
 
         if ($request->hasFile('bukti_laporan')) {
@@ -392,7 +407,7 @@ class SekolahController extends Controller
 
         $sekolah = Sekolah::where('id_user', $user->id)->first();
         if (!$sekolah) {
-            return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
+            return redirect()->route('schools.profile.show')->with('error', 'Lengkapi data Sekolah terlebih dahulu !!!');
         }
 
             $laporan = Laporan::where('id', $id)
@@ -435,7 +450,7 @@ class SekolahController extends Controller
 
         $sekolah = Sekolah::where('id_user', $user->id)->first();
         if (!$sekolah) {
-            return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
+            return redirect()->route('schools.profile.show')->with('error', 'Lengkapi data Sekolah terlebih dahulu !!!');
         }
 
         $laporan = Laporan::where('id', $id)

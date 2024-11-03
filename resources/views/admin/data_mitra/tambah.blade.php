@@ -68,7 +68,7 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="id_bantuan">Bantuan Dan Nama Industrinya (Optional)</label>
+                    <label for="id_bantuan">Bantuan Dan Nama Industrinya</label>
                     <select name="id_bantuan" class="form-control">
                         <option value="">Tidak Ada</option>
                         @foreach ($bantuan as $b)

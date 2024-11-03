@@ -35,25 +35,28 @@ class IndustriController extends Controller
     {
         // Validasi input
         $request->validate([
-            'nama_industri' => 'required|max:255',
-            'email' => 'required|unique:industri,email|email|max:255',
-            'phone' => 'required|digits_between:10,15',
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => [
+                'required',
+                'regex:/^(\(\d{3,5}\)\s?\d{5,10}|\d{10,15})$/'
+            ],
             'alamat' => 'required|max:255',
             'bidang_industri' => 'required|max:100',
-            'npwp' => 'required|unique:industri,npwp|digits:15',
-            'akta_pendirian' => 'required|unique:industri,akta_pendirian',
+            'npwp' => 'required|digits:15',
+            'akta_pendirian' => 'required',
             'image' => 'nullable|max:2024|mimes:png,jpg',
         ], [
-            'nama_industri.required' => 'Nama industri harus diisi.',
-            'nama_industri.max' => 'Nama industri tidak boleh lebih dari 255 karakter.',
+            'name.required' => 'Nama industri harus diisi.',
+            'name.max' => 'Nama industri tidak boleh lebih dari 255 karakter.',
             
             'email.required' => 'Email harus diisi.',
-            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
             'email.email' => 'Format email tidak valid.',
             'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
             
             'phone.required' => 'Nomor telepon harus diisi.',
-            'phone.digits_between' => 'Nomor telepon harus antara 10 hingga 15 digit.',
+            'phone.regex' => 'Nomor telepon harus dalam format yang valid, misalnya (23312) 908** atau 0823*****, dan harus terdiri dari 10 hingga 15 digit.',
+            
             
             'alamat.required' => 'Alamat harus diisi.',
             'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
@@ -62,11 +65,9 @@ class IndustriController extends Controller
             'bidang_industri.max' => 'Bidang industri tidak boleh lebih dari 100 karakter.',
             
             'npwp.required' => 'NPWP harus diisi.',
-            'npwp.unique' => 'NPWP ini sudah terdaftar. Gunakan NPWP lain.',
             'npwp.digits' => 'NPWP harus terdiri dari 15 digit.',
             
             'akta_pendirian.required' => 'Akta pendirian harus diisi.',
-            'akta_pendirian.unique' => 'Akta pendirian ini sudah terdaftar. Gunakan akta lain.',
             
             'image.max' => 'Ukuran file gambar tidak boleh lebih dari 2 MB.',
             'image.mimes' => 'Gambar harus berformat png atau jpg.',
@@ -75,17 +76,31 @@ class IndustriController extends Controller
         $auth = Auth::user();
         $user = User::find($auth->id);
 
-        $exists = industri::where(function ($query) use ($request, $user) {
+        $checkIndustri = industri::where('id_user', '!=', $user->id)
+        ->where(function ($query) use ($request) {
             $query->where('email', $request->email)
                 ->orWhere('npwp', $request->npwp)
                 ->orWhere('akta_pendirian', $request->akta_pendirian);
-        })
-            ->where('id_user', '!=', $user->id)
-            ->exists();
+        })->first();
 
-        if ($exists) {
-            return redirect()->back()->with('alert', 'EMAIL, NPWP, & SKDP TIDAK BOLEH SAMA, SILAHKAN DIPERBAIKI!');
+    if ($checkIndustri) {
+        $alert = [];
+
+        if ($checkIndustri->email == $request->email) {
+            $alert[] = 'Email sudah digunakan. ';
         }
+        if ($checkIndustri->npwp == $request->npwp) {
+            $alert[] = 'NPWP sudah digunakan.';
+        }
+        if ($checkIndustri->akta_pendirian == $request->akta_pendirian) {
+            $alert[] = 'Akta Pendirian sudah digunakan.';
+        }
+
+        $alertMessage = implode(' ', $alert);
+
+        return redirect()->back()->with('alert', $alertMessage);
+    }
+
 
 
         $dataIndustri = [
