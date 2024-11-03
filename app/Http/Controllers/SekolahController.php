@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Mitra;
-use App\Models\Bantuan;
 use App\Models\Laporan;
 use App\Models\Sekolah;
 use Illuminate\Http\Request;
@@ -40,28 +39,45 @@ class SekolahController extends Controller
             'jenjang' => 'required|max:10',
             'kepsek' => 'required|max:255',
             'alamat' => 'required|max:255',
-            'email' => 'required|email|max:255',
-            'phone' => 'required|max:15',
-            'image' => 'nullable|max:1045|mimes:png,jpg',
+            'email' => 'required|unique:sekolah,email|email|max:255',
+            'phone' => [
+                'required',
+                'regex:/^(\(\d{3,5}\)\s?\d{5,10}|\d{10,15})$/'
+            ],
+            'image' => 'nullable|max:2045|mimes:png,jpg',
         ], [
-            // pesan kesalahan
-            'npsn.required' => 'NPSN harus diisi !!',
-            'npsn.max' => 'NPSN maksimal 8 digit !!',
-            'npsn.min' => 'NPSN minimal 8 digit !!',
-            'name.required' => 'Nama harus diisi !!',
-            'name.max' => 'Nama terlalu panjang !!',
-            'name.min' => 'Nama terlalu pendek !!',
-            'email.required' => 'Email harus diisi !!',
-            'email.email' => 'Format email tidak valid !!',
-            'phone.required' => 'Nomor telepon harus diisi !!',
-            'phone.max' => 'Nomor telepon harus diisi !!',
-            'alamat.required' => 'Alamat harus diisi !!',
-            'status.required' => 'Status harus diisi !!',
-            'jenjang.required' => 'Jenjang harus diisi !!',
-            'kepsek.required' => 'Kepala Sekolah harus diisi !!',
-            'image.max' => 'Foto maksimal 1MB',
-            'image.mimes' => 'Foto harus dalam format PNG atau JPG !',
+            'npsn.required' => 'NPSN harus diisi.',
+            'npsn.min' => 'NPSN harus terdiri dari 8 karakter.',
+            'npsn.max' => 'NPSN tidak boleh lebih dari 8 karakter.',
+            
+            'name.required' => 'Nama sekolah harus diisi.',
+            'name.min' => 'Nama sekolah harus terdiri dari minimal 4 karakter.',
+            'name.max' => 'Nama sekolah tidak boleh lebih dari 255 karakter.',
+            
+            'status.required' => 'Status harus diisi.',
+            'status.max' => 'Status tidak boleh lebih dari 10 karakter.',
+            
+            'jenjang.required' => 'Jenjang pendidikan harus diisi.',
+            'jenjang.max' => 'Jenjang pendidikan tidak boleh lebih dari 10 karakter.',
+            
+            'kepsek.required' => 'Nama kepala sekolah harus diisi.',
+            'kepsek.max' => 'Nama kepala sekolah tidak boleh lebih dari 255 karakter.',
+            
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            
+            'phone.required' => 'Nomor telepon harus diisi.',
+            'phone.regex' => 'Nomor telepon harus dalam format yang valid, misalnya (23312) 908** atau 0823*****, dan harus terdiri dari 10 hingga 15 digit.',
+            
+            'image.max' => 'Ukuran file gambar tidak boleh lebih dari 2 MB.',
+            'image.mimes' => 'Gambar harus berformat png atau jpg.',
         ]);
+        
     
         $dataSekolah = [
             'npsn' => $request->npsn,
@@ -77,7 +93,6 @@ class SekolahController extends Controller
         $auth = Auth::user();
         $user = User::find($auth->id);
         
-        // Proses upload gambar
         if($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . uniqid() . "." . $image->extension();
@@ -97,16 +112,13 @@ class SekolahController extends Controller
             $user->update();
         }
     
-        // Cek apakah profile baru atau update
         $sekolah = Sekolah::where('id_user', $user->id)->first();
         $checkNpsn = Sekolah::where('npsn', $request->npsn)->first();
     
-        // Jika NPSN sudah ada
         if ($checkNpsn && (!$sekolah || $checkNpsn->npsn !== $sekolah->npsn)) {
             return redirect()->route('schools.profile.show')->with('error', 'Gagal Edit Profile, Nomor pokok sekolah(NPSN) sudah ada!!');
         }
     
-        // Update atau buat data sekolah
         Sekolah::updateOrCreate(['id_user' => $user->id], $dataSekolah);
         $user->name = strtoupper($request->name);
         $user->save();
@@ -119,7 +131,6 @@ class SekolahController extends Controller
         $laporan = Laporan::find($id);
     
         if ($laporan && $laporan->bukti_laporan) {
-            // Path file berdasarkan data dari database
             $filePath = 'laporan/' . $laporan->progres_laporan . '/' . $laporan->bukti_laporan;
             $absolutePath = storage_path('app/public/' . $filePath);
     
@@ -133,7 +144,6 @@ class SekolahController extends Controller
             }
         }
     
-        // Jika file laporan tidak ditemukan, gunakan file template sebagai cadangan
         $defaultFile = 'template/template_laporan.pdf';
         $defaultFilePath = storage_path('app/public/' . $defaultFile);
     
@@ -151,7 +161,6 @@ class SekolahController extends Controller
 
     public function downloadTemplateLaporan($persentase)
     {
-        // Tentukan file template berdasarkan persentase
         switch ($persentase) {
             case 0:
                 $defaultFile = 'template/template_laporan_0.pdf';
@@ -166,10 +175,8 @@ class SekolahController extends Controller
                 return redirect()->back()->with('error', 'Persentase laporan tidak valid!');
         }
     
-        // Path absolut file dalam storage
         $filePath = storage_path('app/public/' . $defaultFile);
     
-        // Periksa apakah file ada
         if (file_exists($filePath)) {
             return response()->streamDownload(function () use ($filePath) {
                 echo file_get_contents($filePath);
@@ -212,7 +219,7 @@ class SekolahController extends Controller
     }
 
     // Tampilkan halaman monitoring bantuan Sekolah
-    public function monitoringBantuan(Request $request)
+    public function monitoringBantuan()
      {
         $auth = Auth::user();
         $sekolah = Sekolah::where('id_user',$auth->id)->first();    
@@ -226,7 +233,6 @@ class SekolahController extends Controller
         ->get();
         
 
-         // Tampilkan ke view bersama data pencarian
          return view('sekolah.monitoring_bantuan.index', compact('mitras'));
      }
 
@@ -249,11 +255,7 @@ class SekolahController extends Controller
             return redirect()->route('schools.assistance-monitoring')->with('error', 'Belum ada bantuan dari industri!');
         }
 
-        // Ambil semua bantuan yang sesuai dengan sekolah ini
-        $mitra = Mitra::where('id_sekolah', $sekolah->id)
-            ->where('status_mitra', 'aktif')
-            ->with('bantuan')
-            ->get();
+
 
             $mitraID = Mitra::where('id_sekolah', $sekolah->id)
             ->where('status_mitra', 'aktif')
@@ -269,10 +271,8 @@ class SekolahController extends Controller
         }
         
         $defaultProgress = '0%';
-        // Tentukan progres laporan berdasarkan laporan terakhir
         if ($laporanTerakhir) {
             if ($laporanTerakhir->status_laporan === 'diterima') {
-                // Ubah progres_laporan jika laporan terakhir diterima
                 if ($laporanTerakhir->progres_laporan === '0%') {
                     $defaultProgress = '50%';
                 } elseif ($laporanTerakhir->progres_laporan === '50%') {
@@ -281,6 +281,11 @@ class SekolahController extends Controller
             }
         }
         // dd($defaultProgress);
+
+        $mitra = Mitra::where('id_sekolah', $sekolah->id)
+        ->where('status_mitra', 'aktif')
+        ->with('bantuan')
+        ->get();
 
         return view('sekolah.laporan.progress', compact('mitra', 'defaultProgress'));
     }
@@ -314,12 +319,15 @@ class SekolahController extends Controller
             'id_bantuan' => 'required|exists:bantuan,id',
             'nama_laporan' => 'required|max:255',
             'progres_laporan' => 'required|in:0%,50%,100%',
-            'bukti_laporan' => 'required|file|mimes:pdf|max:2048',
-            'deskripsi_laporan' => 'nullable',
+            'bukti_laporan' => 'required|file|mimes:pdf',
+            'deskripsi_laporan' => 'required',
         ], [
             'nama_laporan.required' => 'Nama laporan harus diisi !!',
             'nama_laporan.max' => 'Nama laporan maximal 255 digit !!',
             'bukti_laporan.required' => 'Bukti laporan harus diisi !!',
+            'bukti_laporan.file' => 'Bukti laporan harus file !!',
+            'bukti_laporan.mimes' => 'Bukti laporan harus PDF !!',
+            'deskripsi_laporan.required' => 'Deskripsi Laporan harus diisi',
         ]);
 
         $sekolah = Sekolah::where('id_user', Auth::id())->first();
@@ -327,14 +335,11 @@ class SekolahController extends Controller
             return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
         }
 
-        // Simpan file PDF
         if ($request->hasFile('bukti_laporan')) {
             $pdfName = 'bukti_laporan_' . $request->progres_laporan . time() . '.' . $request->file('bukti_laporan')->extension();
             $request->file('bukti_laporan')->storeAs('laporan/' . $request->progres_laporan . '/', $pdfName, 'public');
         }
 
-        // Ambil laporan terakhir
-       
         $mitra = Mitra::where('id_bantuan', $request->id_bantuan)
         ->where('id_sekolah', $sekolah->id)
         ->firstOrFail();
@@ -413,26 +418,26 @@ class SekolahController extends Controller
         $request->validate([
             'nama_laporan' => 'required|string|max:255',
             'deskripsi_laporan' => 'required|string',
-            'bukti_laporan' => 'nullable|file|mimes:pdf|max:2048',
+            'bukti_laporan' => 'required|file|mimes:pdf',
             'tanggal_laporan' => 'required|date',
         ], [
             'nama_laporan.required' => 'Nama laporan harus diisi !!',
             'deskripsi_laporan.required' => 'Deskripsi laporan harus diisi !!',
+            'bukti_laporan.required' => 'Bukti Laporan harus di upload',
+            'bukti_laporan.file' => 'Bukti Laporan Harus File',
+            'bukti_laporan.mimes' => 'Bukti Laporan harus file PDF',
         ]);
 
-        // Pastikan user terautentikasi
         $user = Auth::user();
         if (!$user) {
-            return redirect()->route('login'); // Redirect ke login jika tidak terautentikasi
+            return redirect()->route('login');
         }
 
-        // Ambil data sekolah berdasarkan user
         $sekolah = Sekolah::where('id_user', $user->id)->first();
         if (!$sekolah) {
             return redirect()->route('schools.profile.show')->with('error', 'Data sekolah tidak ditemukan. Silakan lengkapi profil sekolah Anda.');
         }
 
-        // Ambil laporan berdasarkan ID dan validasi status
         $laporan = Laporan::where('id', $id)
         ->where('status_laporan', 'revisi')
         ->whereHas('mitra', function ($query) use ($sekolah) {
@@ -446,21 +451,15 @@ class SekolahController extends Controller
 
         
 
-        // Update field laporan
         $laporan->nama_laporan = $request->input('nama_laporan');
         $laporan->deskripsi_laporan = $request->input('deskripsi_laporan');
 
-        // Update tanggal laporan ke tanggal saat ini
         $laporan->tanggal_laporan = now(); 
-        // Jika ada bukti laporan yang diunggah
         if ($request->hasFile('bukti_laporan')) {
-            // Hapus file yang lama jika ada
             if ($laporan->bukti_laporan) {
                 Storage::delete($laporan->bukti_laporan);
             }
 
-            // Simpan file yang baru
-            // Simpan file PDF
         if ($request->hasFile('bukti_laporan')) {
             $pdfName = 'bukti_laporan_' . $request->progres_laporan . time() . '.' . $request->file('bukti_laporan')->extension();
              $request->file('bukti_laporan')->storeAs('laporan/' . $request->progres_laporan . '/', $pdfName, 'public');
@@ -471,10 +470,8 @@ class SekolahController extends Controller
 
         $laporan->status_laporan = 'direvisi'; 
 
-        // Simpan perubahan ke database
         $laporan->save();
 
-        // Redirect ke halaman informasi progres dengan pesan sukses
         return redirect()->route('information_progress')->with('success', 'Laporan berhasil diperbarui.');
     }
 

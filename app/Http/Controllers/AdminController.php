@@ -20,8 +20,6 @@ class AdminController extends Controller
     {
         return view("pointakses.admin.index");
     }
-
-
     public function uploadTemplate(Request $request)
     {
         // Validasi file PDF dan persentase
@@ -107,8 +105,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.profile.show')->with('success', 'Edit Profile Berhasil');
     }
-
-
     public function password()
     {
         return view('admin.profile.password');
@@ -170,8 +166,6 @@ class AdminController extends Controller
 
         return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan');
     }
-
-
     public function editUser($id)
     {
         $user = User::find($id);
@@ -220,6 +214,9 @@ class AdminController extends Controller
 
 
 
+
+
+
     // School Management// Menampilkan data sekolah
     public function dataSekolah()
     {
@@ -230,44 +227,80 @@ class AdminController extends Controller
     // Menampilkan form tambah sekolah
     public function createSekolah()
     {
-        $users = User::where('role', 'sekolah')->get();
+        $users = User::where('role', 'sekolah')
+        ->whereDoesntHave('sekolah') 
+        ->get();
+
+        if ($users->isEmpty()) {
+        return redirect()->route('admin.schools.index')->withErrors(['error' => 'Semua user sekolah sudah memiliki sekolah']);
+        }
+
         return view('admin.data_sekolah.tambah', compact('users'));
     }
 
     // Menyimpan sekolah baru
     public function storeSekolah(Request $request)
-    {
+    {   
+        // dd($request->all());
         $request->validate([
-            'npsn' => 'required|unique:sekolah',
-            'nama_sekolah' => 'required|max:255',
-            'status' => 'required',
-            'jenjang' => 'required',
+            'npsn' => 'required|unique:sekolah,npsn|min:8|max:8',
+            'nama_sekolah' => 'required|min:4|max:255',
+            'status' => 'required|max:10',
+            'jenjang' => 'required|max:10',
             'kepsek' => 'required|max:255',
             'alamat' => 'required|max:255',
-            'email' => 'required|email|unique:sekolah',
-            'no_tlpn_sekolah' => 'required|regex:/^\+?[0-9]{1,3}?[0-9]{7,14}$/',
-            'id_user' => 'required|exists:users,id'
+            'email' => 'required|unique:sekolah,email|email|max:255',
+            'no_tlpn_sekolah' => [
+                'required',
+                'regex:/^(\(\d{3,5}\)\s?\d{5,10}|\d{10,15})$/'
+            ],
         ], [
-            'npsn.required' => 'NPSN harus diisi!',
-            'npsn.unique' => 'NPSN sudah terdaftar!',
-            'nama_sekolah.required' => 'Nama sekolah harus diisi!',
-            'nama_sekolah.max' => 'Nama sekolah terlalu panjang (maksimal 255 karakter)!',
-            'status.required' => 'Status harus diisi!',
-            'jenjang.required' => 'Jenjang harus diisi!',
-            'kepsek.required' => 'Nama Kepala Sekolah harus diisi!',
-            'kepsek.max' => 'Nama Kepala Sekolah terlalu panjang (maksimal 255 karakter)!',
-            'alamat.required' => 'Alamat harus diisi!',
-            'alamat.max' => 'Alamat terlalu panjang (maksimal 255 karakter)!',
-            'email.required' => 'Email harus diisi!',
-            'email.email' => 'Format email tidak valid!',
-            'email.unique' => 'Email sudah terdaftar!',
-            'no_tlpn_sekolah.required' => 'Nomor telepon harus diisi!',
-            'no_tlpn_sekolah.regex' => 'Format nomor telepon tidak valid!',
-            'id_user.required' => 'ID pengguna harus diisi!',
-            'id_user.exists' => 'ID pengguna tidak terdaftar!'
+            'npsn.required' => 'NPSN harus diisi.',
+            'npsn.unique' => 'NPSN ini sudah terdaftar. Gunakan NPSN lain.',
+            'npsn.min' => 'NPSN harus terdiri dari 8 karakter.',
+            'npsn.max' => 'NPSN tidak boleh lebih dari 8 karakter.',
+            
+            'nama_sekolah.required' => 'Nama sekolah harus diisi.',
+            'nama_sekolah.min' => 'Nama sekolah harus terdiri dari minimal 4 karakter.',
+            'nama_sekolah.max' => 'Nama sekolah tidak boleh lebih dari 255 karakter.',
+            
+            'status.required' => 'Status harus diisi.',
+            'status.max' => 'Status tidak boleh lebih dari 10 karakter.',
+            
+            'jenjang.required' => 'Jenjang pendidikan harus diisi.',
+            'jenjang.max' => 'Jenjang pendidikan tidak boleh lebih dari 10 karakter.',
+            
+            'kepsek.required' => 'Nama kepala sekolah harus diisi.',
+            'kepsek.max' => 'Nama kepala sekolah tidak boleh lebih dari 255 karakter.',
+            
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            
+            'no_tlpn_sekolah.required' => 'Nomor telepon harus diisi.',
+            'no_tlpn_sekolah.regex' => 'Nomor telepon harus dalam format yang valid, misalnya (23312) 908** atau 0823*****, dan harus terdiri dari 10 hingga 15 digit.',
         ]);
 
-        Sekolah::create($request->all());
+
+
+        $dataSekolah = [
+            'npsn' => $request->npsn,
+            'nama_sekolah' => strtoupper($request->nama_sekolah),
+            'email' => $request->email,
+            'no_tlpn_sekolah' => $request->no_tlpn_sekolah,
+            'alamat' => $request->alamat,
+            'status' => $request->status,
+            'jenjang' => $request->jenjang,
+            'kepsek' => $request->kepsek,
+            'id_user' => $request->id_user
+        ];
+        
+
+        Sekolah::create($dataSekolah);
 
         return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil ditambahkan.');
     }
@@ -275,7 +308,14 @@ class AdminController extends Controller
     // Menampilkan form edit sekolah
     public function editSekolah($id)
     {
-        $users = User::where('role', 'sekolah')->get();
+        $users = User::where('role', 'sekolah')
+        ->where(function($query) use ($id) {  
+            $query->whereDoesntHave('sekolah')
+                  ->orWhereHas('sekolah', function($q) use ($id) {
+                      $q->where('id', $id);
+                  });
+        })
+        ->get();
         $sekolah = Sekolah::findOrFail($id);
         return view('admin.data_sekolah.edit', compact('sekolah', 'users'));
     }
@@ -283,38 +323,67 @@ class AdminController extends Controller
     // Memperbarui data sekolah
     public function updateSekolah(Request $request, $id)
     {
+        $sekolah = Sekolah::findOrFail($id);
+
         $request->validate([
-            'npsn' => 'required|unique:sekolah,npsn,' . $id,
-            'nama_sekolah' => 'required|max:255',
-            'status' => 'required',
-            'jenjang' => 'required',
+            'npsn' => 'required|min:8|max:8|unique:sekolah,npsn,' . $sekolah->id,
+            'nama_sekolah' => 'required|min:4|max:255',
+            'status' => 'required|max:10',
+            'jenjang' => 'required|max:10',
             'kepsek' => 'required|max:255',
             'alamat' => 'required|max:255',
-            'email' => 'required|email|unique:sekolah,email,' . $id,
-            'no_tlpn_sekolah' => 'required|regex:/^\+?[0-9]{1,3}?[0-9]{7,14}$/',
-            'id_user' => 'required|exists:users,id'
+            'email' => 'required|email|max:255|unique:sekolah,email,' . $sekolah->id,
+            'no_tlpn_sekolah' => [
+                'required',
+                'regex:/^(\(\d{3,5}\)\s?\d{5,10}|\d{10,15})$/'
+            ],
         ], [
-            'npsn.required' => 'NPSN harus diisi!',
-            'npsn.unique' => 'NPSN sudah terdaftar!',
-            'nama_sekolah.required' => 'Nama sekolah harus diisi!',
-            'nama_sekolah.max' => 'Nama sekolah terlalu panjang (maksimal 255 karakter)!',
-            'status.required' => 'Status harus diisi!',
-            'jenjang.required' => 'Jenjang harus diisi!',
-            'kepsek.required' => 'Nama Kepala Sekolah harus diisi!',
-            'kepsek.max' => 'Nama Kepala Sekolah terlalu panjang (maksimal 255 karakter)!',
-            'alamat.required' => 'Alamat harus diisi!',
-            'alamat.max' => 'Alamat terlalu panjang (maksimal 255 karakter)!',
-            'email.required' => 'Email harus diisi!',
-            'email.email' => 'Format email tidak valid!',
-            'email.unique' => 'Email sudah terdaftar!',
-            'no_tlpn_sekolah.required' => 'Nomor telepon harus diisi!',
-            'no_tlpn_sekolah.regex' => 'Format nomor telepon tidak valid!',
-            'id_user.required' => 'ID pengguna harus diisi!',
-            'id_user.exists' => 'ID pengguna tidak terdaftar!'
+            'npsn.required' => 'NPSN harus diisi.',
+            'npsn.unique' => 'NPSN ini sudah terdaftar. Gunakan NPSN lain.',
+            'npsn.min' => 'NPSN harus terdiri dari 8 karakter.',
+            'npsn.max' => 'NPSN tidak boleh lebih dari 8 karakter.',
+            
+            'nama_sekolah.required' => 'Nama sekolah harus diisi.',
+            'nama_sekolah.min' => 'Nama sekolah harus terdiri dari minimal 4 karakter.',
+            'nama_sekolah.max' => 'Nama sekolah tidak boleh lebih dari 255 karakter.',
+            
+            'status.required' => 'Status harus diisi.',
+            'status.max' => 'Status tidak boleh lebih dari 10 karakter.',
+            
+            'jenjang.required' => 'Jenjang pendidikan harus diisi.',
+            'jenjang.max' => 'Jenjang pendidikan tidak boleh lebih dari 10 karakter.',
+            
+            'kepsek.required' => 'Nama kepala sekolah harus diisi.',
+            'kepsek.max' => 'Nama kepala sekolah tidak boleh lebih dari 255 karakter.',
+            
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            
+            'no_tlpn_sekolah.required' => 'Nomor telepon harus diisi.',
+            'no_tlpn_sekolah.regex' => 'Nomor telepon harus dalam format yang valid, misalnya (23312) 908** atau 0823*****, dan harus terdiri dari 10 hingga 15 digit.',
         ]);
 
-        $sekolah = Sekolah::findOrFail($id);
-        $sekolah->update($request->all());
+
+
+        $dataSekolah = [
+            'npsn' => $request->npsn,
+            'nama_sekolah' => strtoupper($request->nama_sekolah),
+            'email' => $request->email,
+            'no_tlpn_sekolah' => $request->no_tlpn_sekolah,
+            'alamat' => $request->alamat,
+            'status' => $request->status,
+            'jenjang' => $request->jenjang,
+            'kepsek' => $request->kepsek,
+            'id_user' => $request->id_user  
+        ];
+        
+
+        $sekolah->update($dataSekolah);
 
         return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil diperbarui.');
     }
@@ -327,11 +396,16 @@ class AdminController extends Controller
 
         return redirect()->route('admin.schools.index')->with('success', 'Data sekolah berhasil dihapus.');
     }
+
     public function showSekolah($id)
     {
         $sekolah = Sekolah::findOrFail($id);
         return view('admin.data_sekolah.show', compact('sekolah'));
     }
+
+
+
+
 
 
     // Industry Management
@@ -343,28 +417,56 @@ class AdminController extends Controller
 
     public function createIndustri()
     {
-        $users = User::where('role', 'industri')->get();
+        $users = User::where('role', 'industri')
+                     ->whereDoesntHave('industri') 
+                     ->get();
+    
+        if ($users->isEmpty()) {
+            return redirect()->route('admin.industries.index')->withErrors(['error' => 'Semua user industri sudah memiliki industri']);
+        }
+    
         return view('admin.data_industri.tambah', compact('users'));
     }
-
+    
     public function storeIndustri(Request $request)
     {
 
         $request->validate([
-            'nama_industri' => 'required|unique:industri|string|max:50',
-            'npwp' => 'required|integer|max:15',
-            'akta_pendirian' => 'required',
-            'email' => 'required|email|unique:industri',
-            'alamat' => 'required',
-            'bidang_industri' => 'required',
-            'no_tlpn_industri' => 'required|integer|max:13',
-            'id_user' => 'required|exists:users,id'
+            'nama_industri' => 'required|max:255',
+            'email' => 'required|unique:industri,email|email|max:255',
+            'no_tlpn_industri' => 'required|digits_between:10,15',
+            'alamat' => 'required|max:255',
+            'bidang_industri' => 'required|max:100',
+            'npwp' => 'required|unique:industri,npwp|digits:15',
+            'akta_pendirian' => 'required|unique:industri,akta_pendirian',
+            'image' => 'nullable|max:1024|mimes:png,jpg',
         ], [
-            'nama_industri.max' => 'maxsimal kata yang boleh di masukan tidak lebih dari 50',
-            'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
-            'npwp.max' => 'maximal nomer npwp adalah 15 digit',
-            'no_tlpn_industri' => 'maxsimal nomer telepon adalah 13 digit',
-            'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
+            'nama_industri.required' => 'Nama industri harus diisi.',
+            'nama_industri.max' => 'Nama industri tidak boleh lebih dari 255 karakter.',
+            
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            
+            'no_tlpn_industri.required' => 'Nomor telepon harus diisi.',
+            'no_tlpn_industri.digits_between' => 'Nomor telepon harus antara 10 hingga 15 digit.',
+            
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            
+            'bidang_industri.required' => 'Bidang industri harus diisi.',
+            'bidang_industri.max' => 'Bidang industri tidak boleh lebih dari 100 karakter.',
+            
+            'npwp.required' => 'NPWP harus diisi.',
+            'npwp.unique' => 'NPWP ini sudah terdaftar. Gunakan NPWP lain.',
+            'npwp.digits' => 'NPWP harus terdiri dari 15 digit.',
+            
+            'akta_pendirian.required' => 'Akta pendirian harus diisi.',
+            'akta_pendirian.unique' => 'Akta pendirian ini sudah terdaftar. Gunakan akta lain.',
+            
+            'image.max' => 'Ukuran file gambar tidak boleh lebih dari 1 MB.',
+            'image.mimes' => 'Gambar harus berformat png atau jpg.',
         ]);
 
         Industri::create($request->all());
@@ -373,31 +475,63 @@ class AdminController extends Controller
 
     public function editIndustri($id)
     {
-        $users = User::where('role', 'industri')->get();
+        $users = User::where('role', 'industri')
+            ->where(function($query) use ($id) {  
+                $query->whereDoesntHave('industri')
+                      ->orWhereHas('industri', function($q) use ($id) {
+                          $q->where('id', $id);
+                      });
+            })
+            ->get();
+    
         $industri = Industri::findOrFail($id);
         return view('admin.data_industri.edit', compact('industri', 'users'));
     }
-
+    
     public function updateIndustri(Request $request, $id)
     {
 
-        $request->validate([
-            'nama_industri' => 'required|string|max:50',
-            'npwp' => 'required|integer',
-            'akta_pendirian' => 'required',
-            'email' => 'required',
-            'alamat' => 'required',
-            'bidang_industri' => 'required',
-            'no_tlpn_industri' => 'required',
-            'id_user' => 'required|exists:users,id'
-        ], [
-            'nama_industri.max' => 'maxsimal kata yang boleh di masukan tidak lebih dari 50',
-            'npwp.integer' => 'harus memasukan angka bukan huruf pada npwp',
-            'no_tlpn_industri' => 'maxsimal nomer telepon adalah 13 digit',
-            'no_tlpn_industri.integer' => 'harus memasukan angka bukan huruf pada nomor telepon industri',
-        ]);
-
         $industri = Industri::findOrFail($id);
+
+        $request->validate([
+            'nama_industri' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:industri,email,' . $industri->id,
+            'no_tlpn_industri' => 'required|digits_between:10,15',
+            'alamat' => 'required|max:255',
+            'bidang_industri' => 'required|max:100',
+            'npwp' => 'required|digits:15|unique:industri,npwp,' . $industri->id,
+            'akta_pendirian' => 'required|unique:industri,akta_pendirian,' . $industri->id,
+            'image' => 'nullable|max:1024|mimes:png,jpg',
+        ], [
+            'nama_industri.required' => 'Nama industri harus diisi.',
+            'nama_industri.max' => 'Nama industri tidak boleh lebih dari 255 karakter.',
+            
+            'email.required' => 'Email harus diisi.',
+            'email.unique' => 'Email ini sudah terdaftar. Gunakan email lain.',
+            'email.email' => 'Format email tidak valid.',
+            'email.max' => 'Email tidak boleh lebih dari 255 karakter.',
+            
+            'no_tlpn_industri.required' => 'Nomor telepon harus diisi.',
+            'no_tlpn_industri.digits_between' => 'Nomor telepon harus antara 10 hingga 15 digit.',
+            
+            'alamat.required' => 'Alamat harus diisi.',
+            'alamat.max' => 'Alamat tidak boleh lebih dari 255 karakter.',
+            
+            'bidang_industri.required' => 'Bidang industri harus diisi.',
+            'bidang_industri.max' => 'Bidang industri tidak boleh lebih dari 100 karakter.',
+            
+            'npwp.required' => 'NPWP harus diisi.',
+            'npwp.unique' => 'NPWP ini sudah terdaftar. Gunakan NPWP lain.',
+            'npwp.digits' => 'NPWP harus terdiri dari 15 digit.',
+            
+            'akta_pendirian.required' => 'Akta pendirian harus diisi.',
+            'akta_pendirian.unique' => 'Akta pendirian ini sudah terdaftar. Gunakan akta lain.',
+            
+            'image.max' => 'Ukuran file gambar tidak boleh lebih dari 1 MB.',
+            'image.mimes' => 'Gambar harus berformat png atau jpg.',
+        ]);
+        
+
         $industri->update($request->all());
         return redirect()->route('admin.industries.index')->with('success', 'Data Industri berhasil diperbarui.');
     }
@@ -426,14 +560,15 @@ class AdminController extends Controller
         return redirect()->route('admin.industries.index')->with('success', 'Data industri berhasil di unverifikasi.');
     }
 
-
-
-
     public function showIndustri($id)
     {
         $industri = Industri::findOrFail($id);
         return view('admin.data_industri.show', compact('industri'));
     }
+
+
+
+
 
     public function dataMitra()
     {
@@ -441,8 +576,6 @@ class AdminController extends Controller
         $sekolah = Sekolah::all();
         $industri = Industri::all();
         $bantuan = Bantuan::all();
-
-
         return view('admin.data_mitra.index', compact('mitra', 'sekolah', 'industri', 'bantuan'));
     }
 
@@ -450,21 +583,40 @@ class AdminController extends Controller
     {
         $sekolah = Sekolah::all();
         $industri = Industri::all();
-        $bantuan = Bantuan::all();
+        $bantuan = Bantuan::with('industri')->get();
         return view('admin.data_mitra.tambah', compact('sekolah', 'industri', 'bantuan'));
     }
 
     public function storeMitra(Request $request)
     {
-        $request->validate(
-            [
-                'nama_mitra' => 'required|string|max:50',
-
-            ],
-            [
-                'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
-            ]
-        );
+        // dd($request->all());
+        $request->validate([
+            'program_kemitraan' => 'required|max:255',
+            'tanggal_bermitra' => 'required|date',
+            'periode_bermitra' => 'required|in:1,2,3',
+            'durasi_bermitra' => 'nullable|date',
+            'id_sekolah' => 'required|exists:sekolah,id',
+            'id_bantuan' => 'nullable|exists:bantuan,id',
+        ], [
+            'program_kemitraan.required' => 'Program kemitraan harus diisi.',
+            'program_kemitraan.max' => 'Program kemitraan tidak boleh lebih dari 255 karakter.',
+            
+            'tanggal_bermitra.required' => 'Tanggal bermitra harus diisi.',
+            'tanggal_bermitra.date' => 'Tanggal bermitra harus berupa tanggal yang valid.',
+            
+            'periode_bermitra.required' => 'Periode bermitra harus diisi.',
+            'periode_bermitra.in' => 'Periode bermitra hanya boleh 1, 2, atau 3 tahun.',
+            
+            'durasi_bermitra.date' => 'Durasi bermitra harus berupa tanggal yang valid.',
+            
+            'id_sekolah.required' => 'Sekolah harus dipilih.',
+            'id_sekolah.exists' => 'Sekolah yang dipilih tidak valid.',
+            
+            'id_industri.required' => 'Industri harus dipilih.',
+            'id_industri.exists' => 'Industri yang dipilih tidak valid.',
+            
+            'id_bantuan.exists' => 'Bantuan yang dipilih tidak valid.',
+        ]);
 
         $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
         $periodeBermitra = (int) $request->input('periode_bermitra');
@@ -473,16 +625,16 @@ class AdminController extends Controller
 
         $durasiBermitra = $tanggalBermitra->format('Y-m-d');
 
+        $industri = Bantuan::where('id_industri', $request->id_bantuan)->first();
+
         Mitra::create([
-            'nama_mitra' => $request->input('nama_mitra'),
+            'program_kemitraan' => $request->input('program_kemitraan'),
             'tanggal_bermitra' => $request->input('tanggal_bermitra'),
             'periode_bermitra' => $request->input('periode_bermitra'),
             'durasi_bermitra' => $durasiBermitra, // Tanggal akhir hasil perhitungan
-            'progres_bermitra' => $request->input('progres_bermitra'),
-            'status_mitra' => $request->input('status_mitra'),
             'id_sekolah' => $request->input('id_sekolah'),
-            'id_industri' => $request->input('id_industri'),
-            'id_bantuan' => $request->input('id_bantuan'), // Jika ada
+            'id_industri' => $industri->id_industri,
+            'id_bantuan' => $request->input('id_bantuan'), 
         ]);
 
         return redirect()->route('admin.partners.index')->with('success', 'Mitra berhasil ditambahkan.');
@@ -496,26 +648,32 @@ class AdminController extends Controller
 
     public function updateMitra(Request $request, $id)
     {
-        $request->validate(
-            [
-                'nama_mitra' => 'required|string|max:50',
+        $request->validate([
+            'program_kemitraan' => 'required|string|max:255',
+            'tanggal_bermitra' => 'required|date',
+            'periode_bermitra' => 'required|in:1 tahun,2 tahun,3 tahun',
+            'durasi_bermitra' => 'nullable|date',
+            'progres_bermitra' => 'required|in:0%,50%,100%',
+            'status_mitra' => 'required|in:aktif,non-aktif',
+        ], [
+            'program_kemitraan.required' => 'Program kemitraan wajib diisi.',
+            'program_kemitraan.string' => 'Program kemitraan harus berupa teks.',
+            'program_kemitraan.max' => 'Program kemitraan maksimal 255 karakter.',
+            'tanggal_bermitra.required' => 'Tanggal bermitra wajib diisi.',
+            'tanggal_bermitra.date' => 'Tanggal bermitra harus berupa tanggal yang valid.',
+            'periode_bermitra.required' => 'Periode bermitra wajib dipilih.',
+            'periode_bermitra.in' => 'Periode bermitra harus salah satu dari: 1 tahun, 2 tahun, atau 3 tahun.',
+            'durasi_bermitra.date' => 'Durasi bermitra harus berupa tanggal yang valid.',
+            'progres_bermitra.required' => 'Progres bermitra wajib dipilih.',
+            'progres_bermitra.in' => 'Progres bermitra harus salah satu dari: 0%, 50%, atau 100%.',
+            'status_mitra.required' => 'Status mitra wajib dipilih.',
+            'status_mitra.in' => 'Status mitra harus salah satu dari: aktif, non-aktif.',
+        ]);
+    
 
-            ],
-            [
-                'nama_mitra.max' => 'tidak boleh lebih dari 50 kata',
-
-            ]
-        );
-
-        $tanggalBermitra = new \DateTime($request->input('tanggal_bermitra'));
-        $periodeBermitra = (int) $request->input('periode_bermitra');
-
-        $tanggalBermitra->modify("+{$periodeBermitra} years");
-
-        $durasiBermitra = $tanggalBermitra->format('Y-m-d');
 
         $mitra = Mitra::findOrFail($id);
-        $mitra->nama_mitra = $request->input('nama_mitra');
+        $mitra->program_kemitraan = $request->input('program_kemitraan');
         $mitra->tanggal_bermitra = $request->input('tanggal_bermitra');
         $mitra->periode_bermitra = $request->input('periode_bermitra');
         $mitra->durasi_bermitra = $request->input('durasi_bermitra');
@@ -535,7 +693,8 @@ class AdminController extends Controller
     }
     public function showMitra($id)
     {
-        $mitra = Mitra::findOrFail($id);
+        $mitra = Mitra::with(['bantuan', 'sekolah', 'industri'])->findOrFail($id);
         return view('admin.data_mitra.show', compact('mitra'));
     }
+    
 }

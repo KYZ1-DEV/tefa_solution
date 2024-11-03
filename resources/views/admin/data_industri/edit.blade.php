@@ -14,7 +14,7 @@
             <br>
             <a href="{{ route('admin.industries.index') }}" class="btn btn-gradient">Kembali</a>
             @if ($errors->any())
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mt-4">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -52,8 +52,8 @@
 
                 <!-- Input SKDP -->
                 <div class="form-group">
-                    <label for="nama_sekolah">Akta Pendirian</label>
-                    <input type="text" name="skdp" class="form-control" value="{{ $industri->akta_pendirian }}" required>
+                    <label for="akta_pendirian">Akta Pendirian</label>
+                    <input type="text" name="akta_pendirian" class="form-control" value="{{ $industri->akta_pendirian }}" required>
                 </div>
 
                  <!-- Input Email Sekolah -->

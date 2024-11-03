@@ -9,19 +9,20 @@
 
 <div class="container">
     <div class="card shadow mb-4">
+
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Data Sekolah</h6>
             <br>
             <a href="{{ route('admin.schools.create') }}" class="btn btn-gradient">Tambah data Sekolah</a>
             @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+        <div class="alert alert-danger m-4">
+            <ul>
+                @foreach ($errors->all() as $item )
+                    <li>{{ $item }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
             @if (Session::has('success'))
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
@@ -60,12 +61,12 @@
                             <td class="text-truncate" style="max-width: 120px; font-size: 12px;">{{ $data->email }}</td>
                             <td class="text-truncate" style="max-width: 100px; font-size: 12px;">{{ $data->no_tlpn_sekolah }}</td>
                             <td class="text-center">
-                                <a href="{{ route('admin.schools.show', $data->id) }}" class="btn btn-gradient">Lihat Detail</a>
-                                <a href="{{ route('admin.schools.edit', $data->id) }}" class="btn btn-gradient">Edit</a>
+                                <a href="{{ route('admin.schools.show', $data->id) }}" class="btn btn-gradient btn-sm">Lihat Detail</a>
+                                <a href="{{ route('admin.schools.edit', $data->id) }}" class="btn btn-gradient btn-sm">Edit</a>
                                 <form onsubmit="return confirmHapus(event)" action="{{ route('admin.schools.destroy', $data->id) }}" class="d-inline" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-gradient">Hapus</button>
+                                    <button type="submit" class="btn btn-gradient btn-sm">Hapus</button>
                                 </form>
                             </td>
                         </tr>

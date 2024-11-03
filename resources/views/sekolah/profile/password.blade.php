@@ -15,6 +15,15 @@
             </ul>
         </div>
     @endif
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $item )
+                <li>{{ $item }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
      <!-- Page Heading -->
      <div class="d-sm-flex align-items-center justify-content-between mb-4">

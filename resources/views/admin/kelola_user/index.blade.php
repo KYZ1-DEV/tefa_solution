@@ -17,7 +17,7 @@
                                 <br>
                                 <a href="{{ route('admin.users.create') }}" class="btn btn-gradient">Tambah data User</a>
                                 @if ($errors->any())
-                                    <div class="alert alert-danger">
+                                    <div class="alert alert-danger mt-4">
                                         <ul>
                                             @foreach ($errors->all() as $user)
                                                 <li>{{ $user }}</li>
