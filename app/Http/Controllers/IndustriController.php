@@ -402,7 +402,8 @@ class IndustriController extends Controller
         if ($industri) {
             $search = $request->input('search');
             if ($search) {
-                $bantuan = Bantuan::where('jenis_bantuan', 'like', '%' . $search . '%')->get();
+                $bantuan = Bantuan::where('jenis_bantuan', 'like', '%' . $search . '%')
+                ->where('id_industri',$industri->id)->get();
             } else {
                 $bantuan = Bantuan::where('id_industri',$industri->id)->get();
             }
